@@ -15,13 +15,13 @@
         android:layout_marginTop="13dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/addTransactionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2">
+        app:layout_constraintTop_toBottomOf="@+id/sortSpinner">
 
         <ListView
-            android:id="@+id/listView"
+            android:id="@+id/transactionListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="0dp"
@@ -41,7 +41,7 @@
         android:textAllCaps="true"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />
 
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/filterSpinner"
         android:layout_width="360dp"
         android:layout_height="45dp"
         android:layout_marginStart="25dp"
@@ -75,7 +75,7 @@
         android:foregroundTint="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/limitNumber" />
 
     <TextView
         android:id="@+id/amountNumber"
@@ -84,27 +84,26 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="38dp"
-        android:text="TextView"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintStart_toEndOf="@+id/globalAmountText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/monthText"
         android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginTop="24dp"
         android:background="#9FFFFFFF"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintEnd_toStartOf="@+id/rightButton"
+        app:layout_constraintStart_toEndOf="@+id/leftButton"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/rightButton"
         android:layout_width="55dp"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
@@ -114,11 +113,11 @@
         android:textColor="#FFFFFF"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintStart_toEndOf="@+id/monthText"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/leftButton"
         android:layout_width="55dp"
         android:layout_height="40dp"
         android:layout_marginStart="39dp"
@@ -129,12 +128,12 @@
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintEnd_toStartOf="@+id/monthText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/sortSpinner"
         android:layout_width="360dp"
         android:layout_height="45dp"
         android:layout_marginStart="25dp"
@@ -143,23 +142,22 @@
         android:background="#FFD600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/monthText" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/limitNumber"
         android:layout_width="94dp"
         android:layout_height="31dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="6dp"
-        android:text="TextView"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintStart_toEndOf="@+id/limitText"
         app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/addTransactionButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
