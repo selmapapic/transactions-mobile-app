@@ -1,16 +1,15 @@
 package com.example.rma20celosmanovicselma04;
 
 import android.content.Context;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
+import java.time.LocalDate;
+
 
 public class TransactionsPresenter implements ITransactionsPresenter {
     private ITransactionsView view;
     private ITransactionsInteractor interactor;
     private Context context;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public TransactionsPresenter(ITransactionsView view, Context context) {
         this.view = view;
         this.interactor = new TransactionsIntreactor();
@@ -23,17 +22,21 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         view.notifyMovieListDataSetChanged();
     }
 
-    public String changeMonthForward () {
-        interactor.nextMonth();
-        return interactor.turnToString();
+    public void changeMonthForward () {
+        interactor.setCurrentDate(interactor.getCurrentDate().plusMonths(1));
+        view.refreshDate(dateToString(interactor.getCurrentDate()));
     }
 
-    public String changeMonthBackward () {
-        interactor.previousMonth();
-        return interactor.turnToString();
+    public void changeMonthBackward () {
+        interactor.setCurrentDate(interactor.getCurrentDate().minusMonths(1));
+        view.refreshDate(dateToString(interactor.getCurrentDate()));
     }
 
-    public String dateToString () {
-        return interactor.turnToString();
+    public String dateToString (LocalDate date) {
+        return date.getMonth().name() + ", " + date.getYear();
+    }
+
+    public void start () {
+        view.refreshDate(dateToString(interactor.getCurrentDate()));
     }
 }

@@ -56,7 +56,7 @@ public class TransactionsAdapter extends ArrayAdapter<Transaction> {
         amount = newView.findViewById(R.id.amount);
 
         title.setText(transaction.getTitle());
-        amount.setText((int) transaction.getAmount());
+        amount.setText(transaction.getAmount().toString());
 
         if(transaction.getType().equals(TransactionType.REGULARINCOME)) {
             icon.setImageResource(R.drawable.regular_income);

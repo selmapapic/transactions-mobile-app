@@ -4,23 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TransactionsIntreactor implements ITransactionsInteractor {
-    private static LocalDate currentDate = LocalDate.now();
 
     public LocalDate getCurrentDate() {
-        return currentDate;
+        return TransactionsModel.getCurrentDate();
     }
-
-    public void nextMonth () {
-        currentDate = currentDate.plusMonths(1);
-    }
-
-    public void previousMonth () {
-        currentDate = currentDate.minusMonths(1);
-    }
-
-    public String turnToString () {
-        return currentDate.getMonth().name() + ", " + currentDate.getYear();
-    }
+    public void setCurrentDate (LocalDate date) { TransactionsModel.setCurrentDate(date); }
 
     @Override
     public ArrayList<Transaction> getTransactions() {

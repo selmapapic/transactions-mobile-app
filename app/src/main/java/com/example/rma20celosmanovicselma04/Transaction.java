@@ -3,15 +3,15 @@ package com.example.rma20celosmanovicselma04;
 import java.time.LocalDate;
 
 public class Transaction {
-    private double amount;
-    private String title;
     private LocalDate date;
+    private Double amount;
+    private String title;
     private TransactionType type;
     private String itemDescription;
     private Integer transactionInterval;
     private LocalDate endDate;
 
-    public Transaction(double amount, String title, LocalDate date, TransactionType type, String itemDescription, Integer transactionInterval, LocalDate endDate) {
+    public Transaction(LocalDate date, Double amount, String title, TransactionType type, String itemDescription, Integer transactionInterval, LocalDate endDate) {
         this.amount = amount;
         this.title = title;
         this.date = date;
@@ -29,11 +29,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

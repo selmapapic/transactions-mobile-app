@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 public interface ITransactionsInteractor {
     LocalDate getCurrentDate();
-    void nextMonth ();
-    void previousMonth();
-    String turnToString ();
     ArrayList<Transaction> getTransactions();
+    void setCurrentDate(LocalDate date);
 }

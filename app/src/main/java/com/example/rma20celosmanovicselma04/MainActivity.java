@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         monthText = (TextView) findViewById(R.id.monthText);
         transactionListView = (ListView) findViewById(R.id.transactionListView);
 
-        monthText.setText(getPresenter().dateToString());
+        getPresenter().start();
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                monthText.setText(presenter.changeMonthBackward());
+                getPresenter().changeMonthBackward();
             }
         };
     }
@@ -69,9 +69,14 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                monthText.setText(presenter.changeMonthForward());
+                getPresenter().changeMonthForward();
             }
         };
+    }
+
+    @Override
+    public void refreshDate(String date) {
+        monthText.setText(date);
     }
 
 
