@@ -19,7 +19,8 @@ public class TransactionsPresenter implements ITransactionsPresenter {
 
     @Override
     public void refreshTransactions() {
-
+        view.setTransactions(interactor.getTransactions());
+        view.notifyMovieListDataSetChanged();
     }
 
     public String changeMonthForward () {

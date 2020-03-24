@@ -1,12 +1,8 @@
 package com.example.rma20celosmanovicselma04;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class TransactionsIntreactor implements ITransactionsInteractor {
     private static LocalDate currentDate = LocalDate.now();
 
@@ -24,5 +20,10 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
 
     public String turnToString () {
         return currentDate.getMonth().name() + ", " + currentDate.getYear();
+    }
+
+    @Override
+    public ArrayList<Transaction> getTransactions() {
+        return TransactionsModel.transactions;
     }
 }
