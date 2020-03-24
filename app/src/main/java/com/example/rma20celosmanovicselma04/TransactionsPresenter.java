@@ -16,9 +16,13 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         this.context = context;
     }
 
-    @Override
     public void refreshTransactions() {
         view.setTransactions(interactor.getTransactions());
+        view.notifyMovieListDataSetChanged();
+    }
+
+    public void refreshTransactionsByMonthAndYear () {
+        view.setTransactions(interactor.getTransactionsByMonthAndYear());
         view.notifyMovieListDataSetChanged();
     }
 

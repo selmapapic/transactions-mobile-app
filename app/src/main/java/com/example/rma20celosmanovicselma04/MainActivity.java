@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
         adapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<Transaction>());
         transactionListView.setAdapter(adapter);
-        getPresenter().refreshTransactions();
+        getPresenter().refreshTransactionsByMonthAndYear();
     }
 
     public ITransactionsPresenter getPresenter () {
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         adapter.setTransactions(transactions);
     }
 
+
     @Override
     public void notifyMovieListDataSetChanged() {
         adapter.notifyDataSetChanged();
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             @Override
             public void onClick(View v) {
                 getPresenter().changeMonthBackward();
+                getPresenter().refreshTransactionsByMonthAndYear();
             }
         };
     }
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             @Override
             public void onClick(View v) {
                 getPresenter().changeMonthForward();
+                getPresenter().refreshTransactionsByMonthAndYear();
             }
         };
     }

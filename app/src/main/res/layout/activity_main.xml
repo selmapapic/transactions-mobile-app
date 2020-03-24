@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8C0000"
+    android:background="#43A047"
     tools:context=".MainActivity">
 
     <FrameLayout

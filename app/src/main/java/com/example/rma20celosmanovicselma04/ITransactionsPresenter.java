@@ -8,4 +8,5 @@ public interface ITransactionsPresenter {
     void changeMonthBackward ();
     String dateToString (LocalDate date);
     void start();
+    void refreshTransactionsByMonthAndYear();
 }
