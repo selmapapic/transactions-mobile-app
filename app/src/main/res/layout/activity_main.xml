@@ -93,7 +93,7 @@
     <TextView
         android:id="@+id/monthText"
         android:layout_width="160dp"
-        android:layout_height="45dp"
+        android:layout_height="30dp"
         android:layout_marginTop="24dp"
         android:background="#9FFFFFFF"
         android:textAlignment="center"
@@ -103,25 +103,11 @@
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
 
     <Button
-        android:id="@+id/rightButton"
-        android:layout_width="55dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/right"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/monthText"
-        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
-
-    <Button
         android:id="@+id/leftButton"
         android:layout_width="55dp"
         android:layout_height="40dp"
         android:layout_marginStart="39dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/left"
         android:backgroundTint="#FFFFFF"
         android:hapticFeedbackEnabled="false"
@@ -132,15 +118,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
 
+    <Button
+        android:id="@+id/rightButton"
+        android:layout_width="55dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/right"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/monthText"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
+
     <Spinner
         android:id="@+id/sortSpinner"
         android:layout_width="360dp"
         android:layout_height="45dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="26dp"
         android:background="#FFD600"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monthText" />
 
