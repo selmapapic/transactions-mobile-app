@@ -26,6 +26,11 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         view.notifyTransactionsListDataSetChanged();
     }
 
+    public void refreshTransactionsByType (String type) {
+        view.setTransactions(interactor.getTransactionsByType(type));
+        view.notifyTransactionsListDataSetChanged();
+    }
+
     public void changeMonthForward () {
         interactor.setCurrentDate(interactor.getCurrentDate().plusMonths(1));
         view.refreshDate(dateToString(interactor.getCurrentDate()));

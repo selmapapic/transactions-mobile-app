@@ -9,4 +9,5 @@ public interface ITransactionsInteractor {
     void setCurrentDate(LocalDate date);
     ArrayList<Transaction> getTransactionsByMonthAndYear();
     ArrayList<String> getTypes ();
+    ArrayList<Transaction> getTransactionsByType  (String type);
 }

@@ -9,4 +9,5 @@ public interface ITransactionsPresenter {
     String dateToString (LocalDate date);
     void start();
     void refreshTransactionsByMonthAndYear();
+    void refreshTransactionsByType (String type);
 }

@@ -3,6 +3,7 @@ package com.example.rma20celosmanovicselma04;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
+        filterSpinner.setOnItemSelectedListener(spinnerAction());
 
         transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
         transactionListView.setAdapter(transactionsAdapter);
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         filterSpinner.setAdapter(filterAdapter);
 
         getPresenter().refreshTransactionsByMonthAndYear();
+        getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
         getPresenter().start();
 
     }
@@ -89,6 +92,21 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             }
         };
     }
+
+    public AdapterView.OnItemSelectedListener spinnerAction () {
+        return new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    }
+
 
     @Override
     public void refreshDate(String date) {

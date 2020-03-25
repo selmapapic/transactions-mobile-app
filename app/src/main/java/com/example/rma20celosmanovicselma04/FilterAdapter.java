@@ -78,7 +78,7 @@ public class FilterAdapter extends ArrayAdapter<String> {
         else if(type.equals("Individual payment")) {
             icon.setImageResource(R.drawable.individual_payment);
         }
-
+        else icon.setImageResource(R.drawable.transparent);
         return newView;
     }
 }

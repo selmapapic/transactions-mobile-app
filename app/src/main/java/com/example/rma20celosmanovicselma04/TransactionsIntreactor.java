@@ -2,7 +2,6 @@ package com.example.rma20celosmanovicselma04;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class TransactionsIntreactor implements ITransactionsInteractor {
 
@@ -18,19 +17,25 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
 
     @Override
     public ArrayList<Transaction> getTransactionsByMonthAndYear() {
-        LocalDate curr = TransactionsModel.currentDate;
-        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
-
-        return (ArrayList<Transaction>) allTransactions.stream().
-                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
-                                (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
-                                        (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
-                collect(Collectors.toList());
+//        LocalDate curr = TransactionsModel.currentDate;
+//        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
+//
+//        return (ArrayList<Transaction>) allTransactions.stream().
+//                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
+//                                (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
+//                                        (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
+//                collect(Collectors.toList());
+        return TransactionsModel.getTransactionsByMonthAndYear();
     }
 
     public ArrayList<String> getTypes () {
         return TransactionsModel.transactionTypes;
 
+    }
+
+    @Override
+    public ArrayList<Transaction> getTransactionsByType  (String type) {
+        return TransactionsModel.getTransactionsByType(type);
     }
 
 }
