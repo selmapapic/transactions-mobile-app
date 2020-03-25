@@ -12,6 +12,7 @@ public class TransactionsModel {
             add(new Transaction(LocalDate.of(2020, 1, 27), 150.0, "Ogrlica", TransactionType.PURCHASE, "Zlatni lanac sa smaragdom", null, null));
             add(new Transaction(LocalDate.of(2020, 2, 18), 3200.0, "Plata", TransactionType.REGULARINCOME, null, 30, LocalDate.of(2020, 12, 18)));
             add(new Transaction(LocalDate.of(2020, 3, 5), 16.95, "KONZUM - kasa", TransactionType.INDIVIDUALPAYMENT, "Kupovina namire u KONZUM-u", null, null));
+            add(new Transaction(LocalDate.of(2019,12,15), 17.6, "Porez", TransactionType.REGULARPAYMENT, "Porez za nekretninu", 28, LocalDate.of(2020, 7, 9)));
         }
     };
 
