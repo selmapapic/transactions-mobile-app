@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -14,10 +15,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ITransactionsView {
     private ITransactionsPresenter presenter;
-    private TransactionsAdapter adapter;
+    private TransactionsAdapter transactionsAdapter;
     private Button leftButton, rightButton;
     private TextView monthText;
     private ListView transactionListView;
+    private Spinner filterSpinner;
+    private FilterAdapter filterAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -29,14 +32,20 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         rightButton = (Button) findViewById(R.id.rightButton);
         monthText = (TextView) findViewById(R.id.monthText);
         transactionListView = (ListView) findViewById(R.id.transactionListView);
+        filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
 
-        getPresenter().start();
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
 
-        adapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<Transaction>());
-        transactionListView.setAdapter(adapter);
+        transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
+        transactionListView.setAdapter(transactionsAdapter);
+
+        filterAdapter = new FilterAdapter(this, R.layout.transaction_spinner_element, new ArrayList<>());
+        filterSpinner.setAdapter(filterAdapter);
+
         getPresenter().refreshTransactionsByMonthAndYear();
+        getPresenter().start();
+
     }
 
     public ITransactionsPresenter getPresenter () {
@@ -48,13 +57,17 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
     @Override
     public void setTransactions(ArrayList<Transaction> transactions) {
-        adapter.setTransactions(transactions);
+        transactionsAdapter.setTransactions(transactions);
+    }
+
+    public void setFilterSpinner (ArrayList<String> types) {
+        filterAdapter.setTransactionType(types);
     }
 
 
     @Override
-    public void notifyMovieListDataSetChanged() {
-        adapter.notifyDataSetChanged();
+    public void notifyTransactionsListDataSetChanged() {
+        transactionsAdapter.notifyDataSetChanged();
     }
 
     public View.OnClickListener leftAction () {

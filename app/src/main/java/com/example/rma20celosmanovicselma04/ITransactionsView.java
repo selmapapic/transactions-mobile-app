@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public interface ITransactionsView {
     void setTransactions(ArrayList<Transaction> movies);
-    void notifyMovieListDataSetChanged();
+    void notifyTransactionsListDataSetChanged();
     void refreshDate(String date);
+    void setFilterSpinner (ArrayList<String> types);
 }

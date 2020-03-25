@@ -8,4 +8,5 @@ public interface ITransactionsInteractor {
     ArrayList<Transaction> getTransactions();
     void setCurrentDate(LocalDate date);
     ArrayList<Transaction> getTransactionsByMonthAndYear();
+    ArrayList<String> getTypes ();
 }

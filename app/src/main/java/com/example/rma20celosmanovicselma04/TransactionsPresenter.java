@@ -18,12 +18,12 @@ public class TransactionsPresenter implements ITransactionsPresenter {
 
     public void refreshTransactions() {
         view.setTransactions(interactor.getTransactions());
-        view.notifyMovieListDataSetChanged();
+        view.notifyTransactionsListDataSetChanged();
     }
 
     public void refreshTransactionsByMonthAndYear () {
         view.setTransactions(interactor.getTransactionsByMonthAndYear());
-        view.notifyMovieListDataSetChanged();
+        view.notifyTransactionsListDataSetChanged();
     }
 
     public void changeMonthForward () {
@@ -43,5 +43,6 @@ public class TransactionsPresenter implements ITransactionsPresenter {
 
     public void start () {
         view.refreshDate(dateToString(interactor.getCurrentDate()));
+        view.setFilterSpinner(interactor.getTypes());
     }
 }

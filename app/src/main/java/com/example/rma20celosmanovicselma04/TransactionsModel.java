@@ -15,6 +15,15 @@ public class TransactionsModel {
             add(new Transaction(LocalDate.of(2019,12,15), 17.6, "Porez", TransactionType.REGULARPAYMENT, "Porez za nekretninu", 28, LocalDate.of(2020, 7, 9)));
         }
     };
+    public static ArrayList<String> transactionTypes = new ArrayList<String>() {
+        {
+            add(TransactionType.INDIVIDUALINCOME.getTransactionName());
+            add(TransactionType.REGULARINCOME.getTransactionName());
+            add(TransactionType.PURCHASE.getTransactionName());
+            add(TransactionType.INDIVIDUALPAYMENT.getTransactionName());
+            add(TransactionType.REGULARPAYMENT.getTransactionName());
+        }
+    };
 
     public static LocalDate getCurrentDate() {
         return currentDate;

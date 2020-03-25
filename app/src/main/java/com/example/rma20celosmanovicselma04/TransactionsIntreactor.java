@@ -28,4 +28,9 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
                 collect(Collectors.toList());
     }
 
+    public ArrayList<String> getTypes () {
+        return TransactionsModel.transactionTypes;
+
+    }
+
 }
