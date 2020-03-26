@@ -1,5 +1,6 @@
 package com.example.rma20celosmanovicselma04;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
         transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
         transactionListView.setAdapter(transactionsAdapter);
+        transactionListView.setOnItemClickListener(listItemClickListener());
 
         filterAdapter = new FilterAdapter(this, R.layout.transaction_spinner_element, new ArrayList<>());
         filterSpinner.setAdapter(filterAdapter);
@@ -101,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         };
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         };
@@ -123,5 +123,22 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     public void refreshDate(String date) {
         monthText.setText(date);
     }
+
+    public AdapterView.OnItemClickListener listItemClickListener () {
+        return (parent, view, position, id) -> {
+            Intent transactionDetailIntent = new Intent(MainActivity.this,
+                    TransactionDetailActivity.class);
+            Transaction transaction = transactionsAdapter.getTransaction(position);
+            transactionDetailIntent.putExtra("titleFld", transaction.getTitle());
+            transactionDetailIntent.putExtra("amountFld", transaction.getAmount());
+            transactionDetailIntent.putExtra("intervalFld", transaction.getTransactionInterval());
+            transactionDetailIntent.putExtra("dateFld", transaction.getDate());
+            transactionDetailIntent.putExtra("endDateFld", transaction.getEndDate());
+            transactionDetailIntent.putExtra("descriptionFld", transaction.getItemDescription());
+            MainActivity.this.startActivity(transactionDetailIntent);
+        };
+    }
+
+
 
 }
