@@ -76,7 +76,6 @@ public class TransactionsPresenter implements ITransactionsPresenter {
             trns = getTransactionsByType(trns, filter);
             return sortTransactions(trns, sort);
         }
-
     }
 
     public ArrayList<Transaction> sortTransactions (ArrayList<Transaction> trns, String type) {

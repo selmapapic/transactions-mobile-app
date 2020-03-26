@@ -1,6 +1,5 @@
 package com.example.rma20celosmanovicselma04;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,7 +9,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     private FilterAdapter filterAdapter;
     private ArrayAdapter<String> sortAdapter;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +50,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         sortSpinner.setAdapter(sortAdapter);
 
         getPresenter().refreshTransactionsByMonthAndYear();
-        //getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
         getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         getPresenter().start();
-
     }
 
     public ITransactionsPresenter getPresenter () {
@@ -85,26 +80,18 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     }
 
     public View.OnClickListener leftAction () {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPresenter().changeMonthBackward();
-                getPresenter().refreshTransactionsByMonthAndYear();
-                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-
-            }
+        return v -> {
+            getPresenter().changeMonthBackward();
+            getPresenter().refreshTransactionsByMonthAndYear();
+            getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
     public View.OnClickListener rightAction () {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPresenter().changeMonthForward();
-                getPresenter().refreshTransactionsByMonthAndYear();
-                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-
-            }
+        return v -> {
+            getPresenter().changeMonthForward();
+            getPresenter().refreshTransactionsByMonthAndYear();
+            getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
@@ -116,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         };
     }
 
@@ -130,17 +115,13 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         };
     }
-
 
     @Override
     public void refreshDate(String date) {
         monthText.setText(date);
     }
-
 
 }
