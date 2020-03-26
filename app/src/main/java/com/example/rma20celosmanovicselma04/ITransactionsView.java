@@ -7,4 +7,5 @@ public interface ITransactionsView {
     void notifyTransactionsListDataSetChanged();
     void refreshDate(String date);
     void setFilterSpinner (ArrayList<String> types);
+    void setSortSpinner (ArrayList<String> sort);
 }

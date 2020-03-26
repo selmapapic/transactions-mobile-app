@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -20,8 +21,9 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     private Button leftButton, rightButton;
     private TextView monthText;
     private ListView transactionListView;
-    private Spinner filterSpinner;
+    private Spinner filterSpinner, sortSpinner;
     private FilterAdapter filterAdapter;
+    private ArrayAdapter<String> sortAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -34,16 +36,21 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         monthText = (TextView) findViewById(R.id.monthText);
         transactionListView = (ListView) findViewById(R.id.transactionListView);
         filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
+        sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
 
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
-        filterSpinner.setOnItemSelectedListener(spinnerAction());
+        filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
+        sortSpinner.setOnItemSelectedListener(spinnerSortAction());
 
         transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
         transactionListView.setAdapter(transactionsAdapter);
 
         filterAdapter = new FilterAdapter(this, R.layout.transaction_spinner_element, new ArrayList<>());
         filterSpinner.setAdapter(filterAdapter);
+
+        sortAdapter = new ArrayAdapter<>(this, R.layout.sort_spinner_element, R.id.sortType, new ArrayList<>());
+        sortSpinner.setAdapter(sortAdapter);
 
         getPresenter().refreshTransactionsByMonthAndYear();
         getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
@@ -67,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         filterAdapter.setTransactionType(types);
     }
 
+    public void setSortSpinner (ArrayList<String> sort) {
+        sortAdapter.addAll(sort);
+    }
 
     @Override
     public void notifyTransactionsListDataSetChanged() {
@@ -79,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onClick(View v) {
                 getPresenter().changeMonthBackward();
                 getPresenter().refreshTransactionsByMonthAndYear();
+                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
             }
         };
     }
@@ -89,15 +101,31 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onClick(View v) {
                 getPresenter().changeMonthForward();
                 getPresenter().refreshTransactionsByMonthAndYear();
+                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
             }
         };
     }
 
-    public AdapterView.OnItemSelectedListener spinnerAction () {
+    public AdapterView.OnItemSelectedListener spinnerTypeAction() {
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    }
+
+    public AdapterView.OnItemSelectedListener spinnerSortAction() {
+        return new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
             }
 
             @Override

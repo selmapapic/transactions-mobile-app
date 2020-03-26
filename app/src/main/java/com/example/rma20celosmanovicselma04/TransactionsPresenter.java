@@ -3,6 +3,9 @@ package com.example.rma20celosmanovicselma04;
 import android.content.Context;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 public class TransactionsPresenter implements ITransactionsPresenter {
@@ -16,19 +19,73 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         this.context = context;
     }
 
+    public void start () {
+        view.refreshDate(dateToString(interactor.getCurrentDate()));
+        view.setFilterSpinner(interactor.getTypes());
+        view.setSortSpinner(interactor.getSortTypes());
+    }
+
     public void refreshTransactions() {
         view.setTransactions(interactor.getTransactions());
         view.notifyTransactionsListDataSetChanged();
     }
 
     public void refreshTransactionsByMonthAndYear () {
-        view.setTransactions(interactor.getTransactionsByMonthAndYear());
+        view.setTransactions(getTransactionsByDate());
         view.notifyTransactionsListDataSetChanged();
     }
 
     public void refreshTransactionsByType (String type) {
-        view.setTransactions(interactor.getTransactionsByType(type));
+        view.setTransactions(getTransactionsByType(type));
         view.notifyTransactionsListDataSetChanged();
+    }
+
+    public ArrayList<Transaction> getTransactionsByDate () {
+        LocalDate curr = interactor.getCurrentDate();
+        ArrayList<Transaction> allTransactions = interactor.getTransactions();
+
+        return (ArrayList<Transaction>) allTransactions.stream().
+                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
+                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
+                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
+                collect(Collectors.toList());
+    }
+
+    public ArrayList<Transaction> getTransactionsByType (String type) {
+        if(type == null || type.equals("Filter by")) return getTransactionsByDate();
+        return (ArrayList<Transaction>) getTransactionsByDate().stream().filter(tr -> tr.getType().equals(TransactionType.getType(type))).collect(Collectors.toList());
+    }
+
+    public void sortTransactions (String type, String filterType) {
+        ArrayList<Transaction> trns = getTransactionsByType(filterType);
+        if(type == null || type.equals("Sort by")) {
+            view.setTransactions(trns);
+            view.notifyTransactionsListDataSetChanged();
+            return;
+        }
+        if(type.equals("Price - Ascending")) trns = sortByPrice(trns, true);
+        else if(type.equals("Price - Descending")) trns = sortByPrice(trns, false);
+        else if (type.equals("Title - Ascending")) trns = sortByTitle(trns, true);
+        else if (type.equals("Title - Descending")) trns = sortByTitle(trns, false);
+        else if (type.equals("Date - Ascending")) trns = sortByDate(trns, true);
+        else if(type.equals("Date - Descending")) trns = sortByDate(trns, false);
+        view.setTransactions(trns);
+        view.notifyTransactionsListDataSetChanged();
+    }
+
+    public ArrayList<Transaction> sortByPrice (ArrayList<Transaction> trns, boolean way) {
+        if(way) return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparingDouble(Transaction::getAmount)).collect(Collectors.toList());
+        return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparingDouble(Transaction::getAmount).reversed()).collect(Collectors.toList());
+    }
+
+    public ArrayList<Transaction> sortByTitle (ArrayList<Transaction> trns, boolean way) {
+        if(way) return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle)).collect(Collectors.toList());
+        return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle).reversed()).collect(Collectors.toList());
+    }
+
+    public ArrayList<Transaction> sortByDate (ArrayList<Transaction> trns, boolean way) {
+        if(way) return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getDate)).collect(Collectors.toList());
+        return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getDate).reversed()).collect(Collectors.toList());
     }
 
     public void changeMonthForward () {
@@ -44,10 +101,5 @@ public class TransactionsPresenter implements ITransactionsPresenter {
 
     public String dateToString (LocalDate date) {
         return date.getMonth().name() + ", " + date.getYear();
-    }
-
-    public void start () {
-        view.refreshDate(dateToString(interactor.getCurrentDate()));
-        view.setFilterSpinner(interactor.getTypes());
     }
 }

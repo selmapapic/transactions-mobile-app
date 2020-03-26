@@ -8,23 +8,12 @@
         android:id="@+id/sortType"
         android:layout_width="206dp"
         android:layout_height="34dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="54dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="137dp"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="35dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="74dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sortType"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/transparent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

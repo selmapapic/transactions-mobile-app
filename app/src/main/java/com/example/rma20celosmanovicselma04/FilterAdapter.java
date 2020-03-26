@@ -22,7 +22,7 @@ public class FilterAdapter extends ArrayAdapter<String> {
     public TextView transactionType;
 
     public FilterAdapter(@NonNull Context context, int _resource, @NonNull List<String> objects) {
-        super(context, _resource, R.id.transactionType, objects);
+        super(context, _resource, R.id.sortType, objects);
         resource = _resource;
     }
 
@@ -59,7 +59,7 @@ public class FilterAdapter extends ArrayAdapter<String> {
         String type = getItem(position);
 
         icon = newView.findViewById(R.id.icon);
-        transactionType = newView.findViewById(R.id.transactionType);
+        transactionType = newView.findViewById(R.id.sortType);
 
         transactionType.setText(type);
 

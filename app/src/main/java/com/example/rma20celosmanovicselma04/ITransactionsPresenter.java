@@ -10,4 +10,5 @@ public interface ITransactionsPresenter {
     void start();
     void refreshTransactionsByMonthAndYear();
     void refreshTransactionsByType (String type);
+    void sortTransactions (String type, String filterType);
 }

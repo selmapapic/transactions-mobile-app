@@ -2,7 +2,6 @@ package com.example.rma20celosmanovicselma04;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class TransactionsModel {
     public static LocalDate currentDate = LocalDate.now();
@@ -19,12 +18,24 @@ public class TransactionsModel {
     };
     public static ArrayList<String> transactionTypes = new ArrayList<String>() {
         {
-            add("Filter by: ");
+            add("Filter by");
             add(TransactionType.INDIVIDUALINCOME.getTransactionName());
             add(TransactionType.REGULARINCOME.getTransactionName());
             add(TransactionType.PURCHASE.getTransactionName());
             add(TransactionType.INDIVIDUALPAYMENT.getTransactionName());
             add(TransactionType.REGULARPAYMENT.getTransactionName());
+        }
+    };
+
+    public static ArrayList<String> sortTypes = new ArrayList<String>() {
+        {
+            add("Sort by");
+            add("Price - Ascending");
+            add("Price - Descending");
+            add("Title - Ascending");
+            add("Title - Descending");
+            add("Date - Ascending");
+            add("Date - Descending");
         }
     };
 
@@ -34,31 +45,5 @@ public class TransactionsModel {
 
     public static void setCurrentDate(LocalDate currentDate) {
         TransactionsModel.currentDate = currentDate;
-    }
-
-    public static ArrayList<Transaction> getTransactionsByMonthAndYear() {
-        LocalDate curr = TransactionsModel.currentDate;
-        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
-
-        return (ArrayList<Transaction>) allTransactions.stream().
-                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
-                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
-                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
-                collect(Collectors.toList());
-    }
-
-    public static TransactionType getType (String type) {
-        if(type == null || type.equals("Filter by: ")) return null;
-        if(type.equals("Regular income")) return TransactionType.REGULARINCOME;
-        else if(type.equals("Regular payment")) return TransactionType.REGULARPAYMENT;
-        else if (type.equals("Purchase")) return TransactionType.PURCHASE;
-        else if(type.equals("Individual payment")) return TransactionType.INDIVIDUALPAYMENT;
-        else if (type.equals("Individual income")) return TransactionType.INDIVIDUALINCOME;
-        return null;
-    }
-
-    public static ArrayList<Transaction> getTransactionsByType (String type) {
-        if(type == null || type.equals("Filter by: ")) return getTransactionsByMonthAndYear();
-        return (ArrayList<Transaction>) getTransactionsByMonthAndYear().stream().filter(tr -> tr.getType().equals(getType(type))).collect(Collectors.toList());
     }
 }
