@@ -14,6 +14,13 @@ public class TransactionsModel {
             add(new Transaction(LocalDate.of(2020, 3, 5), 16.95, "KONZUM - kasa", TransactionType.INDIVIDUALPAYMENT, "Kupovina namire u KONZUM-u", null, null));
             add(new Transaction(LocalDate.of(2019,12,15), 17.6, "Porez", TransactionType.REGULARPAYMENT, "Porez za nekretninu", 28, LocalDate.of(2020, 7, 9)));
             add(new Transaction(LocalDate.of(2020, 2, 15), 200.0, "Dzeparac", TransactionType.INDIVIDUALINCOME, "Mjesecni dzeparac", 30, null));
+            add(new Transaction(LocalDate.of(2020, 4, 26), 3700.0, "Rata za stan", TransactionType.REGULARPAYMENT, "Rata za kupovinu stana", 29, LocalDate.of(2022, 4, 26)));
+            add(new Transaction(LocalDate.of(2020, 3, 1), 110.0, "Bajramluk", TransactionType.INDIVIDUALINCOME, "Bajramluk", null, null));
+            add(new Transaction(LocalDate.of(2020, 2, 8), 50.0, "Rodjendan", TransactionType.INDIVIDUALINCOME, "Poklon", null, null));
+            add(new Transaction(LocalDate.of(2020, 2, 28), 0.8, "Voda", TransactionType.REGULARPAYMENT, "Voda Lejla", 1, LocalDate.of(2021, 2, 28)));
+            add(new Transaction(LocalDate.of(2020, 3, 26), 9.45, "Grickalice", TransactionType.PURCHASE, "Kokice, cips, cokolada", null, null));
+            add(new Transaction(LocalDate.of(2020, 4, 3), 120.0, "Stipendija", TransactionType.REGULARINCOME, "Stipendija za faks", 30, LocalDate.of(2020, 7, 15)));
+            //add(new Transaction(LocalDate.of(2020, 2, 12), 2300.0, "Laptop", TransactionType.PURCHASE, ""))
         }
     };
     public static ArrayList<String> transactionTypes = new ArrayList<String>() {

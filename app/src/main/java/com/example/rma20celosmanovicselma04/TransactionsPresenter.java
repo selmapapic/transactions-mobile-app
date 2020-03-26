@@ -24,21 +24,22 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         view.setFilterSpinner(interactor.getTypes());
         view.setSortSpinner(interactor.getSortTypes());
     }
-
-    public void refreshTransactions() {
-        view.setTransactions(interactor.getTransactions());
-        view.notifyTransactionsListDataSetChanged();
-    }
+//
+//    public void refreshTransactions() {
+//        view.setTransactions(interactor.getTransactions());
+//        view.notifyTransactionsListDataSetChanged();
+//    }
 
     public void refreshTransactionsByMonthAndYear () {
         view.setTransactions(getTransactionsByDate());
         view.notifyTransactionsListDataSetChanged();
     }
-
-    public void refreshTransactionsByType (String type) {
-        view.setTransactions(getTransactionsByType(type));
-        view.notifyTransactionsListDataSetChanged();
-    }
+//
+//    public void refreshTransactionsByType (String type, String sort) {
+//        ArrayList<Transaction> trns = sortTransactions(sort, type);
+//        view.setTransactions(getTransactionsByType(type));
+//        view.notifyTransactionsListDataSetChanged();
+//    }
 
     public ArrayList<Transaction> getTransactionsByDate () {
         LocalDate curr = interactor.getCurrentDate();
@@ -51,26 +52,42 @@ public class TransactionsPresenter implements ITransactionsPresenter {
                 collect(Collectors.toList());
     }
 
-    public ArrayList<Transaction> getTransactionsByType (String type) {
-        if(type == null || type.equals("Filter by")) return getTransactionsByDate();
-        return (ArrayList<Transaction>) getTransactionsByDate().stream().filter(tr -> tr.getType().equals(TransactionType.getType(type))).collect(Collectors.toList());
+    public ArrayList<Transaction> getTransactionsByType (ArrayList<Transaction> trns, String type) {
+        return (ArrayList<Transaction>) trns.stream().filter(tr -> tr.getType().equals(TransactionType.getType(type))).collect(Collectors.toList());
     }
 
-    public void sortTransactions (String type, String filterType) {
-        ArrayList<Transaction> trns = getTransactionsByType(filterType);
-        if(type == null || type.equals("Sort by")) {
-            view.setTransactions(trns);
-            view.notifyTransactionsListDataSetChanged();
-            return;
+    public void refreshFilterAndSort (String filter, String sort) {
+        ArrayList<Transaction> trns = filterAndSort(filter, sort);
+        view.setTransactions(trns);
+        view.notifyTransactionsListDataSetChanged();
+
+    }
+
+    public ArrayList<Transaction> filterAndSort (String filter, String sort) {
+        ArrayList<Transaction> trns = getTransactionsByDate();
+        if((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) return trns;
+        else if((filter == null || filter.equals("Filter by") && !(sort == null || sort.equals("Sort by")))) {
+            return sortTransactions(trns, sort);
         }
+        else if((sort == null || sort.equals("Sort by") && !(filter == null || filter.equals("Filter by")))) {
+            return getTransactionsByType(trns, filter);
+        }
+        else {
+            trns = getTransactionsByType(trns, filter);
+            return sortTransactions(trns, sort);
+        }
+
+    }
+
+    public ArrayList<Transaction> sortTransactions (ArrayList<Transaction> trns, String type) {
         if(type.equals("Price - Ascending")) trns = sortByPrice(trns, true);
         else if(type.equals("Price - Descending")) trns = sortByPrice(trns, false);
         else if (type.equals("Title - Ascending")) trns = sortByTitle(trns, true);
         else if (type.equals("Title - Descending")) trns = sortByTitle(trns, false);
         else if (type.equals("Date - Ascending")) trns = sortByDate(trns, true);
         else if(type.equals("Date - Descending")) trns = sortByDate(trns, false);
-        view.setTransactions(trns);
-        view.notifyTransactionsListDataSetChanged();
+
+        return trns;
     }
 
     public ArrayList<Transaction> sortByPrice (ArrayList<Transaction> trns, boolean way) {

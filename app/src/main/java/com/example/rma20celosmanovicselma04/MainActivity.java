@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         sortSpinner.setAdapter(sortAdapter);
 
         getPresenter().refreshTransactionsByMonthAndYear();
-        getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+        //getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+        getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         getPresenter().start();
 
     }
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onClick(View v) {
                 getPresenter().changeMonthBackward();
                 getPresenter().refreshTransactionsByMonthAndYear();
-                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
-                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
+                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+
             }
         };
     }
@@ -101,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             public void onClick(View v) {
                 getPresenter().changeMonthForward();
                 getPresenter().refreshTransactionsByMonthAndYear();
-                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
-                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
+                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+
             }
         };
     }
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().refreshTransactionsByType((String) filterSpinner.getSelectedItem());
+                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
 
             @Override
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().sortTransactions((String) sortSpinner.getSelectedItem(), (String) filterSpinner.getSelectedItem());
+                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
 
             @Override
