@@ -131,14 +131,18 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             Transaction transaction = transactionsAdapter.getTransaction(position);
             transactionDetailIntent.putExtra("titleFld", transaction.getTitle());
             transactionDetailIntent.putExtra("amountFld", transaction.getAmount());
-            transactionDetailIntent.putExtra("intervalFld", transaction.getTransactionInterval());
             transactionDetailIntent.putExtra("dateFld", transaction.getDate());
-            transactionDetailIntent.putExtra("endDateFld", transaction.getEndDate());
+            transactionDetailIntent.putExtra("spinnerType", transaction.getType());
+            if(transaction.getType().toString().contains("REGULAR")) {
+                transactionDetailIntent.putExtra("intervalFld", transaction.getTransactionInterval());
+                transactionDetailIntent.putExtra("endDateFld", transaction.getEndDate());
+            }
+            else {
+                transactionDetailIntent.putExtra("intervalFld", (String) null);
+                transactionDetailIntent.putExtra("endDateFld", (String) null);
+            }
             transactionDetailIntent.putExtra("descriptionFld", transaction.getItemDescription());
             MainActivity.this.startActivity(transactionDetailIntent);
         };
     }
-
-
-
 }
