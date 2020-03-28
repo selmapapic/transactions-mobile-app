@@ -1,6 +1,8 @@
 package com.example.rma20celosmanovicselma04;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -39,7 +41,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         titleFld.setText(getPresenter().getTransaction().getTitle());
         amountFld.setText(getPresenter().getTransaction().getAmount().toString());
         dateFld.setText(getPresenter().getTransaction().getDate().toString());
-
+        descriptionFld.setText(getPresenter().getTransaction().getItemDescription());
         if(getPresenter().getTransaction().getType().toString().contains("REGULAR")) {
             intervalFld.setText(getPresenter().getTransaction().getTransactionInterval().toString());
             endDateFld.setText(getPresenter().getTransaction().getEndDate().toString());
@@ -49,7 +51,12 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             endDateFld.setText("");
         }
 
-        descriptionFld.setText(getPresenter().getTransaction().getItemDescription());
+        titleFld.addTextChangedListener(fieldColor(titleFld));
+        amountFld.addTextChangedListener(fieldColor(amountFld));
+        dateFld.addTextChangedListener(fieldColor(dateFld));
+        descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
+        intervalFld.addTextChangedListener(fieldColor(intervalFld));
+        endDateFld.addTextChangedListener(fieldColor(endDateFld));
 
         getPresenter().start();
     }
@@ -66,5 +73,24 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         int pos = typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName());
         System.out.println(pos);
         spinnerType.setSelection(typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName()));
+    }
+
+    public TextWatcher fieldColor (EditText edit) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                edit.setBackgroundResource(R.drawable.field_color);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
     }
 }
