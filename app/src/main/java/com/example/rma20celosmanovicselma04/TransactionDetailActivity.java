@@ -1,10 +1,10 @@
 package com.example.rma20celosmanovicselma04;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,6 +66,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
+        //spinnerType.setOnItemSelectedListener(spinnerColor());
 
         deleteBtn.setOnClickListener(deleteAction());
 
@@ -87,19 +88,34 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public TextWatcher fieldColor (EditText edit) {
+        System.out.println(edit.getId()  + "   id id id ");
         return new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                edit.setBackgroundResource(R.drawable.field_color);
+                if(edit.getId() == 2131165351 && (edit.getText().length() < 3 || edit.getText().length() > 15)) {
+                    edit.setBackgroundResource(R.drawable.field_color_invalid);
+                }
+                else edit.setBackgroundResource(R.drawable.field_color_valid);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { }
+        };
+    }
+
+    public AdapterView.OnItemSelectedListener spinnerColor () {
+        System.out.println(spinnerType.getId() + "   id id id ");
+        return new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerType.setBackgroundResource(R.drawable.field_color_valid);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -110,30 +126,17 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
 
             builder.setMessage("Are you sure you want to permanently delete this transaction?");
-            //builder.setTitle("Alert !");
 
             builder.setCancelable(false);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    getPresenter().removeTransaction(getPresenter().getTransaction());
-                    finish();
-                }
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                getPresenter().removeTransaction(getPresenter().getTransaction());
+                finish();
             });
 
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    dialog.cancel();
-                }
-            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         };
-//        getPresenter().removeTransaction(getPresenter().getTransaction());
-//            finish();
     }
 }
