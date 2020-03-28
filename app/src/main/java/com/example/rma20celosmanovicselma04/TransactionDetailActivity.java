@@ -1,5 +1,6 @@
 package com.example.rma20celosmanovicselma04;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.LocalDate;
@@ -105,8 +107,33 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public View.OnClickListener deleteAction () {
         return v -> {
-            getPresenter().removeTransaction(getPresenter().getTransaction());
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
+
+            builder.setMessage("Are you sure you want to permanently delete this transaction?");
+            //builder.setTitle("Alert !");
+
+            builder.setCancelable(false);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    getPresenter().removeTransaction(getPresenter().getTransaction());
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         };
+//        getPresenter().removeTransaction(getPresenter().getTransaction());
+//            finish();
     }
 }
