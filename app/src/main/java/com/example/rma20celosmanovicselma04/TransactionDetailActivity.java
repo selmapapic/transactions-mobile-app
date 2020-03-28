@@ -27,6 +27,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(transaction_detail);
+
+        System.out.println(getIntent().getExtras().getInt("intervalFld") + "interval fld bla bla" );
         getPresenter().create((LocalDate) getIntent().getExtras().get("dateFld"), getIntent().getExtras().getDouble("amountFld"), getIntent().getStringExtra("titleFld"), TransactionType.getType(getIntent().getStringExtra("spinnerType")),
                 getIntent().getStringExtra("descriptionFld"), getIntent().getExtras().getInt("intervalFld"), (LocalDate) getIntent().getExtras().get("endDateFld"));
 

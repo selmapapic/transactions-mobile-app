@@ -15,4 +15,5 @@ public interface ITransactionsPresenter {
     void refreshFilterAndSort (String filter, String sort);
     ArrayList<Transaction> sortTransactions (ArrayList<Transaction> trns, String type);
     ArrayList<Transaction> getTransactionsByDate ();
+    ArrayList<Transaction> filterAndSort (String filter, String sort);
 }

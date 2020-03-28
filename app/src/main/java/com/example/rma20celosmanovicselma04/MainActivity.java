@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     @Override
     public void onResume () {
         super.onResume();
-        transactionsAdapter.setTransactions(getPresenter().getTransactionsByDate());
+        transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
     }
 }
