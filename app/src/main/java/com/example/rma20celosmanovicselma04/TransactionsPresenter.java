@@ -10,13 +10,17 @@ import java.util.stream.Collectors;
 
 public class TransactionsPresenter implements ITransactionsPresenter {
     private ITransactionsView view;
-    private ITransactionsInteractor interactor;
+    private static ITransactionsInteractor interactor;
     private Context context;
 
     public TransactionsPresenter(ITransactionsView view, Context context) {
         this.view = view;
         this.interactor = new TransactionsIntreactor();
         this.context = context;
+    }
+
+    public static ITransactionsInteractor getInteractor() {
+        return interactor;
     }
 
     public void start () {

@@ -9,4 +9,5 @@ public interface ITransactionsInteractor {
     void setCurrentDate(LocalDate date);
     ArrayList<String> getTypes ();
     ArrayList<String> getSortTypes ();
+    void removeTransaction(Transaction trn);
 }

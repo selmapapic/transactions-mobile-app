@@ -3,7 +3,9 @@ package com.example.rma20celosmanovicselma04;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -19,6 +21,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     private EditText titleFld, amountFld, intervalFld, dateFld, endDateFld, descriptionFld;
     private ArrayAdapter<String> typeAdapter;
     private Spinner spinnerType;
+    private Button deleteBtn, saveBtn;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         endDateFld = (EditText) findViewById(R.id.endDateFld);
         descriptionFld = (EditText) findViewById(R.id.descriptionFld);
         spinnerType = (Spinner) findViewById(R.id.spinnerType);
+        deleteBtn = (Button) findViewById(R.id.deleteBtn);
+        saveBtn = (Button) findViewById(R.id.saveBtn);
 
         typeAdapter = new ArrayAdapter<String>(this, R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
@@ -57,6 +62,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
+
+        deleteBtn.setOnClickListener(deleteAction());
 
         getPresenter().start();
     }
@@ -91,6 +98,13 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             public void afterTextChanged(Editable s) {
 
             }
+        };
+    }
+
+    public View.OnClickListener deleteAction () {
+        return v -> {
+            getPresenter().removeTransaction(getPresenter().getTransaction());
+            finish();
         };
     }
 }

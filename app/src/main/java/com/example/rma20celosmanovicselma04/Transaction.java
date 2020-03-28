@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Transaction {
     private LocalDate date;
@@ -83,5 +84,24 @@ public class Transaction {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(date, that.date) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(title, that.title) &&
+                type == that.type &&
+                Objects.equals(itemDescription, that.itemDescription) &&
+                Objects.equals(transactionInterval, that.transactionInterval) &&
+                Objects.equals(endDate, that.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, amount, title, type, itemDescription, transactionInterval, endDate);
     }
 }

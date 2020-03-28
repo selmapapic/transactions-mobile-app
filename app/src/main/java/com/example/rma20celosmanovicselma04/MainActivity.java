@@ -145,4 +145,11 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             MainActivity.this.startActivity(transactionDetailIntent);
         };
     }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        transactionsAdapter.setTransactions(getPresenter().getTransactionsByDate());
+        transactionsAdapter.notifyDataSetChanged();
+    }
 }

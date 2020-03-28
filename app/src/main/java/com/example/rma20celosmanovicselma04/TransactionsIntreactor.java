@@ -24,5 +24,8 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
         return TransactionsModel.sortTypes;
     }
 
+    public void removeTransaction(Transaction trn) {
+        TransactionsModel.transactions.remove(trn);
+    }
 
 }

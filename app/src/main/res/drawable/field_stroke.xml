@@ -6,10 +6,7 @@
                 <stroke android:width="1dp"
                     android:color="#9FFFFFFF"/>
                 <corners android:radius="5dp"/>
-                <solid
-                    android:color="#BF44CF25">
-                </solid>
-
+                <solid android:color="#12FFFFFF"/>
             </shape>
         </item>
     </layer-list></item>

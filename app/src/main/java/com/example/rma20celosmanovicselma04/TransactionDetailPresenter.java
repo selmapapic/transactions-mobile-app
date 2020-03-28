@@ -15,7 +15,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter{
     public TransactionDetailPresenter (Context context, ITransactionDetailView view) {
         this.context = context;
         this.view = view;
-        interactor = new TransactionsIntreactor();
+        interactor = TransactionsPresenter.getInteractor();
     }
 
     @Override
@@ -34,5 +34,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter{
         view.setTypeSpinner(interactor.getTypes());
     }
 
-
+    public void removeTransaction (Transaction trn) {
+        interactor.removeTransaction(trn);
+    }
 }
