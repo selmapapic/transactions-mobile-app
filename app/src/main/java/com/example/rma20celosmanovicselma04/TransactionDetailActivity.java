@@ -13,6 +13,9 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -88,17 +91,20 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public TextWatcher fieldColor (EditText edit) {
-        System.out.println(edit.getId()  + "   id id id ");
+        System.out.println(edit.getId());
+        System.out.println(edit.getText());
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(edit.getId() == 2131165351 && (edit.getText().length() < 3 || edit.getText().length() > 15)) {
-                    edit.setBackgroundResource(R.drawable.field_color_invalid);
-                }
-                else edit.setBackgroundResource(R.drawable.field_color_valid);
+                if(edit.getId() == 2131165351) validateTitle(edit);
+                else if(edit.getId() == 2131165215) validateAmount(edit);
+                else if(edit.getId() == 2131165236) validateDate(edit, true);
+                else if(edit.getId() == 2131165240) validateDescription(edit);
+                else if(edit.getId() == 2131165267) validateInterval(edit);
+                else if(edit.getId() == 2131165246) validateDate(edit, false);
             }
 
             @Override
@@ -106,8 +112,77 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         };
     }
 
+    public void validateTitle (EditText edit) {
+        if(edit.getText().length() < 3 || edit.getText().length() > 15) {
+            edit.setError("Your input is invalid");
+            edit.setBackgroundResource(R.drawable.field_stroke);
+        }
+        else edit.setBackgroundResource(R.drawable.field_color_valid);
+    }
+
+    public void validateAmount (EditText edit) {
+        if(edit.getText().length() > 0) edit.setBackgroundResource(R.drawable.field_color_valid);
+        else {
+            edit.setError("Your input is invalid");
+            edit.setBackgroundResource(R.drawable.field_stroke);
+        }
+    }
+
+    public void validateInterval (EditText edit) {
+        if((!spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() > 0) || (spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() == 0)) {
+            edit.setError("Your input is invalid");
+            edit.setBackgroundResource(R.drawable.field_stroke);
+        }
+        else edit.setBackgroundResource(R.drawable.field_color_valid);
+    }
+
+    public void validateDate (EditText edit, boolean type) { //ako je true, znaci da je date a ako je false onda je endDate
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+        if(!type) {
+            if((!spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() > 0) || (spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() == 0)) {
+                edit.setError("Your input is invalid");
+                edit.setBackgroundResource(R.drawable.field_stroke);
+            }
+            else if(!spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() == 0) {
+                edit.setBackgroundResource(R.drawable.field_color_valid);
+            }
+            else {
+                try {
+                    format.parse(edit.getText().toString());
+                    edit.setBackgroundResource(R.drawable.field_color_valid);
+                } catch (ParseException e) {
+                    edit.setError("Your input is invalid");
+                    edit.setBackgroundResource(R.drawable.field_stroke);
+                }
+            }
+        }
+        else {
+            if(edit.getText().length() == 0) {
+                edit.setError("Your input is invalid");
+                edit.setBackgroundResource(R.drawable.field_stroke);
+            }
+            else {
+                try {
+                    format.parse(edit.getText().toString());
+                    edit.setBackgroundResource(R.drawable.field_color_valid);
+                } catch (ParseException e) {
+                    edit.setError("Your input is invalid");
+                    edit.setBackgroundResource(R.drawable.field_stroke);
+                }
+            }
+        }
+    }
+
+    public void validateDescription (EditText edit) {
+        if(spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) {
+            edit.setError("Your input is invalid");
+            edit.setBackgroundResource(R.drawable.field_stroke);
+        }
+        else edit.setBackgroundResource(R.drawable.field_color_valid);
+    }
+
     public AdapterView.OnItemSelectedListener spinnerColor () {
-        System.out.println(spinnerType.getId() + "   id id id ");
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
