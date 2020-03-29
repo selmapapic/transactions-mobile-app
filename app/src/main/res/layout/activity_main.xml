@@ -15,7 +15,7 @@
         android:layout_marginTop="13dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/addTransactionButton"
+        app:layout_constraintBottom_toTopOf="@+id/addTransactionBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner">
@@ -163,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />
 
     <Button
-        android:id="@+id/addTransactionButton"
+        android:id="@+id/addTransactionBtn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"

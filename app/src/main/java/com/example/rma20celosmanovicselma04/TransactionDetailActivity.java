@@ -33,9 +33,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         super.onCreate(savedInstanceState);
         setContentView(transaction_detail);
 
-        System.out.println(getIntent().getExtras().getInt("intervalFld") + "interval fld bla bla" );
-        getPresenter().create((LocalDate) getIntent().getExtras().get("dateFld"), getIntent().getExtras().getDouble("amountFld"), getIntent().getStringExtra("titleFld"), TransactionType.getType(getIntent().getStringExtra("spinnerType")),
-                getIntent().getStringExtra("descriptionFld"), getIntent().getExtras().getInt("intervalFld"), (LocalDate) getIntent().getExtras().get("endDateFld"));
+        boolean addTrn = (boolean) getIntent().getExtras().get("addTrn");
 
         titleFld = (EditText) findViewById(R.id.titleFld);
         amountFld = (EditText) findViewById(R.id.amountFld);
@@ -50,17 +48,33 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         typeAdapter = new ArrayAdapter<String>(this, R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
 
-        titleFld.setText(getPresenter().getTransaction().getTitle());
-        amountFld.setText(getPresenter().getTransaction().getAmount().toString());
-        dateFld.setText(getPresenter().getTransaction().getDate().toString());
-        descriptionFld.setText(getPresenter().getTransaction().getItemDescription());
-        if(getPresenter().getTransaction().getType().toString().contains("REGULAR")) {
-            intervalFld.setText(getPresenter().getTransaction().getTransactionInterval().toString());
-            endDateFld.setText(getPresenter().getTransaction().getEndDate().toString());
+        if(!addTrn) {
+            getPresenter().create((LocalDate) getIntent().getExtras().get("dateFld"), getIntent().getExtras().getDouble("amountFld"), getIntent().getStringExtra("titleFld"), TransactionType.getType(getIntent().getStringExtra("spinnerType")),
+                    getIntent().getStringExtra("descriptionFld"), getIntent().getExtras().getInt("intervalFld"), (LocalDate) getIntent().getExtras().get("endDateFld"));
+            titleFld.setText(getPresenter().getTransaction().getTitle());
+            amountFld.setText(getPresenter().getTransaction().getAmount().toString());
+            dateFld.setText(getPresenter().getTransaction().getDate().toString());
+            if(!getPresenter().getTransaction().getType().toString().contains("INCOME")) {
+                descriptionFld.setText(getPresenter().getTransaction().getItemDescription());
+            }
+            else {
+                descriptionFld.setText("");
+            }
+            if (getPresenter().getTransaction().getType().toString().contains("REGULAR")) {
+                intervalFld.setText(getPresenter().getTransaction().getTransactionInterval().toString());
+                endDateFld.setText(getPresenter().getTransaction().getEndDate().toString());
+            } else {
+                intervalFld.setText("");
+                endDateFld.setText("");
+            }
+
+            deleteBtn.setOnClickListener(deleteAction());
+            saveBtn.setOnClickListener(saveAction(false));
         }
         else {
-            intervalFld.setText("");
-            endDateFld.setText("");
+            spinnerType.setSelection(0);
+            deleteBtn.setEnabled(false);
+            saveBtn.setOnClickListener(saveAction(true));
         }
 
         titleFld.addTextChangedListener(fieldColor(titleFld));
@@ -70,9 +84,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
-
-        deleteBtn.setOnClickListener(deleteAction());
-        saveBtn.setOnClickListener(saveAction());
 
         getPresenter().start();
     }
@@ -85,10 +96,9 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public void setTypeSpinner (ArrayList<String> types) {
+        boolean addTrn = (boolean) getIntent().getExtras().get("addTrn");
         typeAdapter.addAll(types);
-        int pos = typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName());
-        System.out.println(pos);
-        spinnerType.setSelection(typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName()));
+        if(!addTrn) spinnerType.setSelection(typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName()));
     }
 
     public TextWatcher fieldColor (EditText edit) {
@@ -180,18 +190,27 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             edit.setError("Your input is invalid");
             edit.setBackgroundResource(R.drawable.field_stroke);
         }
-        else edit.setBackgroundResource(R.drawable.field_color_valid);
+        else {
+            edit.setBackgroundResource(R.drawable.field_color_valid);
+            edit.setError(null);
+        }
     }
 
     public AdapterView.OnItemSelectedListener spinnerColor () {
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!getPresenter().getTransaction().getType().getTransactionName().equals(spinnerType.getSelectedItem().toString())) {
+                boolean addTrn = (boolean) getIntent().getExtras().get("addTrn");
+                if(!addTrn) {
+                    if (!getPresenter().getTransaction().getType().getTransactionName().equals(spinnerType.getSelectedItem().toString())) {
+                        spinnerType.setBackgroundResource(R.drawable.spinner_color_valid);
+                    validateInterval(intervalFld);
+                    validateDescription(descriptionFld);
+                    validateDate(endDateFld, false);
+                    }
+                }
+                else {
                     spinnerType.setBackgroundResource(R.drawable.spinner_color_valid);
-//                    validateInterval(intervalFld);
-//                    validateDescription(descriptionFld);
-//                    validateDate(endDateFld, false);
                 }
             }
 
@@ -217,8 +236,18 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         };
     }
 
-    private View.OnClickListener saveAction() {
+    public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
+            if(isAdd) {
+                validateTitle(titleFld);
+                validateAmount(amountFld);
+                validateDate(dateFld, true);
+                validateInterval(intervalFld);
+                validateDescription(descriptionFld);
+                validateDate(endDateFld, false);
+
+            }
+
             ArrayList<Object> errors = new ArrayList<>();
 
             errors.add(titleFld.getError());
@@ -255,15 +284,22 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
                 Transaction trn = new Transaction(LocalDate.parse(dateFld.getText().toString()), Double.parseDouble(amountFld.getText().toString()), titleFld.getText().toString(), TransactionType.getType(spinnerType.getSelectedItem().toString()),
                         descriptionNew, intervalNew, endDateNew);
-                getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
 
-                titleFld.setBackgroundResource(R.drawable.field_stroke);
-                amountFld.setBackgroundResource(R.drawable.field_stroke);
-                intervalFld.setBackgroundResource(R.drawable.field_stroke);
-                dateFld.setBackgroundResource(R.drawable.field_stroke);
-                descriptionFld.setBackgroundResource(R.drawable.field_stroke);
-                endDateFld.setBackgroundResource(R.drawable.field_stroke);
-                spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
+                if(!isAdd) {
+                    getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
+                    titleFld.setBackgroundResource(R.drawable.field_stroke);
+                    amountFld.setBackgroundResource(R.drawable.field_stroke);
+                    intervalFld.setBackgroundResource(R.drawable.field_stroke);
+                    dateFld.setBackgroundResource(R.drawable.field_stroke);
+                    descriptionFld.setBackgroundResource(R.drawable.field_stroke);
+                    endDateFld.setBackgroundResource(R.drawable.field_stroke);
+                    spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
+                }
+                else {
+                    System.out.println(trn);
+                    getPresenter().addTransaction(trn);
+                    finish();
+                }
             }
         };
     }

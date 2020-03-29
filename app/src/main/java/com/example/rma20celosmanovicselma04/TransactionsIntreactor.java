@@ -39,4 +39,7 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
         TransactionsModel.transactions.set(indexOld, newTrn);
     }
 
+    public void addTransaction (Transaction trn) {
+        TransactionsModel.transactions.add(trn);
+    }
 }

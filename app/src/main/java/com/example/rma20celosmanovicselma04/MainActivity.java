@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ITransactionsView {
     private ITransactionsPresenter presenter;
     private TransactionsAdapter transactionsAdapter;
-    private Button leftButton, rightButton;
+    private Button leftButton, rightButton, addTransactionBtn;
     private TextView monthText;
     private ListView transactionListView;
     private Spinner filterSpinner, sortSpinner;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         transactionListView = (ListView) findViewById(R.id.transactionListView);
         filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
         sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
+        addTransactionBtn = (Button) findViewById(R.id.addTransactionBtn);
 
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
         sortAdapter = new ArrayAdapter<>(this, R.layout.sort_spinner_element, R.id.sortType, new ArrayList<>());
         sortSpinner.setAdapter(sortAdapter);
+
+        addTransactionBtn.setOnClickListener(addAction());
 
         getPresenter().refreshTransactionsByMonthAndYear();
         getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
@@ -126,8 +129,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
     public AdapterView.OnItemClickListener listItemClickListener () {
         return (parent, view, position, id) -> {
-            Intent transactionDetailIntent = new Intent(MainActivity.this,
-                    TransactionDetailActivity.class);
+            Intent transactionDetailIntent = new Intent(MainActivity.this, TransactionDetailActivity.class);
             Transaction transaction = transactionsAdapter.getTransaction(position);
             transactionDetailIntent.putExtra("titleFld", transaction.getTitle());
             transactionDetailIntent.putExtra("amountFld", transaction.getAmount());
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
                 transactionDetailIntent.putExtra("endDateFld", (String) null);
             }
             transactionDetailIntent.putExtra("descriptionFld", transaction.getItemDescription());
+            transactionDetailIntent.putExtra("addTrn", false);
             MainActivity.this.startActivity(transactionDetailIntent);
         };
     }
@@ -151,5 +154,13 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         super.onResume();
         transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
+    }
+
+    public View.OnClickListener addAction () {
+        return v -> {
+            Intent transactionDetailIntent = new Intent(MainActivity.this, TransactionDetailActivity.class);
+            transactionDetailIntent.putExtra("addTrn", true);
+            MainActivity.this.startActivity(transactionDetailIntent);
+        };
     }
 }

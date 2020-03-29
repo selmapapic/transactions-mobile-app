@@ -11,4 +11,5 @@ public interface ITransactionsInteractor {
     ArrayList<String> getSortTypes ();
     void removeTransaction(Transaction trn);
     void changeTransaction(Transaction oldTrn, Transaction newTrn);
+    void addTransaction (Transaction trn);
 }
