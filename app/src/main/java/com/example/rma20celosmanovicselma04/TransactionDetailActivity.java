@@ -69,7 +69,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
-        //spinnerType.setOnItemSelectedListener(spinnerColor());
+        spinnerType.setOnItemSelectedListener(spinnerColor());
 
         deleteBtn.setOnClickListener(deleteAction());
 
@@ -99,12 +99,12 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(edit.getId() == 2131165351) validateTitle(edit);
-                else if(edit.getId() == 2131165215) validateAmount(edit);
-                else if(edit.getId() == 2131165236) validateDate(edit, true);
-                else if(edit.getId() == 2131165240) validateDescription(edit);
-                else if(edit.getId() == 2131165267) validateInterval(edit);
-                else if(edit.getId() == 2131165246) validateDate(edit, false);
+                if(edit.getId() == 2131165351) validateTitle(edit); //title
+                else if(edit.getId() == 2131165215) validateAmount(edit);   //amount
+                else if(edit.getId() == 2131165236) validateDate(edit, true);      //date
+                else if(edit.getId() == 2131165240) validateDescription(edit);  //description
+                else if(edit.getId() == 2131165267) validateInterval(edit); //interval
+                else if(edit.getId() == 2131165246) validateDate(edit, false);  //endDate
             }
 
             @Override
@@ -186,7 +186,9 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerType.setBackgroundResource(R.drawable.field_color_valid);
+                if(!getPresenter().getTransaction().getType().getTransactionName().equals(spinnerType.getSelectedItem().toString())) {
+                    spinnerType.setBackgroundResource(R.drawable.spinner_color_valid);
+                }
             }
 
             @Override
