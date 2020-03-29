@@ -7,5 +7,6 @@ public interface ITransactionDetailPresenter {
     Transaction getTransaction ();
     void start ();
     void removeTransaction (Transaction trn);
+    void changeTransaction (Transaction oldTrn, Transaction newTrn);
 
 }

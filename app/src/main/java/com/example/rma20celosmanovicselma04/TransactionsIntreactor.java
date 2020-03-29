@@ -28,4 +28,15 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
         TransactionsModel.transactions.remove(trn);
     }
 
+    public void changeTransaction(Transaction oldTrn, Transaction newTrn) {
+        System.out.println(oldTrn);
+        System.out.println("old");
+        System.out.println(TransactionsModel.transactions.get(5));
+        System.out.println("model");
+        System.out.println(newTrn);
+        System.out.println("new");
+        int indexOld = TransactionsModel.transactions.indexOf(oldTrn);
+        TransactionsModel.transactions.set(indexOld, newTrn);
+    }
+
 }

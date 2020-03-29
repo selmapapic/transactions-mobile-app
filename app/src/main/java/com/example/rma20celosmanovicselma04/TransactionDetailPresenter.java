@@ -37,4 +37,11 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter{
     public void removeTransaction (Transaction trn) {
         interactor.removeTransaction(trn);
     }
+
+    public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
+//        System.out.println(oldTrn);
+//        System.out.println(newTrn);
+//        System.out.println(TransactionsModel.transactions.get(5));
+        interactor.changeTransaction(oldTrn, newTrn);
+    }
 }

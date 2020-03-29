@@ -72,6 +72,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         spinnerType.setOnItemSelectedListener(spinnerColor());
 
         deleteBtn.setOnClickListener(deleteAction());
+        saveBtn.setOnClickListener(saveAction());
 
         getPresenter().start();
     }
@@ -188,13 +189,14 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(!getPresenter().getTransaction().getType().getTransactionName().equals(spinnerType.getSelectedItem().toString())) {
                     spinnerType.setBackgroundResource(R.drawable.spinner_color_valid);
+//                    validateInterval(intervalFld);
+//                    validateDescription(descriptionFld);
+//                    validateDate(endDateFld, false);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         };
     }
 
@@ -203,17 +205,66 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
 
             builder.setMessage("Are you sure you want to permanently delete this transaction?");
-
             builder.setCancelable(false);
             builder.setPositiveButton("Yes", (dialog, which) -> {
                 getPresenter().removeTransaction(getPresenter().getTransaction());
                 finish();
             });
-
             builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
+        };
+    }
+
+    private View.OnClickListener saveAction() {
+        return v -> {
+            ArrayList<Object> errors = new ArrayList<>();
+
+            errors.add(titleFld.getError());
+            errors.add(amountFld.getError());
+            errors.add(intervalFld.getError());
+            errors.add(dateFld.getError());
+            errors.add(descriptionFld.getError());
+            errors.add(endDateFld.getError());
+            boolean hasNoErrors = true;
+            for(Object o : errors) {
+                if (o != null) {
+                    hasNoErrors = false;
+                    break;
+                }
+            }
+
+            if(hasNoErrors) {
+                LocalDate endDateNew;
+                Integer intervalNew;
+                String descriptionNew;
+                if(endDateFld.getText().toString().length() == 0) {
+                    endDateNew = null;
+                }
+                else endDateNew = LocalDate.parse(endDateFld.getText().toString());
+
+                if(intervalFld.getText().toString().length() == 0) {
+                    intervalNew = null;
+                }
+                else intervalNew =  Integer.parseInt(intervalFld.getText().toString());
+                if(descriptionFld.getText().toString().length() == 0) {
+                    descriptionNew = null;
+                }
+                else descriptionNew = descriptionFld.getText().toString();
+
+                Transaction trn = new Transaction(LocalDate.parse(dateFld.getText().toString()), Double.parseDouble(amountFld.getText().toString()), titleFld.getText().toString(), TransactionType.getType(spinnerType.getSelectedItem().toString()),
+                        descriptionNew, intervalNew, endDateNew);
+                getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
+
+                titleFld.setBackgroundResource(R.drawable.field_stroke);
+                amountFld.setBackgroundResource(R.drawable.field_stroke);
+                intervalFld.setBackgroundResource(R.drawable.field_stroke);
+                dateFld.setBackgroundResource(R.drawable.field_stroke);
+                descriptionFld.setBackgroundResource(R.drawable.field_stroke);
+                endDateFld.setBackgroundResource(R.drawable.field_stroke);
+                spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
+            }
         };
     }
 }

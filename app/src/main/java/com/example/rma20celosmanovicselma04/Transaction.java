@@ -104,4 +104,17 @@ public class Transaction {
     public int hashCode() {
         return Objects.hash(date, amount, title, type, itemDescription, transactionInterval, endDate);
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "date=" + date +
+                ", amount=" + amount +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", transactionInterval=" + transactionInterval +
+                ", endDate=" + endDate +
+                '}';
+    }
 }
