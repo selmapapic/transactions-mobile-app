@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/limitText"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="7dp"
@@ -48,18 +48,16 @@
 
     <TextView
         android:id="@+id/globalAmountText"
-        android:layout_width="176dp"
+        android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:background="#00FFFFFF"
         android:text="Global amount:"
         android:textAllCaps="true"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/limitText"
-        app:layout_constraintEnd_toStartOf="@+id/amountNumber"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,14 +83,16 @@
         android:id="@+id/amountNumber"
         android:layout_width="94dp"
         android:layout_height="31dp"
-        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="126dp"
         android:layout_marginBottom="38dp"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/globalAmountText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/monthText"
@@ -154,6 +154,7 @@
         android:id="@+id/limitNumber"
         android:layout_width="94dp"
         android:layout_height="31dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="6dp"
         android:textColor="#FFFFFF"

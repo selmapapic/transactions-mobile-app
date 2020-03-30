@@ -239,17 +239,10 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
             if(isAdd) {
-                validateTitle(titleFld);
-                validateAmount(amountFld);
-                validateDate(dateFld, true);
-                validateInterval(intervalFld);
-                validateDescription(descriptionFld);
-                validateDate(endDateFld, false);
-
+                validateAll();
             }
 
             ArrayList<Object> errors = new ArrayList<>();
-
             errors.add(titleFld.getError());
             errors.add(amountFld.getError());
             errors.add(intervalFld.getError());
@@ -265,42 +258,80 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             }
 
             if(hasNoErrors) {
-                LocalDate endDateNew;
-                Integer intervalNew;
-                String descriptionNew;
-                if(endDateFld.getText().toString().length() == 0) {
-                    endDateNew = null;
-                }
-                else endDateNew = LocalDate.parse(endDateFld.getText().toString());
+                Transaction trn = getNewTransaction();
 
-                if(intervalFld.getText().toString().length() == 0) {
-                    intervalNew = null;
-                }
-                else intervalNew =  Integer.parseInt(intervalFld.getText().toString());
-                if(descriptionFld.getText().toString().length() == 0) {
-                    descriptionNew = null;
-                }
-                else descriptionNew = descriptionFld.getText().toString();
+                if(getPresenter().limitExceeded(Double.parseDouble(amountFld.getText().toString()), isAdd)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
+                    builder.setTitle("Your limit is exceeded.");
+                    builder.setMessage("Are you sure you want to add this transaction?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Yes", (dialog, which) -> {
+                        if(!isAdd) {
+                            getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
+                            removeValidation();
+                        }
+                        else {
+                            getPresenter().addTransaction(trn);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
-                Transaction trn = new Transaction(LocalDate.parse(dateFld.getText().toString()), Double.parseDouble(amountFld.getText().toString()), titleFld.getText().toString(), TransactionType.getType(spinnerType.getSelectedItem().toString()),
-                        descriptionNew, intervalNew, endDateNew);
-
-                if(!isAdd) {
-                    getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
-                    titleFld.setBackgroundResource(R.drawable.field_stroke);
-                    amountFld.setBackgroundResource(R.drawable.field_stroke);
-                    intervalFld.setBackgroundResource(R.drawable.field_stroke);
-                    dateFld.setBackgroundResource(R.drawable.field_stroke);
-                    descriptionFld.setBackgroundResource(R.drawable.field_stroke);
-                    endDateFld.setBackgroundResource(R.drawable.field_stroke);
-                    spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
                 else {
-                    System.out.println(trn);
-                    getPresenter().addTransaction(trn);
-                    finish();
+                    if(!isAdd) {
+                        getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
+                        removeValidation();
+                    }
+                    else {
+                        getPresenter().addTransaction(trn);
+                        finish();
+                    }
                 }
             }
         };
+    }
+
+    public Transaction getNewTransaction() {
+        LocalDate endDateNew;
+        Integer intervalNew;
+        String descriptionNew;
+        if(endDateFld.getText().toString().length() == 0) {
+            endDateNew = null;
+        }
+        else endDateNew = LocalDate.parse(endDateFld.getText().toString());
+
+        if(intervalFld.getText().toString().length() == 0) {
+            intervalNew = null;
+        }
+        else intervalNew =  Integer.parseInt(intervalFld.getText().toString());
+        if(descriptionFld.getText().toString().length() == 0) {
+            descriptionNew = null;
+        }
+        else descriptionNew = descriptionFld.getText().toString();
+
+        return new Transaction(LocalDate.parse(dateFld.getText().toString()), Double.parseDouble(amountFld.getText().toString()), titleFld.getText().toString(), TransactionType.getType(spinnerType.getSelectedItem().toString()),
+                descriptionNew, intervalNew, endDateNew);
+    }
+
+    public void removeValidation () {
+        titleFld.setBackgroundResource(R.drawable.field_stroke);
+        amountFld.setBackgroundResource(R.drawable.field_stroke);
+        intervalFld.setBackgroundResource(R.drawable.field_stroke);
+        dateFld.setBackgroundResource(R.drawable.field_stroke);
+        descriptionFld.setBackgroundResource(R.drawable.field_stroke);
+        endDateFld.setBackgroundResource(R.drawable.field_stroke);
+        spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
+    }
+
+    public void validateAll () {
+        validateTitle(titleFld);
+        validateAmount(amountFld);
+        validateDate(dateFld, true);
+        validateInterval(intervalFld);
+        validateDescription(descriptionFld);
+        validateDate(endDateFld, false);
     }
 }

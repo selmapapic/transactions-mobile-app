@@ -185,7 +185,7 @@
         android:background="@drawable/field_stroke"
         android:ems="10"
         android:includeFontPadding="true"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:paddingLeft="5dp"
         android:textColor="#FFFFFF"
         android:textSize="16sp"

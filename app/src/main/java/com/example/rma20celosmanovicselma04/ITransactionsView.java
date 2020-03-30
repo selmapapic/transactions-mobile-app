@@ -8,5 +8,5 @@ public interface ITransactionsView {
     void refreshDate(String date);
     void setFilterSpinner (ArrayList<String> types);
     void setSortSpinner (ArrayList<String> sort);
-
+    void setBudgetLimit (Double amt, Double limit);
 }

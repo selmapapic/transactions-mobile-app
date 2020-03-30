@@ -9,4 +9,5 @@ public interface ITransactionDetailPresenter {
     void removeTransaction (Transaction trn);
     void changeTransaction (Transaction oldTrn, Transaction newTrn);
     void addTransaction(Transaction trn);
+    boolean limitExceeded (Double currentTrn, boolean isAdd);
 }

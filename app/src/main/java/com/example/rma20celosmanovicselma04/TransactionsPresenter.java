@@ -27,12 +27,8 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         view.refreshDate(dateToString(interactor.getCurrentDate()));
         view.setFilterSpinner(interactor.getTypes());
         view.setSortSpinner(interactor.getSortTypes());
+        view.setBudgetLimit(interactor.getAccount().getBudget(), interactor.getAccount().getTotalLimit());
     }
-//
-//    public void refreshTransactions() {
-//        view.setTransactions(interactor.getTransactions());
-//        view.notifyTransactionsListDataSetChanged();
-//    }
 
     public void refreshTransactionsByMonthAndYear () {
         view.setTransactions(getTransactionsByDate());

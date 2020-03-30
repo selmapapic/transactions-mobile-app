@@ -12,4 +12,5 @@ public interface ITransactionsInteractor {
     void removeTransaction(Transaction trn);
     void changeTransaction(Transaction oldTrn, Transaction newTrn);
     void addTransaction (Transaction trn);
+    Account getAccount ();
 }

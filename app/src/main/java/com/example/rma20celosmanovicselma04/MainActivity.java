@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     private ITransactionsPresenter presenter;
     private TransactionsAdapter transactionsAdapter;
     private Button leftButton, rightButton, addTransactionBtn;
-    private TextView monthText;
+    private TextView monthText, amountNumber, limitNumber;
     private ListView transactionListView;
     private Spinner filterSpinner, sortSpinner;
     private FilterAdapter filterAdapter;
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
         sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
         addTransactionBtn = (Button) findViewById(R.id.addTransactionBtn);
+        amountNumber = (TextView) findViewById(R.id.amountNumber);
+        limitNumber = (TextView) findViewById(R.id.limitNumber);
 
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
@@ -162,5 +164,10 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
             transactionDetailIntent.putExtra("addTrn", true);
             MainActivity.this.startActivity(transactionDetailIntent);
         };
+    }
+
+    public void setBudgetLimit (Double amt, Double limit) {
+        amountNumber.setText(amt.toString());
+        limitNumber.setText(limit.toString());
     }
 }

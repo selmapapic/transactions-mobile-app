@@ -29,17 +29,21 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
     }
 
     public void changeTransaction(Transaction oldTrn, Transaction newTrn) {
-        System.out.println(oldTrn);
-        System.out.println("old");
-        System.out.println(TransactionsModel.transactions.get(5));
-        System.out.println("model");
-        System.out.println(newTrn);
-        System.out.println("new");
+//        System.out.println(oldTrn);
+//        System.out.println("old");
+//        System.out.println(TransactionsModel.transactions.get(5));
+//        System.out.println("model");
+//        System.out.println(newTrn);
+//        System.out.println("new");
         int indexOld = TransactionsModel.transactions.indexOf(oldTrn);
         TransactionsModel.transactions.set(indexOld, newTrn);
     }
 
     public void addTransaction (Transaction trn) {
         TransactionsModel.transactions.add(trn);
+    }
+
+    public Account getAccount () {
+        return AccountModel.account;
     }
 }
