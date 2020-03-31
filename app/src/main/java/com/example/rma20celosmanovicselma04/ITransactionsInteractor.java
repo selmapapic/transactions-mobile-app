@@ -13,4 +13,7 @@ public interface ITransactionsInteractor {
     void changeTransaction(Transaction oldTrn, Transaction newTrn);
     void addTransaction (Transaction trn);
     Account getAccount ();
+    void setBudget (double budget);
+    ArrayList<Transaction> getTransactionsByDate ();
+    double getCurrentBudget (boolean isAllNoDate);
 }

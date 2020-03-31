@@ -48,6 +48,20 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         typeAdapter = new ArrayAdapter<String>(this, R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
 
+        setFields(addTrn);
+
+        titleFld.addTextChangedListener(fieldColor(titleFld));
+        amountFld.addTextChangedListener(fieldColor(amountFld));
+        dateFld.addTextChangedListener(fieldColor(dateFld));
+        descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
+        intervalFld.addTextChangedListener(fieldColor(intervalFld));
+        endDateFld.addTextChangedListener(fieldColor(endDateFld));
+        spinnerType.setOnItemSelectedListener(spinnerColor());
+
+        getPresenter().start();
+    }
+
+    public void setFields(boolean addTrn) {
         if(!addTrn) {
             getPresenter().create((LocalDate) getIntent().getExtras().get("dateFld"), getIntent().getExtras().getDouble("amountFld"), getIntent().getStringExtra("titleFld"), TransactionType.getType(getIntent().getStringExtra("spinnerType")),
                     getIntent().getStringExtra("descriptionFld"), getIntent().getExtras().getInt("intervalFld"), (LocalDate) getIntent().getExtras().get("endDateFld"));
@@ -76,16 +90,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             deleteBtn.setEnabled(false);
             saveBtn.setOnClickListener(saveAction(true));
         }
-
-        titleFld.addTextChangedListener(fieldColor(titleFld));
-        amountFld.addTextChangedListener(fieldColor(amountFld));
-        dateFld.addTextChangedListener(fieldColor(dateFld));
-        descriptionFld.addTextChangedListener(fieldColor(descriptionFld));
-        intervalFld.addTextChangedListener(fieldColor(intervalFld));
-        endDateFld.addTextChangedListener(fieldColor(endDateFld));
-        spinnerType.setOnItemSelectedListener(spinnerColor());
-
-        getPresenter().start();
     }
 
     public ITransactionDetailPresenter getPresenter () {
@@ -102,8 +106,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public TextWatcher fieldColor (EditText edit) {
-        System.out.println(edit.getId());
-        System.out.println(edit.getText());
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -186,7 +188,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public void validateDescription (EditText edit) {
-        if(spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) {
+        if((spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) || (!spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() == 0)) {
             edit.setError("Your input is invalid");
             edit.setBackgroundResource(R.drawable.field_stroke);
         }
@@ -204,9 +206,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
                 if(!addTrn) {
                     if (!getPresenter().getTransaction().getType().getTransactionName().equals(spinnerType.getSelectedItem().toString())) {
                         spinnerType.setBackgroundResource(R.drawable.spinner_color_valid);
-                    validateInterval(intervalFld);
-                    validateDescription(descriptionFld);
-                    validateDate(endDateFld, false);
                     }
                 }
                 else {
@@ -238,29 +237,16 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
-            if(isAdd) {
-                validateAll();
-            }
+            validateDateDistances();
+            validateAll();
 
             ArrayList<Object> errors = new ArrayList<>();
-            errors.add(titleFld.getError());
-            errors.add(amountFld.getError());
-            errors.add(intervalFld.getError());
-            errors.add(dateFld.getError());
-            errors.add(descriptionFld.getError());
-            errors.add(endDateFld.getError());
-            boolean hasNoErrors = true;
-            for(Object o : errors) {
-                if (o != null) {
-                    hasNoErrors = false;
-                    break;
-                }
-            }
+            boolean hasNoErrors = isHasNoErrors(errors);
 
             if(hasNoErrors) {
                 Transaction trn = getNewTransaction();
-
-                if(getPresenter().limitExceeded(Double.parseDouble(amountFld.getText().toString()), isAdd)) {
+                if((spinnerType.getSelectedItem().toString().contains("payment") || spinnerType.getSelectedItem().toString().contains("Purchase")) &&
+                        getPresenter().limitExceeded(Double.parseDouble(amountFld.getText().toString()), isAdd)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
                     builder.setTitle("Your limit is exceeded.");
                     builder.setMessage("Are you sure you want to add this transaction?");
@@ -269,6 +255,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
                         if(!isAdd) {
                             getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                             removeValidation();
+                            getPresenter().setTransaction(trn);
                         }
                         else {
                             getPresenter().addTransaction(trn);
@@ -284,6 +271,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
                     if(!isAdd) {
                         getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                         removeValidation();
+                        getPresenter().setTransaction(trn);
                     }
                     else {
                         getPresenter().addTransaction(trn);
@@ -292,6 +280,34 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
                 }
             }
         };
+    }
+
+    public void validateDateDistances() {
+        if(dateFld.getText().length() > 0 && endDateFld.getText().length() > 0) {
+            if(LocalDate.parse(dateFld.getText().toString()).isAfter(LocalDate.parse(endDateFld.getText().toString()))) {
+                dateFld.setBackgroundResource(R.drawable.field_stroke);
+                dateFld.setError("Date cannot be after end date");
+                endDateFld.setBackgroundResource(R.drawable.field_stroke);
+                endDateFld.setError("End date cannot be before date");
+            }
+        }
+    }
+
+    public boolean isHasNoErrors(ArrayList<Object> errors) {
+        errors.add(titleFld.getError());
+        errors.add(amountFld.getError());
+        errors.add(intervalFld.getError());
+        errors.add(dateFld.getError());
+        errors.add(descriptionFld.getError());
+        errors.add(endDateFld.getError());
+        boolean hasNoErrors = true;
+        for(Object o : errors) {
+            if (o != null) {
+                hasNoErrors = false;
+                break;
+            }
+        }
+        return hasNoErrors;
     }
 
     public Transaction getNewTransaction() {

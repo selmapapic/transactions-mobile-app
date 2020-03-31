@@ -31,25 +31,8 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     }
 
     public void refreshTransactionsByMonthAndYear () {
-        view.setTransactions(getTransactionsByDate());
+        view.setTransactions(interactor.getTransactionsByDate());
         view.notifyTransactionsListDataSetChanged();
-    }
-//
-//    public void refreshTransactionsByType (String type, String sort) {
-//        ArrayList<Transaction> trns = sortTransactions(sort, type);
-//        view.setTransactions(getTransactionsByType(type));
-//        view.notifyTransactionsListDataSetChanged();
-//    }
-
-    public ArrayList<Transaction> getTransactionsByDate () {
-        LocalDate curr = interactor.getCurrentDate();
-        ArrayList<Transaction> allTransactions = interactor.getTransactions();
-
-        return (ArrayList<Transaction>) allTransactions.stream().
-                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
-                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
-                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
-                collect(Collectors.toList());
     }
 
     public ArrayList<Transaction> getTransactionsByType (ArrayList<Transaction> trns, String type) {
@@ -64,7 +47,7 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     }
 
     public ArrayList<Transaction> filterAndSort (String filter, String sort) {
-        ArrayList<Transaction> trns = getTransactionsByDate();
+        ArrayList<Transaction> trns = interactor.getTransactionsByDate();
         if((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) return trns;
         else if((filter == null || filter.equals("Filter by") && !(sort == null || sort.equals("Sort by")))) {
             return sortTransactions(trns, sort);
@@ -117,5 +100,10 @@ public class TransactionsPresenter implements ITransactionsPresenter {
 
     public String dateToString (LocalDate date) {
         return date.getMonth().name() + ", " + date.getYear();
+    }
+
+    public void setCurrentBudget () {
+        interactor.setBudget(interactor.getCurrentBudget(true));
+        view.setBudget(interactor.getCurrentBudget(true));
     }
 }

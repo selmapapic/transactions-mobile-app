@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         super.onResume();
         transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
+        getPresenter().setCurrentBudget();
     }
 
     public View.OnClickListener addAction () {
@@ -169,5 +170,9 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     public void setBudgetLimit (Double amt, Double limit) {
         amountNumber.setText(amt.toString());
         limitNumber.setText(limit.toString());
+    }
+
+    public void setBudget (Double budget) {
+        amountNumber.setText(budget.toString());
     }
 }

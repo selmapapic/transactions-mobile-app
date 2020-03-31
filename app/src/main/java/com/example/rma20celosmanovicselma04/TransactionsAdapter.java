@@ -77,5 +77,4 @@ public class TransactionsAdapter extends ArrayAdapter<Transaction> {
 
         return newView;
     }
-
 }
