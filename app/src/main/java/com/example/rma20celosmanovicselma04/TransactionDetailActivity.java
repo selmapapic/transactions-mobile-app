@@ -146,7 +146,10 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             edit.setError("Your input is invalid");
             edit.setBackgroundResource(R.drawable.field_stroke);
         }
-        else edit.setBackgroundResource(R.drawable.field_color_valid);
+        else {
+            edit.setBackgroundResource(R.drawable.field_color_valid);
+            edit.setError(null);
+        }
     }
 
     public void validateDate (EditText edit, boolean type) { //ako je true, znaci da je date a ako je false onda je endDate
@@ -334,11 +337,17 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public void removeValidation () {
         titleFld.setBackgroundResource(R.drawable.field_stroke);
+        titleFld.setError(null);
         amountFld.setBackgroundResource(R.drawable.field_stroke);
+        amountFld.setError(null);
         intervalFld.setBackgroundResource(R.drawable.field_stroke);
+        intervalFld.setError(null);
         dateFld.setBackgroundResource(R.drawable.field_stroke);
+        dateFld.setError(null);
         descriptionFld.setBackgroundResource(R.drawable.field_stroke);
+        descriptionFld.setError(null);
         endDateFld.setBackgroundResource(R.drawable.field_stroke);
+        endDateFld.setError(null);
         spinnerType.setBackgroundResource(R.drawable.spinner_bg_2);
     }
 

@@ -16,4 +16,5 @@ public interface ITransactionsInteractor {
     void setBudget (double budget);
     ArrayList<Transaction> getTransactionsByDate ();
     double getCurrentBudget (boolean isAllNoDate);
+    double getAmountForLimit (boolean isAllNoDate);
 }

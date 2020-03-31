@@ -103,4 +103,34 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
         budget = Math.round(budget * 100.0) / 100.0;
         return budget;
     }
+
+    public double getAmountForLimit (boolean isAllNoDate) {
+        ArrayList<Transaction> trns;
+        if (isAllNoDate) trns = getTransactions();
+        else trns = getTransactionsByDate();
+
+        for (Transaction t : trns) {
+            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
+        }
+
+        double budget = 0;
+        for (Transaction t : trns) {
+            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
+                if (t.getType().toString().contains("REGULAR")) {
+                    if (!isAllNoDate) {
+                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
+                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
+                        else {
+                            //todo
+                        }
+                    } else
+                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
+                } else {
+                    budget += t.getAmount();
+                }
+            }
+        }
+        budget = Math.round(budget * 100.0) / 100.0;
+        return budget;
+    }
 }

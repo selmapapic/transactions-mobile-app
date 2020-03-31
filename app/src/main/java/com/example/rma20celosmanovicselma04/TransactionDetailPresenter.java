@@ -51,16 +51,19 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter{
     }
 
     public boolean limitExceeded (Double currentTrn, boolean isAdd) {
-
-        Double monthSum = interactor.getCurrentBudget(false);
+        System.out.println(isAdd);
+        System.out.println(currentTrn);
+        Double monthSum = interactor.getAmountForLimit(false);
+        System.out.println(monthSum);
         monthSum += currentTrn;
         if(!isAdd) monthSum -= getTransaction().getAmount();
-
-        Double allSum = interactor.getCurrentBudget(true);
+        System.out.println(monthSum);
+        Double allSum = interactor.getAmountForLimit(true);
         allSum += currentTrn;
         if(!isAdd) allSum -= getTransaction().getAmount();
         System.out.println(allSum);
-
+        System.out.println(interactor.getAccount().getMonthLimit());
+        System.out.println(interactor.getAccount().getTotalLimit());
         return interactor.getAccount().getMonthLimit() < monthSum || interactor.getAccount().getTotalLimit() < allSum;
     }
 }
