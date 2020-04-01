@@ -90,7 +90,6 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     public void changeMonthForward () {
         interactor.setCurrentDate(interactor.getCurrentDate().plusMonths(1));
         view.refreshDate(dateToString(interactor.getCurrentDate()));
-        System.out.println(interactor.getCurrentDate());
     }
 
     public void changeMonthBackward () {

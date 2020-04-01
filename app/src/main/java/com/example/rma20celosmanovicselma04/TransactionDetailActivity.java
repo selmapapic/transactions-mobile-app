@@ -156,7 +156,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setLenient(false);
         if(!type) {
-            if((!spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() > 0) || (spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() == 0)) {
+            if((!spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() > 0) ||
+                    (spinnerType.getSelectedItem().toString().contains("Regular") && edit.getText().length() == 0) || edit.getText().length() > 10) {
                 edit.setError("Your input is invalid");
                 edit.setBackgroundResource(R.drawable.field_stroke);
             }
@@ -174,7 +175,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             }
         }
         else {
-            if(edit.getText().length() == 0) {
+            if(edit.getText().length() == 0 || edit.getText().length() > 10) {
                 edit.setError("Your input is invalid");
                 edit.setBackgroundResource(R.drawable.field_stroke);
             }
@@ -191,13 +192,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
     }
 
     public void validateDescription (EditText edit) {
-        if((spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) || (!spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() == 0)) {
-            if(spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) {
-                edit.setError("This field must be empty");
-            }
-            else {
-                edit.setError("This field cannot be empty");
-            }
+        if((spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0)) {
+            edit.setError("This field must be empty");
             edit.setBackgroundResource(R.drawable.field_stroke);
         }
         else {
@@ -293,10 +289,15 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public boolean validateDateDistances() {
         if(dateFld.getText().length() > 0 && endDateFld.getText().length() > 0) {
-            if(LocalDate.parse(dateFld.getText().toString()).isAfter(LocalDate.parse(endDateFld.getText().toString()))) {
+            try {
+                if (LocalDate.parse(dateFld.getText().toString()).isAfter(LocalDate.parse(endDateFld.getText().toString()))) {
+                    endDateFld.setBackgroundResource(R.drawable.field_stroke);
+                    endDateFld.setError("End date cannot be before date");
+                    return false;
+                }
+            } catch (Exception e){
                 endDateFld.setBackgroundResource(R.drawable.field_stroke);
                 endDateFld.setError("End date cannot be before date");
-                return false;
             }
         }
         return true;

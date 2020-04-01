@@ -19,8 +19,9 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
 
     public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
         LocalDate curr;
-        if(date == null) curr = TransactionsModel.getCurrentDate();
+        if(date == null) curr = TransactionsModel.currentDate;
         else curr = date;
+
         ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
 
         return (ArrayList<Transaction>) allTransactions.stream().
