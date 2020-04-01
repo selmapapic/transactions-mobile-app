@@ -192,7 +192,12 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public void validateDescription (EditText edit) {
         if((spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) || (!spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() == 0)) {
-            edit.setError("Your input is invalid");
+            if(spinnerType.getSelectedItem().toString().contains("income") && edit.getText().length() > 0) {
+                edit.setError("This field must be empty");
+            }
+            else {
+                edit.setError("This field cannot be empty");
+            }
             edit.setBackgroundResource(R.drawable.field_stroke);
         }
         else {
