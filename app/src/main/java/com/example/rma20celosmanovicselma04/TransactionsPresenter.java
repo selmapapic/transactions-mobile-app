@@ -78,8 +78,8 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     }
 
     public ArrayList<Transaction> sortByTitle (ArrayList<Transaction> trns, boolean way) {
-        if(way) return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle)).collect(Collectors.toList());
-        return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle).reversed()).collect(Collectors.toList());
+        if(way) return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+        return (ArrayList<Transaction>) trns.stream().sorted(Comparator.comparing(Transaction::getTitle, String.CASE_INSENSITIVE_ORDER).reversed()).collect(Collectors.toList());
     }
 
     public ArrayList<Transaction> sortByDate (ArrayList<Transaction> trns, boolean way) {
