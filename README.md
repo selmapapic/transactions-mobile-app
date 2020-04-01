@@ -4,4 +4,4 @@
 - Pri editovanju ili dodavanju nove transakcije, mijenjanjem tipa se ne validiraju svi podaci (npr da li određeni tip ima interval ili end date) nego se tek validiraju klikom na Save button
 - Dopušteno je da sve transakcije, osim onih sa tipom "income", ne moraju imati description
 - Za računanje budget i totalLimit-a uzeto je u obzir čitavo trajanje transakcije (od date do endDate) 
-- Pri sortiranju po nazivu, pravi se razlika između transakcija sa velikim i malim slovima (aaa ide poslije ZZZ)
+- Pri sortiranju po nazivu, ne pravi se razlika između transakcija sa velikim i malim slovima
