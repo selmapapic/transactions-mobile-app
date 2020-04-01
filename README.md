@@ -6,3 +6,4 @@
 - Za računanje budget i totalLimit-a uzeto je u obzir čitavo trajanje transakcije (od date do endDate) 
 - Pri sortiranju po nazivu, ne pravi se razlika između transakcija sa velikim i malim slovima 
 - Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogodnosti koje nisu podržane u nižem SDK-u
+- Tokom rada na aplikaciji korišten je uređaj u Genymotion emulatoru - Google pixel, 1080x1920, 420dpi, 9.0 - API 28
