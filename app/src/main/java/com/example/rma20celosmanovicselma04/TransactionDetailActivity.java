@@ -240,8 +240,9 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
 
     public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
-            validateDateDistances();
-            validateAll();
+            if(validateDateDistances()) {
+                validateAll();
+            }
 
             ArrayList<Object> errors = new ArrayList<>();
             boolean hasNoErrors = isHasNoErrors(errors);
@@ -249,7 +250,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
             if(hasNoErrors) {
                 Transaction trn = getNewTransaction();
                 if((spinnerType.getSelectedItem().toString().contains("payment") || spinnerType.getSelectedItem().toString().contains("Purchase")) &&
-                        getPresenter().limitExceeded(Double.parseDouble(amountFld.getText().toString()), isAdd)) {
+                        getPresenter().limitExceeded(trn, isAdd)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(TransactionDetailActivity.this);
                     builder.setTitle("Your limit is exceeded.");
                     builder.setMessage("Are you sure you want to add this transaction?");
@@ -285,15 +286,15 @@ public class TransactionDetailActivity extends AppCompatActivity implements ITra
         };
     }
 
-    public void validateDateDistances() {
+    public boolean validateDateDistances() {
         if(dateFld.getText().length() > 0 && endDateFld.getText().length() > 0) {
             if(LocalDate.parse(dateFld.getText().toString()).isAfter(LocalDate.parse(endDateFld.getText().toString()))) {
-                dateFld.setBackgroundResource(R.drawable.field_stroke);
-                dateFld.setError("Date cannot be after end date");
                 endDateFld.setBackgroundResource(R.drawable.field_stroke);
                 endDateFld.setError("End date cannot be before date");
+                return false;
             }
         }
+        return true;
     }
 
     public boolean isHasNoErrors(ArrayList<Object> errors) {

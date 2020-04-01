@@ -31,7 +31,7 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     }
 
     public void refreshTransactionsByMonthAndYear () {
-        view.setTransactions(interactor.getTransactionsByDate());
+        view.setTransactions(interactor.getTransactionsByDate(null));
         view.notifyTransactionsListDataSetChanged();
     }
 
@@ -47,7 +47,7 @@ public class TransactionsPresenter implements ITransactionsPresenter {
     }
 
     public ArrayList<Transaction> filterAndSort (String filter, String sort) {
-        ArrayList<Transaction> trns = interactor.getTransactionsByDate();
+        ArrayList<Transaction> trns = interactor.getTransactionsByDate(null);
         if((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) return trns;
         else if((filter == null || filter.equals("Filter by") && !(sort == null || sort.equals("Sort by")))) {
             return sortTransactions(trns, sort);
