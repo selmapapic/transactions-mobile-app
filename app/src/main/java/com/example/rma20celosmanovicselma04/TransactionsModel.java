@@ -22,7 +22,7 @@ public class TransactionsModel {
             add(new Transaction(LocalDate.of(2020, 4, 3), 120.0, "Stipendija", TransactionType.REGULARINCOME, null, 30, LocalDate.of(2020, 7, 15)));
             add(new Transaction(LocalDate.of(2020, 2, 12), 2300.0, "Laptop", TransactionType.PURCHASE, "HP Envy x360", null, null));
             add(new Transaction(LocalDate.of(2020, 1, 1), 750.0, "Nagradna igra", TransactionType.INDIVIDUALINCOME, null, null, null));
-            add(new Transaction(LocalDate.of(2020, 5, 19), 20.0, "Clanarina", TransactionType.INDIVIDUALPAYMENT, "Clanarina za steleks", null,null));
+            add(new Transaction(LocalDate.of (2020, 5, 19), 20.0, "Clanarina", TransactionType.INDIVIDUALPAYMENT, "Clanarina za steleks", null,null));
             add(new Transaction(LocalDate.of(2019, 6, 6), 35.6, "Netflix", TransactionType.REGULARPAYMENT, "Netflix pretplata", 25, LocalDate.of(2020, 8, 6)));
             add(new Transaction(LocalDate.of(2018, 8, 17), 580.0, "Penzija", TransactionType.REGULARINCOME, null, 30, LocalDate.of(2023, 8, 9)));
             add(new Transaction(LocalDate.of(2020, 4, 16), 20.0, "Tal za poklon", TransactionType.INDIVIDUALPAYMENT, "Poklon za neciji rodjendan", null, null));

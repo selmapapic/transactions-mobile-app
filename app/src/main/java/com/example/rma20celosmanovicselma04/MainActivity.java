@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -23,42 +26,65 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
     private Spinner filterSpinner, sortSpinner;
     private FilterAdapter filterAdapter;
     private ArrayAdapter<String> sortAdapter;
+    private boolean twoPaneMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        leftButton = (Button) findViewById(R.id.leftButton);
-        rightButton = (Button) findViewById(R.id.rightButton);
-        monthText = (TextView) findViewById(R.id.monthText);
-        transactionListView = (ListView) findViewById(R.id.transactionListView);
-        filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
-        sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
-        addTransactionBtn = (Button) findViewById(R.id.addTransactionBtn);
-        amountNumber = (TextView) findViewById(R.id.amountNumber);
-        limitNumber = (TextView) findViewById(R.id.limitNumber);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FrameLayout details = findViewById(R.id.transactions_detail);
+        if (details != null) {
+            twoPaneMode = true;
+            TransactionDetailFragment detailFragment = (TransactionDetailFragment) fragmentManager.findFragmentById(R.id.transactions_detail);
+            if (detailFragment==null) {
+                detailFragment = new TransactionDetailFragment();
+                fragmentManager.beginTransaction().replace(R.id.transactions_detail,detailFragment).commit();
+            }
+        }
+        else {
+            twoPaneMode = false;
+        }
+        Fragment listFragment = fragmentManager.findFragmentByTag("list");
+        if (listFragment==null){
+            listFragment = new TransactionListFragment();
+            fragmentManager.beginTransaction().replace(R.id.transactions_main,listFragment,"list").commit();
+        }
+        else{
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
 
-        leftButton.setOnClickListener(leftAction());
-        rightButton.setOnClickListener(rightAction());
-        filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
-        sortSpinner.setOnItemSelectedListener(spinnerSortAction());
-
-        transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
-        transactionListView.setAdapter(transactionsAdapter);
-        transactionListView.setOnItemClickListener(listItemClickListener());
-
-        filterAdapter = new FilterAdapter(this, R.layout.transaction_spinner_element, new ArrayList<>());
-        filterSpinner.setAdapter(filterAdapter);
-
-        sortAdapter = new ArrayAdapter<>(this, R.layout.sort_spinner_element, R.id.sortType, new ArrayList<>());
-        sortSpinner.setAdapter(sortAdapter);
-
-        addTransactionBtn.setOnClickListener(addAction());
-
-        getPresenter().refreshTransactionsByMonthAndYear();
-        getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-        getPresenter().start();
+//        leftButton = (Button) findViewById(R.id.leftButton);
+//        rightButton = (Button) findViewById(R.id.rightButton);
+//        monthText = (TextView) findViewById(R.id.monthText);
+//        transactionListView = (ListView) findViewById(R.id.transactionListView);
+//        filterSpinner = (Spinner) findViewById(R.id.filterSpinner);
+//        sortSpinner = (Spinner) findViewById(R.id.sortSpinner);
+//        addTransactionBtn = (Button) findViewById(R.id.addTransactionBtn);
+//        amountNumber = (TextView) findViewById(R.id.amountNumber);
+//        limitNumber = (TextView) findViewById(R.id.limitNumber);
+//
+//        leftButton.setOnClickListener(leftAction());
+//        rightButton.setOnClickListener(rightAction());
+//        filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
+//        sortSpinner.setOnItemSelectedListener(spinnerSortAction());
+//
+//        transactionsAdapter = new TransactionsAdapter(this, R.layout.transactions_list_element, new ArrayList<>());
+//        transactionListView.setAdapter(transactionsAdapter);
+//        transactionListView.setOnItemClickListener(listItemClickListener());
+//
+//        filterAdapter = new FilterAdapter(this, R.layout.transaction_spinner_element, new ArrayList<>());
+//        filterSpinner.setAdapter(filterAdapter);
+//
+//        sortAdapter = new ArrayAdapter<>(this, R.layout.sort_spinner_element, R.id.sortType, new ArrayList<>());
+//        sortSpinner.setAdapter(sortAdapter);
+//
+//        addTransactionBtn.setOnClickListener(addAction());
+//
+//        getPresenter().refreshTransactionsByMonthAndYear();
+//        getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+//        getPresenter().start();
     }
 
     public ITransactionsPresenter getPresenter () {
@@ -151,13 +177,13 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
         };
     }
 
-    @Override
-    public void onResume () {
-        super.onResume();
-        transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
-        transactionsAdapter.notifyDataSetChanged();
-        getPresenter().setCurrentBudget();
-    }
+//    @Override
+//    public void onResume () {
+//        super.onResume();
+//        transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
+//        transactionsAdapter.notifyDataSetChanged();
+//        getPresenter().setCurrentBudget();
+//    }
 
     public View.OnClickListener addAction () {
         return v -> {

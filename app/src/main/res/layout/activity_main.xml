@@ -1,181 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="#590098"-->
+<!--    tools:context=".MainActivity">-->
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/frameLayout"-->
+<!--        android:layout_width="308dp"-->
+<!--        android:layout_height="292dp"-->
+<!--        android:layout_marginStart="48dp"-->
+<!--        android:layout_marginTop="13dp"-->
+<!--        android:layout_marginEnd="48dp"-->
+<!--        android:layout_marginBottom="18dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/addTransactionBtn"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/sortSpinner">-->
+
+<!--        <ListView-->
+<!--            android:id="@+id/transactionListView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="0dp"-->
+<!--            android:layout_marginTop="0dp"-->
+<!--            android:layout_marginEnd="0dp"-->
+<!--            android:layout_marginBottom="0dp"-->
+<!--            android:background="#FFFFFF"-->
+<!--            android:nestedScrollingEnabled="true" />-->
+<!--    </FrameLayout>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/limitText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginBottom="7dp"-->
+<!--        android:text="Limit:"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:textColor="#F6F6F6"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/globalAmountText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:layout_marginStart="22dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="#00FFFFFF"-->
+<!--        android:text="Global amount:"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:textColor="#F6F6F6"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/limitText"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/filterSpinner"-->
+<!--        android:layout_width="360dp"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginEnd="26dp"-->
+<!--        android:animateLayoutChanges="false"-->
+<!--        android:background="@drawable/spinner_background"-->
+<!--        android:dropDownWidth="308dp"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        android:foregroundTint="#00FFFFFF"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        android:theme="@style/AppTheme"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/limitNumber" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/amountNumber"-->
+<!--        android:layout_width="94dp"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="126dp"-->
+<!--        android:layout_marginBottom="38dp"-->
+<!--        android:textColor="#F6F6F6"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/globalAmountText"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/monthText"-->
+<!--        android:layout_width="160dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:background="#9FFFFFFF"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/rightButton"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/leftButton"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/leftButton"-->
+<!--        android:layout_width="55dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="39dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="@drawable/left"-->
+<!--        android:backgroundTint="#FFFFFF"-->
+<!--        android:hapticFeedbackEnabled="false"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="36sp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/monthText"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/rightButton"-->
+<!--        android:layout_width="55dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="40dp"-->
+<!--        android:background="@drawable/right"-->
+<!--        android:backgroundTint="#FFFFFF"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="36sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/monthText"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/sortSpinner"-->
+<!--        android:layout_width="360dp"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="26dp"-->
+<!--        android:background="@drawable/spinner_background"-->
+<!--        android:dropDownWidth="308dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/monthText" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/limitNumber"-->
+<!--        android:layout_width="94dp"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginTop="1dp"-->
+<!--        android:layout_marginBottom="6dp"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/limitText"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/addTransactionBtn"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="56dp"-->
+<!--        android:layout_marginEnd="55dp"-->
+<!--        android:background="#00FFFFFF"-->
+<!--        android:backgroundTint="#00FFFFFF"-->
+<!--        android:text="Add transaction"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<LinearLayout
     android:layout_height="match_parent"
-    android:background="#590098"
-    tools:context=".MainActivity">
-
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal">
     <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="308dp"
-        android:layout_height="292dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/addTransactionBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sortSpinner">
-
-        <ListView
-            android:id="@+id/transactionListView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            android:background="#FFFFFF"
-            android:nestedScrollingEnabled="true" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/limitText"
-        android:layout_width="wrap_content"
-        android:layout_height="31dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="7dp"
-        android:text="Limit:"
-        android:textAllCaps="true"
-        android:textColor="#F6F6F6"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />
-
-    <TextView
-        android:id="@+id/globalAmountText"
-        android:layout_width="wrap_content"
-        android:layout_height="31dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
-        android:text="Global amount:"
-        android:textAllCaps="true"
-        android:textColor="#F6F6F6"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/limitText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/filterSpinner"
-        android:layout_width="360dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="26dp"
-        android:animateLayoutChanges="false"
-        android:background="@drawable/spinner_background"
-        android:dropDownWidth="308dp"
-        android:focusableInTouchMode="false"
-        android:foregroundTint="#00FFFFFF"
-        android:spinnerMode="dropdown"
-        android:theme="@style/AppTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/limitNumber" />
-
-    <TextView
-        android:id="@+id/amountNumber"
-        android:layout_width="94dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="126dp"
-        android:layout_marginBottom="38dp"
-        android:textColor="#F6F6F6"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/globalAmountText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/monthText"
-        android:layout_width="160dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="24dp"
-        android:background="#9FFFFFFF"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/rightButton"
-        app:layout_constraintStart_toEndOf="@+id/leftButton"
-        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
-
-    <Button
-        android:id="@+id/leftButton"
-        android:layout_width="55dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/left"
-        android:backgroundTint="#FFFFFF"
-        android:hapticFeedbackEnabled="false"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toStartOf="@+id/monthText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
-
-    <Button
-        android:id="@+id/rightButton"
-        android:layout_width="55dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/right"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/monthText"
-        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
-
-    <Spinner
-        android:id="@+id/sortSpinner"
-        android:layout_width="360dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="26dp"
-        android:background="@drawable/spinner_background"
-        android:dropDownWidth="308dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthText" />
-
-    <TextView
-        android:id="@+id/limitNumber"
-        android:layout_width="94dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="6dp"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
-        app:layout_constraintStart_toEndOf="@+id/limitText"
-        app:layout_constraintTop_toBottomOf="@+id/globalAmountText" />
-
-    <Button
-        android:id="@+id/addTransactionBtn"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginEnd="55dp"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:text="Add transaction"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/transactions_main"
+        android:layout_weight="1">
+    </FrameLayout>
+</LinearLayout>
