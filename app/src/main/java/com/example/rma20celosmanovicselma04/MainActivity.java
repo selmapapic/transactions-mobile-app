@@ -52,4 +52,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
             getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, detailFragment).addToBackStack(null).commit();
         }
     }
+
+    @Override
+    public void onButtonClicked() {
+        Bundle arguments = new Bundle();
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+        if (twoPaneMode){
+            getSupportFragmentManager().beginTransaction().replace(R.id.transactions_detail, detailFragment).commit();
+        }
+        else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, detailFragment).addToBackStack(null).commit();
+        }
+    }
 }

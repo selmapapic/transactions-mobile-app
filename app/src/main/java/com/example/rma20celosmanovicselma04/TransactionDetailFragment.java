@@ -31,7 +31,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
-        boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
+        //boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
 
         titleFld = (EditText) view.findViewById(R.id.titleFld);
         amountFld = (EditText) view.findViewById(R.id.amountFld);
@@ -46,7 +46,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         typeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
 
-        setFields(addTrn);
+        setFields();
 
         titleFld.addTextChangedListener(fieldColor(titleFld));
         amountFld.addTextChangedListener(fieldColor(amountFld));
@@ -61,9 +61,10 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         return view;
     }
 
-    public void setFields(boolean addTrn) {
-        if(!addTrn) {
-            if(getArguments() != null && getArguments().containsKey("transaction")) {
+    public void setFields() {
+        if(getArguments() != null && getArguments().containsKey("transaction")) {
+            boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
+            if(!addTrn) {
                 getPresenter().setTransaction(getArguments().getParcelable("transaction"));
                 titleFld.setText(getPresenter().getTransaction().getTitle());
                 amountFld.setText(getPresenter().getTransaction().getAmount().toString());
@@ -85,11 +86,11 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                 deleteBtn.setOnClickListener(deleteAction());
                 saveBtn.setOnClickListener(saveAction(false));
             }
-        }
-        else {
-            spinnerType.setSelection(0);
-            deleteBtn.setEnabled(false);
-            saveBtn.setOnClickListener(saveAction(true));
+            else {
+                spinnerType.setSelection(0);
+                deleteBtn.setEnabled(false);
+                saveBtn.setOnClickListener(saveAction(true));
+            }
         }
     }
 
@@ -231,6 +232,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
             builder.setCancelable(false);
             builder.setPositiveButton("Yes", (dialog, which) -> {
                 getPresenter().removeTransaction(getPresenter().getTransaction());
+                getFragmentManager().popBackStack();
+
             });
             builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 

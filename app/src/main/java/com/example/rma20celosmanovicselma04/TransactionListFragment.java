@@ -159,6 +159,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return v -> {
             Bundle arguments = new Bundle();
             arguments.putBoolean("addTrn", true);
+            onItemClick.onButtonClicked();
         };
     }
 
@@ -175,5 +176,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     private OnItemClick onItemClick;
     public interface OnItemClick {
         void onItemClicked(Transaction transaction);
+
+        void onButtonClicked();
     }
 }

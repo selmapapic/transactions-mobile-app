@@ -3,7 +3,6 @@ package com.example.rma20celosmanovicselma04;
 import android.content.Context;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     private ITransactionsInteractor interactor;
@@ -33,9 +32,9 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     }
 
     public void start () {
-        ArrayList<String> types = interactor.getTypes();
-        types.remove("Filter by");
-        view.setTypeSpinner(interactor.getTypes());
+       // ArrayList<String> types = interactor.getTypes();
+        //types.remove("Filter by");
+        //view.setTypeSpinner(interactor.getTypes());
     }
 
     public void removeTransaction (Transaction trn) {
