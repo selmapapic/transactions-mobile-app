@@ -5,7 +5,7 @@ import android.content.Context;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TransactionDetailPresenter implements ITransactionDetailPresenter{
+public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     private ITransactionsInteractor interactor;
     private ITransactionDetailView view;
     private Context context;
