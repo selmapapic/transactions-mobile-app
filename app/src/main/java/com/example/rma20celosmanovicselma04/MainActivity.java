@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ITransactionsView {
+public class MainActivity extends AppCompatActivity implements ITransactionsView, TransactionListFragment.OnItemClick{
     private ITransactionsPresenter presenter;
     private TransactionsAdapter transactionsAdapter;
     private Button leftButton, rightButton, addTransactionBtn;
@@ -200,5 +200,19 @@ public class MainActivity extends AppCompatActivity implements ITransactionsView
 
     public void setBudget (Double budget) {
         amountNumber.setText(budget.toString());
+    }
+
+    @Override
+    public void onItemClicked(Transaction transaction) {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("transaction", transaction);
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+        detailFragment.setArguments(arguments);
+        if (twoPaneMode){
+            getSupportFragmentManager().beginTransaction().replace(R.id.transactions_detail, detailFragment).commit();
+        }
+        else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main,detailFragment).addToBackStack(null).commit();
+        }
     }
 }
