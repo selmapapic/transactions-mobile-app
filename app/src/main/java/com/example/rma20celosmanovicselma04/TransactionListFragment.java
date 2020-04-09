@@ -180,4 +180,12 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
 
         void onButtonClicked();
     }
+
+    public String getFilterSpinner() {
+        return filterSpinner.getSelectedItem().toString();
+    }
+
+    public String getSortSpinner() {
+        return sortSpinner.getSelectedItem().toString();
+    }
 }

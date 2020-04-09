@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 
-public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick{
+public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
 
     @Override
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         else {
             twoPaneMode = false;
         }
-
     }
 
     @Override
@@ -72,5 +71,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         else{
             getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, detailFragment).addToBackStack(null).commit();
         }
+    }
+
+    @Override
+    public void onSaveOrDelete () {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        TransactionListFragment listFragment = (TransactionListFragment) fragmentManager.findFragmentByTag("list");
+        listFragment.getPresenter().refreshFilterAndSort(listFragment.getFilterSpinner(), listFragment.getSortSpinner());
     }
 }

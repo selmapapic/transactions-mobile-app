@@ -52,6 +52,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         spinnerType.setAdapter(typeAdapter);
 
         setFields();
+        onChange = (OnChange) getActivity();
+
 
         titleFld.addTextChangedListener(fieldColor(titleFld));
         amountFld.addTextChangedListener(fieldColor(amountFld));
@@ -241,6 +243,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
             builder.setCancelable(false);
             builder.setPositiveButton("Yes", (dialog, which) -> {
                 getPresenter().removeTransaction(getPresenter().getTransaction());
+                onChange.onSaveOrDelete();
                 getFragmentManager().popBackStack();
 
             });
@@ -272,6 +275,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                         if(!isAdd) {
                             getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                             removeValidation();
+                            onChange.onSaveOrDelete();
                             getPresenter().setTransaction(trn);
                         }
                         else {
@@ -375,6 +379,11 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         validateInterval(intervalFld);
         validateDescription(descriptionFld);
         validateDate(endDateFld, false);
+    }
+
+    private TransactionDetailFragment.OnChange onChange;
+    public interface OnChange {
+        void onSaveOrDelete ();
     }
 }
 
