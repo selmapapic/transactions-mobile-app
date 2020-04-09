@@ -101,6 +101,11 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                 saveBtn.setOnClickListener(saveAction(true));
             }
         }
+        else {
+            spinnerType.setSelection(0);
+            deleteBtn.setEnabled(false);
+            saveBtn.setOnClickListener(saveAction(true));
+        }
     }
 
     public ITransactionDetailPresenter getPresenter () {
@@ -124,7 +129,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println(edit.getId());
                 if(edit.getTag().equals("title")) validateTitle(edit); //title
                 else if(edit.getTag().equals("amount")) validateAmount(edit);   //amount
                 else if(edit.getTag().equals("date")) validateDate(edit, true);      //date
@@ -280,6 +284,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                         }
                         else {
                             getPresenter().addTransaction(trn);
+                            onChange.onSaveOrDelete();
                         }
                     });
                     builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
@@ -291,10 +296,12 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                     if(!isAdd) {
                         getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                         removeValidation();
+                        onChange.onSaveOrDelete();
                         getPresenter().setTransaction(trn);
                     }
                     else {
                         getPresenter().addTransaction(trn);
+                        onChange.onSaveOrDelete();
                     }
                 }
             }
