@@ -31,7 +31,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
-        //boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
 
         titleFld = (EditText) view.findViewById(R.id.titleFld);
         amountFld = (EditText) view.findViewById(R.id.amountFld);
@@ -56,7 +55,9 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
 
-        getPresenter().start();
+        //getPresenter().start();
+        ArrayList<String> types = getPresenter().getTypes();
+        setTypeSpinner(types);
 
         return view;
     }
@@ -103,6 +104,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     public void setTypeSpinner (ArrayList<String> types) {
         boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
+        System.out.println(addTrn);
         typeAdapter.addAll(types);
         if(!addTrn) spinnerType.setSelection(typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName()));
     }

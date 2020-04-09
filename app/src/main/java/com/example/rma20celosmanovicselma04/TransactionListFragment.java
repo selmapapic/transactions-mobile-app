@@ -153,6 +153,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
         getPresenter().setCurrentBudget();
+        System.out.println("pozvao se on resume u list fragmentu");
     }
 
     public View.OnClickListener addAction() {

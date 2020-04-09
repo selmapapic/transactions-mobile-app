@@ -3,6 +3,7 @@ package com.example.rma20celosmanovicselma04;
 import android.content.Context;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     private ITransactionsInteractor interactor;
@@ -32,9 +33,10 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     }
 
     public void start () {
-       // ArrayList<String> types = interactor.getTypes();
-        //types.remove("Filter by");
-        //view.setTypeSpinner(interactor.getTypes());
+//        ArrayList<String> types = interactor.getTypes();
+//        types.remove("Filter by");
+//        view.setTypeSpinner(interactor.getTypes());
+//        System.out.println("pozvao se startttttt");
     }
 
     public void removeTransaction (Transaction trn) {
@@ -57,5 +59,19 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
         allSum += currentTrn.getAmount();
         if(!isAdd) allSum -= getTransaction().getAmount();
         return interactor.getAccount().getMonthLimit() < monthSum || interactor.getAccount().getTotalLimit() < allSum;
+    }
+
+    public ITransactionsInteractor getInteractor() {
+        return interactor;
+    }
+
+    public ArrayList<String> getTypes () {
+        ArrayList<String> types = new ArrayList<>();
+        types.add(TransactionType.INDIVIDUALINCOME.getTransactionName());
+        types.add(TransactionType.REGULARINCOME.getTransactionName());
+        types.add(TransactionType.PURCHASE.getTransactionName());
+        types.add(TransactionType.INDIVIDUALPAYMENT.getTransactionName());
+        types.add(TransactionType.REGULARPAYMENT.getTransactionName());
+        return types;
     }
 }
