@@ -248,6 +248,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
             builder.setPositiveButton("Yes", (dialog, which) -> {
                 getPresenter().removeTransaction(getPresenter().getTransaction());
                 onChange.onSaveOrDelete();
+                clearAllFields();
                 getFragmentManager().popBackStack();
 
             });
@@ -386,6 +387,16 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         validateInterval(intervalFld);
         validateDescription(descriptionFld);
         validateDate(endDateFld, false);
+    }
+
+    private void clearAllFields () {
+        titleFld.setText("");
+        intervalFld.setText("");
+        amountFld.setText("");
+        descriptionFld.setText("");
+        dateFld.setText("");
+        endDateFld.setText("");
+        removeValidation();
     }
 
     private TransactionDetailFragment.OnChange onChange;
