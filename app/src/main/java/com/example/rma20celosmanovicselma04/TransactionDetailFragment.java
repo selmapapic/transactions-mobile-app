@@ -54,7 +54,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         setFields();
         onChange = (OnChange) getActivity();
 
-
         titleFld.addTextChangedListener(fieldColor(titleFld));
         amountFld.addTextChangedListener(fieldColor(amountFld));
         dateFld.addTextChangedListener(fieldColor(dateFld));
@@ -63,10 +62,9 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
 
-        //getPresenter().start();
         ArrayList<String> types = getPresenter().getTypes();
         setTypeSpinner(types);
-
+        removeValidation();
         return view;
     }
 

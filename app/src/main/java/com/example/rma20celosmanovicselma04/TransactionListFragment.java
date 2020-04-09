@@ -140,10 +140,31 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         monthText.setText(date);
     }
 
+
+    public static int pos = -1;
+    public static boolean first = true;
     public AdapterView.OnItemClickListener listItemClickListener() {
         return (parent, view, position, id) -> {
             Transaction transaction = transactionsAdapter.getTransaction(position);
-            onItemClick.onItemClicked(transaction);
+            System.out.println(pos + " " + position + " " + first);
+            if (first) {
+                pos = position;
+                first = false;
+                transactionListView.setSelected(true);
+                onItemClick.onItemClicked(transaction);
+                addTransactionBtn.setEnabled(false);
+            }
+            else if(pos == position) {
+                transactionListView.setAdapter(transactionsAdapter);
+                onItemClick.onButtonClicked();
+                pos = -1;
+                addTransactionBtn.setEnabled(true);
+            }
+            else {
+                onItemClick.onItemClicked(transaction);
+                pos = position;
+                addTransactionBtn.setEnabled(false);
+            }
         };
     }
 
