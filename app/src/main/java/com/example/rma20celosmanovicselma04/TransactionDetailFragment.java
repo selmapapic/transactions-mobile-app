@@ -33,11 +33,17 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
 
         titleFld = (EditText) view.findViewById(R.id.titleFld);
+        titleFld.setTag("title");
         amountFld = (EditText) view.findViewById(R.id.amountFld);
+        amountFld.setTag("amount");
         intervalFld = (EditText) view.findViewById(R.id.intervalFld);
+        intervalFld.setTag("interval");
         dateFld = (EditText) view.findViewById(R.id.dateFld);
+        dateFld.setTag("date");
         endDateFld = (EditText) view.findViewById(R.id.endDateFld);
+        endDateFld.setTag("endDate");
         descriptionFld = (EditText) view.findViewById(R.id.descriptionFld);
+        descriptionFld.setTag("description");
         spinnerType = (Spinner) view.findViewById(R.id.spinnerType);
         deleteBtn = (Button) view.findViewById(R.id.deleteBtn);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
@@ -116,12 +122,13 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(edit.getId() == 2131165351) validateTitle(edit); //title
-                else if(edit.getId() == 2131165215) validateAmount(edit);   //amount
-                else if(edit.getId() == 2131165236) validateDate(edit, true);      //date
-                else if(edit.getId() == 2131165240) validateDescription(edit);  //description
-                else if(edit.getId() == 2131165267) validateInterval(edit); //interval
-                else if(edit.getId() == 2131165246) validateDate(edit, false);  //endDate
+                System.out.println(edit.getId());
+                if(edit.getTag().equals("title")) validateTitle(edit); //title
+                else if(edit.getTag().equals("amount")) validateAmount(edit);   //amount
+                else if(edit.getTag().equals("date")) validateDate(edit, true);      //date
+                else if(edit.getTag().equals("description")) validateDescription(edit);  //description
+                else if(edit.getTag().equals("interval")) validateInterval(edit); //interval
+                else if(edit.getTag().equals("endDate")) validateDate(edit, false);  //endDate
             }
 
             @Override

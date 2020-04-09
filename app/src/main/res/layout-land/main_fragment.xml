@@ -63,7 +63,7 @@
 
     <Spinner
         android:id="@+id/filterSpinner"
-        android:layout_width="360dp"
+        android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="5dp"
@@ -139,7 +139,7 @@
 
     <Spinner
         android:id="@+id/sortSpinner"
-        android:layout_width="360dp"
+        android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginStart="161dp"
         android:layout_marginTop="28dp"
