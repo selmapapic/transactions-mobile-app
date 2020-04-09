@@ -69,6 +69,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void setFields() {
+        System.out.println("pozvalo se set f");
         if(getArguments() != null && getArguments().containsKey("transaction")) {
             boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
             if(!addTrn) {
@@ -301,6 +302,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                     else {
                         getPresenter().addTransaction(trn);
                         onChange.onSaveOrDelete();
+                        clearAllFields();
                     }
                 }
             }
@@ -363,6 +365,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void removeValidation () {
+        System.out.println("pozvao se rem val");
         titleFld.setBackgroundResource(R.drawable.field_stroke);
         titleFld.setError(null);
         amountFld.setBackgroundResource(R.drawable.field_stroke);
@@ -379,6 +382,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void validateAll () {
+        System.out.println("pozvao se validate all");
         validateTitle(titleFld);
         validateAmount(amountFld);
         validateDate(dateFld, true);
