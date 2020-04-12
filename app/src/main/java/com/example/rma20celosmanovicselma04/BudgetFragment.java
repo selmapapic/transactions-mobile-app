@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements IBudgetView{
+    private IBudgetPresenter presenter;
     private TextView budgetText;
     private EditText totalLimitFld, monthLimitFld;
 
@@ -21,6 +22,16 @@ public class BudgetFragment extends Fragment {
         budgetText = (TextView) view.findViewById(R.id.budgetText);
 
 
+
         return view;
     }
+
+    public IBudgetPresenter getPresenter() {
+        if (presenter == null) {
+            presenter = new BudgetPresenter(this, getActivity());
+        }
+        return presenter;
+    }
+
+
 }

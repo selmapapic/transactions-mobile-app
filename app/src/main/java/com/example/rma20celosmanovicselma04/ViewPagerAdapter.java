@@ -20,24 +20,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             return new BudgetFragment();
         }
         return null;
-
-//        switch (i % 3) {
-//            case 1:
-//                if (firstViewFragment == null) {
-//                    firstViewFragment = new FirstViewFragment();
-//                }
-//                return firstViewFragment;
-//            case 2:
-//                if (secondViewFragment == null) {
-//                    secondViewFragment = new SecondViewFragment();
-//                }
-//                return secondViewFragment;
-//            case 3:
-//                if (thirdViewFragment == null) {
-//                    thirdViewFragment = new ThirdViewFragment();
-//                }
-//                return thirdViewFragment;
-//        }
     }
 
     @Override
