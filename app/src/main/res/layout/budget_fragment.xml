@@ -7,7 +7,7 @@
     android:background="#590098">
 
     <Button
-        android:id="@+id/saveBtn2"
+        android:id="@+id/saveBtn"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginStart="52dp"
@@ -142,5 +142,18 @@
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icons8_settings_50px" />
+
+    <ImageButton
+        android:id="@+id/resetBtn"
+        android:layout_width="40dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="433dp"
+        android:layout_marginEnd="9dp"
+        android:background="@drawable/button_design"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/saveBtn"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/reset" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

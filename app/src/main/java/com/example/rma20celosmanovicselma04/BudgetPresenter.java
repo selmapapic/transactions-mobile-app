@@ -13,5 +13,9 @@ public class BudgetPresenter implements IBudgetPresenter {
         this.context = context;
     }
 
-
+    public void start () {
+        view.setBudgetText(interactor.getCurrentBudget(true));
+        view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
+        view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
+    }
 }
