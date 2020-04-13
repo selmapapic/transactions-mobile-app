@@ -7,8 +7,32 @@
     android:background="#590098">
 
     <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addTransactionBtn" />
+
+    <Button
+        android:id="@+id/previousBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/previous"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addTransactionBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/saveBtn"
-        android:layout_width="300dp"
+        android:layout_width="270dp"
         android:layout_height="45dp"
         android:layout_marginStart="52dp"
         android:layout_marginTop="47dp"
@@ -125,7 +149,7 @@
         android:layout_marginTop="65dp"
         android:layout_marginEnd="30dp"
         android:text="TextView"
-        android:textColor="#9FFFFFFF"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -147,13 +171,14 @@
         android:id="@+id/resetBtn"
         android:layout_width="40dp"
         android:layout_height="47dp"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="433dp"
-        android:layout_marginEnd="9dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="47dp"
         android:background="@drawable/button_design"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/saveBtn"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/reset" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,4 +18,16 @@ public class BudgetPresenter implements IBudgetPresenter {
         view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
         view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
     }
+
+    @Override
+    public void saveNewChanges(Double totalLimit, Double monthLimit) {
+        interactor.getAccount().setTotalLimit(totalLimit);
+        interactor.getAccount().setMonthLimit(monthLimit);
+    }
+
+    @Override
+    public void refreshFields() {
+        view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
+        view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
+    }
 }

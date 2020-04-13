@@ -15,7 +15,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
     private IBudgetPresenter presenter;
     private TextView budgetText;
     private EditText totalLimitFld, monthLimitFld;
-    private Button saveBtn;
+    private Button saveBtn, nextBtn, previousBtn;
     private ImageButton resetBtn;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,11 +26,50 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         budgetText = (TextView) view.findViewById(R.id.budgetText);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
         resetBtn = (ImageButton) view.findViewById(R.id.resetBtn);
+        nextBtn = (Button) view.findViewById(R.id.nextBtn);
+        previousBtn = (Button) view.findViewById(R.id.previousBtn);
+
+        onItemClick = (TransactionListFragment.OnItemClick) getActivity();
+
+        nextBtn.setOnClickListener(nextAction());
+        previousBtn.setOnClickListener(previousAction());
+        saveBtn.setOnClickListener(saveAction());
 
         resetBtn.setOnClickListener(resetFields());
         getPresenter().start();
 
         return view;
+    }
+
+    private View.OnClickListener saveAction() {
+        return v -> {
+            if(totalLimitFld.getText().length() == 0) {
+                totalLimitFld.setError("This field cannot be empty");
+            }
+            else {
+                totalLimitFld.setError(null);
+            }
+            if(monthLimitFld.getText().length() == 0) {
+                monthLimitFld.setError("This field cannot be empty");
+            }
+            else {
+                monthLimitFld.setError(null);
+            }
+            if(totalLimitFld.getError() == null && monthLimitFld.getError() == null) {
+                getPresenter().saveNewChanges(Double.parseDouble(String.valueOf(totalLimitFld.getText())), Double.parseDouble(String.valueOf(monthLimitFld.getText())));
+                getPresenter().refreshFields();
+            }
+        };
+    }
+
+    private View.OnClickListener nextAction() {
+        return v -> {
+
+        };
+    }
+
+    private View.OnClickListener previousAction() {
+        return v -> onItemClick.onPreviousClicked(1);
     }
 
     private View.OnClickListener resetFields() {
@@ -54,5 +93,11 @@ public class BudgetFragment extends Fragment implements IBudgetView{
 
     public void setMonthLimitFld (Double monthLimit) {
         monthLimitFld.setText(monthLimit.toString());
+    }
+
+    private TransactionListFragment.OnItemClick onItemClick;
+    public interface OnItemClick {
+        void onNextClicked(int page);
+        void onPreviousClicked(int page);
     }
 }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class TransactionListFragment extends Fragment implements ITransactionsView {
     private ITransactionsPresenter presenter;
     private TransactionsAdapter transactionsAdapter;
-    private Button leftButton, rightButton, addTransactionBtn;
+    private Button leftButton, rightButton, addTransactionBtn, nextBtn, previousBtn;
     private TextView monthText, amountNumber, limitNumber;
     private ListView transactionListView;
     private Spinner filterSpinner, sortSpinner;
@@ -38,11 +38,17 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         amountNumber = (TextView) fragmentView.findViewById(R.id.amountNumber);
         limitNumber = (TextView) fragmentView.findViewById(R.id.limitNumber);
 
+
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
         filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
         sortSpinner.setOnItemSelectedListener(spinnerSortAction());
-
+        if(!getArguments().getBoolean("twoPaneMode")) {
+            nextBtn = (Button) fragmentView.findViewById(R.id.nextBtn);
+            previousBtn = (Button) fragmentView.findViewById(R.id.previousBtn);
+            previousBtn.setOnClickListener(previousAction());
+            nextBtn.setOnClickListener(nextAction());
+        }
         transactionsAdapter = new TransactionsAdapter(getActivity(), R.layout.transactions_list_element, new ArrayList<>());
         transactionListView.setAdapter(transactionsAdapter);
         transactionListView.setOnItemClickListener(listItemClickListener());
@@ -61,6 +67,16 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         getPresenter().start();
         return fragmentView;
+    }
+
+    private View.OnClickListener nextAction() {
+        return v -> onItemClick.onNextClicked(2);
+    }
+
+    private View.OnClickListener previousAction() {
+        return v -> {
+
+        };
     }
 
     @Override
@@ -198,8 +214,9 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     private OnItemClick onItemClick;
     public interface OnItemClick {
         void onItemClicked(Transaction transaction);
-
         void onButtonClicked();
+        void onNextClicked(int page);
+        void onPreviousClicked(int page);
     }
 
     public String getFilterSpinner() {

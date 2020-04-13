@@ -5,9 +5,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-
+    FragmentManager fm;
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        this.fm = fm;
     }
 
     @Override
@@ -17,7 +18,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             return new TransactionListFragment();
         }
         else if(i % 2 == 0) {
-            return new BudgetFragment();
+            BudgetFragment fragment = new BudgetFragment();
+            fm.beginTransaction().replace(R.id.budget_fragment, fragment).addToBackStack(null).commit();
+            return fragment;
         }
         return null;
     }
