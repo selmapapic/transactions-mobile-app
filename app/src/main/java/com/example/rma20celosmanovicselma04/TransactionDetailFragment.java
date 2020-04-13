@@ -61,7 +61,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
-
+        System.out.println("evo nas ovdje");
         ArrayList<String> types = getPresenter().getTypes();
         setTypeSpinner(types);
         removeValidation();
@@ -69,7 +69,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void setFields() {
-        System.out.println("pozvalo se set f");
         if(getArguments() != null && getArguments().containsKey("transaction")) {
             boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
             if(!addTrn) {
@@ -116,7 +115,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     public void setTypeSpinner (ArrayList<String> types) {
         boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
-        System.out.println(addTrn);
         typeAdapter.addAll(types);
         if(!addTrn) spinnerType.setSelection(typeAdapter.getPosition(getPresenter().getTransaction().getType().getTransactionName()));
     }
@@ -142,6 +140,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void validateTitle (EditText edit) {
+        System.out.println("pozvao se ovaj listenrrrrrrr");
         if(edit.getText().length() < 3 || edit.getText().length() > 15) {
             edit.setError("Your input is invalid");
             edit.setBackgroundResource(R.drawable.field_stroke);
@@ -249,7 +248,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                 onChange.onSaveOrDelete();
                 clearAllFields();
                 getFragmentManager().popBackStack();
-
+                clearAllFields();
             });
             builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
@@ -365,7 +364,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void removeValidation () {
-        System.out.println("pozvao se rem val");
         titleFld.setBackgroundResource(R.drawable.field_stroke);
         titleFld.setError(null);
         amountFld.setBackgroundResource(R.drawable.field_stroke);
@@ -382,7 +380,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void validateAll () {
-        System.out.println("pozvao se validate all");
         validateTitle(titleFld);
         validateAmount(amountFld);
         validateDate(dateFld, true);

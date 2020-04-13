@@ -7,25 +7,25 @@
     android:background="#590098">
 
     <Button
-        android:id="@+id/nextBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/graphsBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="76dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/next"
+        android:layout_marginBottom="7dp"
+        android:background="@drawable/graphs"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addTransactionBtn" />
 
     <Button
-        android:id="@+id/previousBtn"
+        android:id="@+id/homeBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="11dp"
         android:layout_marginEnd="75dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/previous"
+        android:layout_marginBottom="9dp"
+        android:background="@drawable/home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addTransactionBtn"
         app:layout_constraintStart_toStartOf="parent" />

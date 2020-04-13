@@ -224,7 +224,7 @@
         tools:layout_editor_absoluteX="683dp" />
 
     <Button
-        android:id="@+id/nextBtn"
+        android:id="@+id/graphsBtn"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:background="#00FFFFFF"
@@ -234,7 +234,7 @@
         tools:layout_editor_absoluteY="279dp" />
 
     <Button
-        android:id="@+id/previousBtn"
+        android:id="@+id/settingsBtn"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:background="#00FFFFFF"

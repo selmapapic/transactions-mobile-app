@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class TransactionListFragment extends Fragment implements ITransactionsView {
     private ITransactionsPresenter presenter;
     private TransactionsAdapter transactionsAdapter;
-    private Button leftButton, rightButton, addTransactionBtn, nextBtn, previousBtn;
+    private Button leftButton, rightButton, addTransactionBtn, settingsBtn, graphsBtn;
     private TextView monthText, amountNumber, limitNumber;
     private ListView transactionListView;
     private Spinner filterSpinner, sortSpinner;
@@ -45,10 +45,10 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         sortSpinner.setOnItemSelectedListener(spinnerSortAction());
         System.out.println(getArguments().getBoolean("twoPaneMode") + "bla bla two pane mode");
         if(!getArguments().getBoolean("twoPaneMode")) {
-            nextBtn = (Button) fragmentView.findViewById(R.id.nextBtn);
-            previousBtn = (Button) fragmentView.findViewById(R.id.previousBtn);
-            previousBtn.setOnClickListener(previousAction());
-            nextBtn.setOnClickListener(nextAction());
+            settingsBtn = (Button) fragmentView.findViewById(R.id.settingsBtn);
+            graphsBtn = (Button) fragmentView.findViewById(R.id.graphsBtn);
+            graphsBtn.setOnClickListener(graphsAction());
+            settingsBtn.setOnClickListener(settingsAction());
         }
         transactionsAdapter = new TransactionsAdapter(getActivity(), R.layout.transactions_list_element, new ArrayList<>());
         transactionListView.setAdapter(transactionsAdapter);
@@ -70,11 +70,11 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return fragmentView;
     }
 
-    private View.OnClickListener nextAction() {
+    private View.OnClickListener settingsAction() {
         return v -> onItemClick.onNextClicked(2);
     }
 
-    private View.OnClickListener previousAction() {
+    private View.OnClickListener graphsAction() {
         return v -> {
 
         };

@@ -15,7 +15,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
     private IBudgetPresenter presenter;
     private TextView budgetText;
     private EditText totalLimitFld, monthLimitFld;
-    private Button saveBtn, nextBtn, previousBtn;
+    private Button saveBtn, homeBtn, graphsBtn;
     private ImageButton resetBtn;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,13 +26,13 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         budgetText = (TextView) view.findViewById(R.id.budgetText);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
         resetBtn = (ImageButton) view.findViewById(R.id.resetBtn);
-        nextBtn = (Button) view.findViewById(R.id.nextBtn);
-        previousBtn = (Button) view.findViewById(R.id.previousBtn);
+        homeBtn = (Button) view.findViewById(R.id.homeBtn);
+        graphsBtn = (Button) view.findViewById(R.id.graphsBtn);
 
         onItemClick = (TransactionListFragment.OnItemClick) getActivity();
 
-        nextBtn.setOnClickListener(nextAction());
-        previousBtn.setOnClickListener(previousAction());
+        graphsBtn.setOnClickListener(graphsAction());
+        homeBtn.setOnClickListener(homeAction());
         saveBtn.setOnClickListener(saveAction());
 
         resetBtn.setOnClickListener(resetFields());
@@ -62,13 +62,13 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         };
     }
 
-    private View.OnClickListener nextAction() {
+    private View.OnClickListener graphsAction() {
         return v -> {
 
         };
     }
 
-    private View.OnClickListener previousAction() {
+    private View.OnClickListener homeAction() {
         return v -> onItemClick.onPreviousClicked(1);
     }
 

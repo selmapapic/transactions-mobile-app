@@ -8,12 +8,12 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/nextBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/settingsBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="76dp"
         android:layout_marginTop="304dp"
-        android:background="@drawable/next"
+        android:background="@drawable/settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addTransactionBtn"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner" />
@@ -189,12 +189,12 @@
         app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <Button
-        android:id="@+id/previousBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/graphsBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginTop="304dp"
         android:layout_marginEnd="75dp"
-        android:background="@drawable/previous"
+        android:background="@drawable/graphs"
         app:layout_constraintEnd_toStartOf="@+id/addTransactionBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner" />
