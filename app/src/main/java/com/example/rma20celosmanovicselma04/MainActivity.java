@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         Fragment listFragment = fragmentManager.findFragmentByTag("list");
         if (listFragment==null){
             listFragment = new TransactionListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("twoPaneMode", false);
+            listFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.transactions_main, listFragment,"list").commit();
         }
         else{
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         FrameLayout details = findViewById(R.id.transactions_detail);
         if (details != null) {
             twoPaneMode = true;
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("twoPaneMode", true);
+            listFragment.setArguments(bundle);
             Bundle arguments = new Bundle();
             arguments.putBoolean("addTrn", true);
             TransactionDetailFragment detailFragment = (TransactionDetailFragment) fragmentManager.findFragmentById(R.id.transactions_detail);

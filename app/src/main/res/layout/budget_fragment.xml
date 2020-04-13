@@ -170,7 +170,7 @@
     <ImageButton
         android:id="@+id/resetBtn"
         android:layout_width="40dp"
-        android:layout_height="47dp"
+        android:layout_height="45dp"
         android:layout_marginTop="433dp"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="47dp"

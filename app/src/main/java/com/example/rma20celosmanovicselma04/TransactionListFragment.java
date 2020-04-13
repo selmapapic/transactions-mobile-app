@@ -43,6 +43,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         rightButton.setOnClickListener(rightAction());
         filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
         sortSpinner.setOnItemSelectedListener(spinnerSortAction());
+        System.out.println(getArguments().getBoolean("twoPaneMode") + "bla bla two pane mode");
         if(!getArguments().getBoolean("twoPaneMode")) {
             nextBtn = (Button) fragmentView.findViewById(R.id.nextBtn);
             previousBtn = (Button) fragmentView.findViewById(R.id.previousBtn);

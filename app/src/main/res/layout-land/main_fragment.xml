@@ -220,6 +220,25 @@
         android:id="@+id/barrier4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="left" />
+        app:barrierDirection="left"
+        tools:layout_editor_absoluteX="683dp" />
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:background="#00FFFFFF"
+        android:clickable="false"
+        android:contextClickable="false"
+        tools:layout_editor_absoluteX="566dp"
+        tools:layout_editor_absoluteY="279dp" />
+
+    <Button
+        android:id="@+id/previousBtn"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:background="#00FFFFFF"
+        tools:layout_editor_absoluteX="582dp"
+        tools:layout_editor_absoluteY="260dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
