@@ -46,9 +46,15 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         return (group, checkedId) -> {
             if(checkedId == R.id.monthBtn) {
                 getPresenter().refreshGraphs(1);
+                incomeGraph.invalidate();
+                expenseGraph.invalidate();
+                combinedGraph.invalidate();
             }
             else if(checkedId == R.id.weekBtn) {
                 getPresenter().refreshGraphs(2);
+                incomeGraph.invalidate();
+                expenseGraph.invalidate();
+                combinedGraph.invalidate();
             }
             else if(checkedId == R.id.dayBtn) {
                 getPresenter().refreshGraphs(3);
@@ -58,19 +64,18 @@ public class GraphsFragment extends Fragment implements IGraphsView{
 
     public void setExpenseGraph (int monthWeekDay) {
         graphSetOptions(expenseGraph);
-
+        System.out.println(monthWeekDay + " expense mwd");
         BarDataSet bar = null;
         if(monthWeekDay == 1) {
              bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByMonth(), "Monthly expenses");
         }
         else if(monthWeekDay == 2) {
-
+            bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByWeek(), "Weekly expenses");
         }
         else if(monthWeekDay == 3) {
 
         }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
-
         BarData data = new BarData(bar);
         data.setBarWidth(0.9f);
 
@@ -85,7 +90,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByMonth(), "Monthly income");
         }
         else if(monthWeekDay == 2) {
-
+            bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByWeek(), "Weekly income");
         }
         else if(monthWeekDay == 3) {
 
@@ -94,6 +99,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
 
         BarData data = new BarData(bar);
         data.setBarWidth(0.9f);
+        incomeGraph.setDrawValueAboveBar(true);
 
         incomeGraph.setData(data);
         incomeGraph.setDrawValueAboveBar(true);
@@ -108,7 +114,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByMonth(), "Monthly expense and income");
         }
         else if(monthWeekDay == 2) {
-
+            bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByWeek(), "Weekly expense and income");
         }
         else if(monthWeekDay == 3) {
 

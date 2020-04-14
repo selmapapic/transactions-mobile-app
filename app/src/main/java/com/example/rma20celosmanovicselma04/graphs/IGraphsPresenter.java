@@ -9,4 +9,7 @@ public interface IGraphsPresenter {
     ArrayList<BarEntry> getExpenseValuesForGraphByMonth ();
     ArrayList<BarEntry> getIncomeValuesForGraphByMonth ();
     ArrayList<BarEntry> getCombinedValuesForGraphByMonth();
+    ArrayList<BarEntry> getExpenseValuesForGraphByWeek ();
+    ArrayList<BarEntry> getIncomeValuesForGraphByWeek ();
+    ArrayList<BarEntry> getCombinedValuesForGraphByWeek();
 }

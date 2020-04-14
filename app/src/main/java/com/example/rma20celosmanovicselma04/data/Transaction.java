@@ -157,4 +157,8 @@ public class Transaction implements Parcelable {
             dest.writeInt(transactionInterval);
         }
     }
+
+    public Transaction clone () {
+        return new Transaction(this.getDate(), this.getAmount(), this.getTitle(), this.getType(), this.getItemDescription(), this.getTransactionInterval(), this.getEndDate());
+    }
 }
