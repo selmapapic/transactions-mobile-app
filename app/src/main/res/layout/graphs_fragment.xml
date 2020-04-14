@@ -47,7 +47,7 @@
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/incomeGraph"
@@ -66,6 +66,54 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/incomeGraph" />
+
+        <TextView
+            android:id="@+id/textViewSort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VIEW BY:"
+            android:textColor="#f6f6f6"
+            android:textSize="16sp"
+            android:layout_marginStart="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            android:layout_marginTop="45dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="40dp"
+            android:contextClickable="false"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/textViewSort"
+            app:layout_constraintTop_toBottomOf="@+id/textView15">
+
+            <RadioButton
+                android:id="@+id/monthBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Month"
+                android:textColor="#f6f6f6" />
+
+            <RadioButton
+                android:id="@+id/weekBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Week"
+                android:textColor="#f6f6f6" />
+
+            <RadioButton
+                android:id="@+id/dayBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Day"
+                android:textColor="#f6f6f6" />
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

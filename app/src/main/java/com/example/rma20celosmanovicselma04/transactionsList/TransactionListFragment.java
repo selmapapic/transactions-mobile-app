@@ -168,7 +168,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     public AdapterView.OnItemClickListener listItemClickListener() {
         return (parent, view, position, id) -> {
             Transaction transaction = transactionsAdapter.getTransaction(position);
-            System.out.println(pos + " " + position + " " + first);
             if (first) {
                 pos = position;
                 first = false;
