@@ -1,6 +1,11 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.transactionsList;
 
 import android.content.Context;
+
+import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
+import com.example.rma20celosmanovicselma04.data.Transaction;
+import com.example.rma20celosmanovicselma04.data.TransactionType;
+import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

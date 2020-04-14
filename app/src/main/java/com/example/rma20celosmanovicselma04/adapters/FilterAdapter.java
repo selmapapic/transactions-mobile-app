@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,33 +12,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.rma20celosmanovicselma04.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionsAdapter extends ArrayAdapter<Transaction> {
+public class FilterAdapter extends ArrayAdapter<String> {
     private int resource;
 
-    public TextView title;
     public ImageView icon;
-    public TextView amount;
+    public TextView transactionType;
 
-    public TransactionsAdapter(@NonNull Context context, int _resource, @NonNull List<Transaction> objects) {
-        super(context, _resource, objects);
-        resource = _resource; //resource je id od layouta na kojem se nalazi list item
+    public FilterAdapter(@NonNull Context context, int _resource, @NonNull List<String> objects) {
+        super(context, _resource, R.id.sortType, objects);
+        resource = _resource;
     }
 
-    public Transaction getTransaction(int position) {
-        return getItem(position);
-    }
-
-    public void setTransactions(ArrayList<Transaction> transactions) {
+    public void setTransactionType(ArrayList<String> types) {
         this.clear();
-        this.addAll(transactions);
+        this.addAll(types);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        return createItemView(position, convertView, parent);
+    }
+
+
+    @Override
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        return createItemView(position, convertView, parent);
+
+    }
+
+    private View createItemView(int position, View convertView, ViewGroup parent){
         LinearLayout newView;
         if (convertView == null) {
             newView = new LinearLayout(getContext());
@@ -50,31 +58,29 @@ public class TransactionsAdapter extends ArrayAdapter<Transaction> {
             newView = (LinearLayout)convertView;
         }
 
-        Transaction transaction = getItem(position);
+        String type = getItem(position);
 
         icon = newView.findViewById(R.id.icon);
-        title = newView.findViewById(R.id.title);
-        amount = newView.findViewById(R.id.amount);
+        transactionType = newView.findViewById(R.id.sortType);
 
-        title.setText(transaction.getTitle());
-        amount.setText(transaction.getAmount().toString());
+        transactionType.setText(type);
 
-        if(transaction.getType().equals(TransactionType.REGULARINCOME)) {
+        if(type.equals("Regular income")) {
             icon.setImageResource(R.drawable.regular_income);
         }
-        else if(transaction.getType().equals(TransactionType.INDIVIDUALINCOME)) {
+        else if(type.equals("Individual income")) {
             icon.setImageResource(R.drawable.individual_income);
         }
-        else if(transaction.getType().equals(TransactionType.PURCHASE)) {
+        else if(type.equals("Purchase")) {
             icon.setImageResource(R.drawable.purchase);
         }
-        else if(transaction.getType().equals(TransactionType.REGULARPAYMENT)) {
+        else if(type.equals("Regular payment")) {
             icon.setImageResource(R.drawable.regular_payment);
         }
-        else if(transaction.getType().equals(TransactionType.INDIVIDUALPAYMENT)) {
+        else if(type.equals("Individual payment")) {
             icon.setImageResource(R.drawable.individual_payment);
         }
-
+        else icon.setImageResource(R.drawable.transparent);
         return newView;
     }
 }

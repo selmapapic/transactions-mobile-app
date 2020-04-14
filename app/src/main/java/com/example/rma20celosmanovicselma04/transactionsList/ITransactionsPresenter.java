@@ -1,4 +1,6 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.transactionsList;
+
+import com.example.rma20celosmanovicselma04.data.Transaction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

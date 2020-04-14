@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.budget;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
 
 public class BudgetFragment extends Fragment implements IBudgetView{
     private IBudgetPresenter presenter;
@@ -64,7 +67,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
 
     private View.OnClickListener graphsAction() {
         return v -> {
-
+            onItemClick.onNextClicked(3);
         };
     }
 

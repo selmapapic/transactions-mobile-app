@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.data;
 
 public class Account {
     private double budget, totalLimit, monthLimit;

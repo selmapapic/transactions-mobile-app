@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.details;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +14,10 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.data.Transaction;
+import com.example.rma20celosmanovicselma04.data.TransactionType;
 
 import java.text.DateFormat;
 import java.text.ParseException;

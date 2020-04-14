@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.transactionsList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.adapters.FilterAdapter;
+import com.example.rma20celosmanovicselma04.adapters.TransactionsAdapter;
+import com.example.rma20celosmanovicselma04.data.Transaction;
 
 import java.util.ArrayList;
 

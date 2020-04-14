@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

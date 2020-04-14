@@ -1,6 +1,9 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.budget;
 
 import android.content.Context;
+
+import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
+import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 
 public class BudgetPresenter implements IBudgetPresenter {
     private IBudgetView view;

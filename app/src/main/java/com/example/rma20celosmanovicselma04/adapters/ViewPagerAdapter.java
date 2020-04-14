@@ -1,8 +1,12 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.adapters;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.budget.BudgetFragment;
+import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     FragmentManager fm;

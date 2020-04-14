@@ -8,6 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.rma20celosmanovicselma04.adapters.ViewPagerAdapter;
+import com.example.rma20celosmanovicselma04.budget.BudgetFragment;
+import com.example.rma20celosmanovicselma04.data.Transaction;
+import com.example.rma20celosmanovicselma04.details.TransactionDetailFragment;
+import com.example.rma20celosmanovicselma04.graphs.GraphsFragment;
+import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
+
 
 public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
@@ -127,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
 
     @Override
     public void onNextClicked(int page) {
+        System.out.println(page);
         if(page == 2) {
             BudgetFragment budgetFragment = new BudgetFragment();
             if (!twoPaneMode) {
@@ -140,7 +148,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
             }
         }
         else if(page == 3) {
-            //todo grafovi
+            GraphsFragment graphsFragment = new GraphsFragment();
+            if(!twoPaneMode) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, graphsFragment).addToBackStack(null).commit();
+            }
         }
     }
 

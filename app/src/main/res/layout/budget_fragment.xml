@@ -135,7 +135,7 @@
         android:layout_marginEnd="16dp"
         android:text="Account settings"
         android:textAllCaps="true"
-        android:textColor="#9FFFFFFF"
+        android:textColor="#f6f6f6"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"

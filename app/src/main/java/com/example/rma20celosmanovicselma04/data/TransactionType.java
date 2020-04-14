@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.data;
 
 public enum TransactionType {
     INDIVIDUALPAYMENT("Individual payment"), REGULARPAYMENT("Regular payment"), PURCHASE("Purchase"), INDIVIDUALINCOME("Individual income"), REGULARINCOME("Regular income");
