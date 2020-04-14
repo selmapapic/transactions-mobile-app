@@ -1,12 +1,12 @@
 package com.example.rma20celosmanovicselma04.graphs;
 
+import com.github.mikephil.charting.data.BarEntry;
+
+import java.util.ArrayList;
+
 public interface IGraphsPresenter {
-    double expenseGraphMonthValues (int month);
-    void refreshExpenseGraphByMonth ();
-    double incomeGraphMonthValues (int month);
-    void refreshIncomeGraphByMonth();
-
-    double combinedGraphMonthValues(int month);
-
-    void refreshCombinedGraphByMonth();
+    void refreshGraphs (int monthWeekDay);
+    ArrayList<BarEntry> getExpenseValuesForGraphByMonth ();
+    ArrayList<BarEntry> getIncomeValuesForGraphByMonth ();
+    ArrayList<BarEntry> getCombinedValuesForGraphByMonth();
 }

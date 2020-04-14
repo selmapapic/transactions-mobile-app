@@ -13,10 +13,7 @@ import com.example.rma20celosmanovicselma04.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.util.ArrayList;
 
 public class GraphsFragment extends Fragment implements IGraphsView{
     private IGraphsPresenter presenter;
@@ -33,11 +30,8 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         radioGroup.check(R.id.monthBtn);
 
         radioGroup.setOnCheckedChangeListener(radioListener());
-        getPresenter().refreshIncomeGraphByMonth();
-        getPresenter().refreshExpenseGraphByMonth();
-        getPresenter().refreshCombinedGraphByMonth();
+        getPresenter().refreshGraphs(1);
 
-        
         return view;
     }
 
@@ -51,31 +45,30 @@ public class GraphsFragment extends Fragment implements IGraphsView{
     private RadioGroup.OnCheckedChangeListener radioListener() {
         return (group, checkedId) -> {
             if(checkedId == R.id.monthBtn) {
-                getPresenter().refreshExpenseGraphByMonth();
+                getPresenter().refreshGraphs(1);
             }
             else if(checkedId == R.id.weekBtn) {
-
+                getPresenter().refreshGraphs(2);
             }
             else if(checkedId == R.id.dayBtn) {
-
+                getPresenter().refreshGraphs(3);
             }
         };
     }
 
-    public void setExpenseGraph () {
-        ArrayList<Double> values = new ArrayList<>();
-        for(int i = 0; i < 12; i++) {
-            values.add(i, getPresenter().expenseGraphMonthValues(i + 1));
-        }
-
+    public void setExpenseGraph (int monthWeekDay) {
         graphSetOptions(expenseGraph);
 
-        ArrayList<BarEntry> list = new ArrayList<>();
-        for(int i = 0; i < 12; i++) {
-            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        BarDataSet bar = null;
+        if(monthWeekDay == 1) {
+             bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByMonth(), "Monthly expenses");
         }
+        else if(monthWeekDay == 2) {
 
-        BarDataSet bar = new BarDataSet(list, "Monthly expenses");
+        }
+        else if(monthWeekDay == 3) {
+
+        }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
 
         BarData data = new BarData(bar);
@@ -84,20 +77,19 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         expenseGraph.setData(data);
     }
 
-    public void setIncomeGraph () {
-        ArrayList<Double> values = new ArrayList<>();
-        for(int i = 0; i < 12; i++) {
-            values.add(i, getPresenter().incomeGraphMonthValues(i + 1));
-        }
-
+    public void setIncomeGraph (int monthWeekDay) {
         graphSetOptions(incomeGraph);
 
-        ArrayList<BarEntry> list = new ArrayList<>();
-        for(int i = 0; i < 12; i++ ) {
-            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        BarDataSet bar = null;
+        if(monthWeekDay == 1) {
+            bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByMonth(), "Monthly income");
         }
+        else if(monthWeekDay == 2) {
 
-        BarDataSet bar = new BarDataSet(list, "Monthly income");
+        }
+        else if(monthWeekDay == 3) {
+
+        }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
 
         BarData data = new BarData(bar);
@@ -107,20 +99,20 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         incomeGraph.setDrawValueAboveBar(true);
     }
 
-    public void setCombinedGraph () {
-        ArrayList<Double> values = new ArrayList<>();
-        for(int i = 0; i < 12; i++) {
-            values.add(i, getPresenter().combinedGraphMonthValues(i + 1));
-        }
+    public void setCombinedGraph (int monthWeekDay) {
 
         graphSetOptions(combinedGraph);
 
-        ArrayList<BarEntry> list = new ArrayList<>();
-        for(int i = 0; i < 12; i++ ) {
-            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        BarDataSet bar = null;
+        if(monthWeekDay == 1) {
+            bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByMonth(), "Monthly expense and income");
         }
+        else if(monthWeekDay == 2) {
 
-        BarDataSet bar = new BarDataSet(list, "Monthly expense and income");
+        }
+        else if(monthWeekDay == 3) {
+
+        }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
 
         BarData data = new BarData(bar);
@@ -139,7 +131,4 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         graph.setBorderColor(Color.WHITE);
 
     }
-
-
-
 }
