@@ -14,8 +14,15 @@ Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogod
 
 ### 2. spirala:
 - U GraphFragment-u omogućen je prikaz sljedećih podataka:
+
+
   1. Za mjesečne grafove prikazane su vrijednosti svih mjeseci u trenutnoj godini
+
+
   2. Za sedmične grafove prikazane su vrijednosti svih sedmica, počevši od prvog do posljednjeg dana u mjesecu. (mjesec april 2020. godine će imati sljedeće sedmice ->  1.- 8. (prva sedmica), 8.- 15. (druga sedmica), 15. - 22. (treća sedmica), 22. - 29. (četvrta sedmica), 29. - 30. (peta sedmica)). Ovime je osigurano da će se uzeti u obzir svi dani trenutnog mjeseca, te da će svaka sedmica imati po 7 dana.
+
+
   3. Za grafova po danu prikazane su vrijednosti svih dana u trenutnoj sedmici (od ponedjeljka do nedjelje)
+
 - Swipe je realizovan pomoću onFling metode iz klase GestureDetector
 - Pored swipe-a, omogućen je prelazak između fragmenata pomoću dugmadi kako bi se omogućilo korisniku da izabere pristup koji želi
