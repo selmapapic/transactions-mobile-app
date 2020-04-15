@@ -12,9 +12,13 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import static java.time.DayOfWeek.MONDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
+import static java.time.temporal.TemporalAdjusters.nextOrSame;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 public class GraphsPresenter implements IGraphsPresenter {
     private ITransactionsInteractor interactor;
@@ -281,6 +285,103 @@ public class GraphsPresenter implements IGraphsPresenter {
             list.add(new BarEntry(i + 1, values.get(i).floatValue()));
         }
         return list;
+    }
+
+    public Double expenseGraphDayValues (int day) {
+        LocalDate monday = LocalDate.now().with(previousOrSame(MONDAY));
+        LocalDate d = monday.plusDays(day);
+        ArrayList<Double> values = new ArrayList<>();
+        ArrayList<Transaction> transactions = interactor.getTransactions();
+        transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("PAYMENT") || transaction.getType().toString().contains("PURCHASE")).collect(Collectors.toList());
+        for (Transaction t : transactions) {
+            if(t.getDate().equals(d) || isRegularInThisWeek(t, d)){
+                values.add(t.getAmount());
+            }
+        }
+        return values.stream().mapToDouble(Double::doubleValue).sum();
+    }
+
+    private double incomeGraphDayValues (int day) {
+        LocalDate monday = LocalDate.now().with(previousOrSame(MONDAY));
+        LocalDate d = monday.plusDays(day);
+        ArrayList<Double> values = new ArrayList<>();
+        ArrayList<Transaction> transactions = interactor.getTransactions();
+        transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("INCOME")).collect(Collectors.toList());
+        for (Transaction t : transactions) {
+            if(t.getDate().equals(d) || isRegularInThisWeek(t, d)){
+                values.add(t.getAmount());
+            }
+        }
+        return values.stream().mapToDouble(Double::doubleValue).sum();
+    }
+
+    private double combinedGraphDayValues (int day) {
+        double valueTillNow = 0;
+        for(int i = 0; i <= day; i++) {
+            valueTillNow += incomeGraphDayValues(i) - expenseGraphDayValues(i);
+        }
+        return valueTillNow;
+    }
+
+    private boolean isRegularInThisWeek(Transaction tr, LocalDate date) {
+        if(!tr.getType().toString().contains("REGULAR")) return false;
+        LocalDate trnDate = tr.getDate();
+        LocalDate sunday = LocalDate.now().with(nextOrSame(SUNDAY));
+        while(trnDate.isBefore(sunday.plusDays(1))) {
+            if(trnDate.equals(date)) return true;
+            trnDate = trnDate.plusDays(tr.getTransactionInterval());
+        }
+        return false;
+    }
+
+    public ArrayList<BarEntry> getExpenseValuesForGraphByDay () {
+        ArrayList<Double> values = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            values.add(i, expenseGraphDayValues(i));
+        }
+
+        ArrayList<BarEntry> list = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        }
+        return list;
+    }
+
+    public ArrayList<BarEntry> getIncomeValuesForGraphByDay () {
+        ArrayList<Double> values = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            values.add(i, incomeGraphDayValues(i));
+        }
+
+        ArrayList<BarEntry> list = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        }
+        return list;
+    }
+
+    public ArrayList<BarEntry> getCombinedValuesForGraphByDay () {
+        ArrayList<Double> values = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            values.add(i, combinedGraphDayValues(i));
+        }
+
+        ArrayList<BarEntry> list = new ArrayList<>();
+        for(int i = 0; i < 7; i++) {
+            list.add(new BarEntry(i + 1, values.get(i).floatValue()));
+        }
+        return list;
+    }
+
+    @Override
+    public String[] getWeekDays() {
+        String[] s = new String[7];
+        LocalDate monday = LocalDate.now().with(previousOrSame(MONDAY));
+        for(int i = 0; i < 7; i++) {
+            LocalDate d = monday.plusDays(i);
+            s[i] = d.getDayOfMonth() + "." + d.getMonthValue() + ".";
+        }
+        return s;
     }
 
     @Override

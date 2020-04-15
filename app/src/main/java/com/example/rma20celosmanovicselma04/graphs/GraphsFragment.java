@@ -59,6 +59,9 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             }
             else if(checkedId == R.id.dayBtn) {
                 getPresenter().refreshGraphs(3);
+                incomeGraph.invalidate();
+                expenseGraph.invalidate();
+                combinedGraph.invalidate();
             }
         };
     }
@@ -75,26 +78,13 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             setWeekAxis(expenseGraph);
         }
         else if(monthWeekDay == 3) {
-
+            bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByDay(), "Daily expenses");
+            setDayAxis(expenseGraph);
         }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
         BarData data = new BarData(bar);
         data.setBarWidth(0.9f);
         expenseGraph.setData(data);
-    }
-
-    private void setMonthAxis(BarChart graph) {
-        XAxis xAxis = graph.getXAxis();
-        xAxis.setDrawGridLines(true);
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        final String xVal[]={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return xVal[(int) value-1];
-            }
-        });
     }
 
     public void setIncomeGraph (int monthWeekDay) {
@@ -110,7 +100,8 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             setWeekAxis(incomeGraph);
         }
         else if(monthWeekDay == 3) {
-
+            bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByDay(), "Daily income");
+            setDayAxis(incomeGraph);
         }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
 
@@ -136,7 +127,8 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             setWeekAxis(combinedGraph);
         }
         else if(monthWeekDay == 3) {
-
+            bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByDay(), "Daily expense and income");
+            setDayAxis(combinedGraph);
         }
         bar.setColors(ColorTemplate.PASTEL_COLORS);
 
@@ -150,6 +142,34 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         XAxis xAxis = graph.getXAxis();
         xAxis.setValueFormatter(null);
         xAxis.setGranularity(1f);
+    }
+
+    private void setMonthAxis(BarChart graph) {
+        XAxis xAxis = graph.getXAxis();
+        xAxis.setDrawGridLines(true);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        String xVal[]={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return xVal[(int) value-1];
+            }
+        });
+    }
+
+    private void setDayAxis(BarChart graph) {
+        XAxis xAxis = graph.getXAxis();
+        xAxis.setDrawGridLines(true);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        String xVal[] = getPresenter().getWeekDays();
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return xVal[(int) value-1];
+            }
+        });
     }
 
     private void graphSetOptions(BarChart graph) {
