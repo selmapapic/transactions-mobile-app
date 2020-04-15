@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04.budget;
 
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
 
 public class BudgetFragment extends Fragment implements IBudgetView{
@@ -20,6 +22,8 @@ public class BudgetFragment extends Fragment implements IBudgetView{
     private EditText totalLimitFld, monthLimitFld;
     private Button saveBtn, homeBtn, graphsBtn;
     private ImageButton resetBtn;
+    private GestureDetector gestureDetector;
+    private Swipe swipe = new Swipe();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.budget_fragment, container, false);
@@ -37,8 +41,14 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         graphsBtn.setOnClickListener(graphsAction());
         homeBtn.setOnClickListener(homeAction());
         saveBtn.setOnClickListener(saveAction());
-
         resetBtn.setOnClickListener(resetFields());
+
+        gestureDetector = new GestureDetector(getContext(), swipe);
+        swipe.setNext(3);
+        swipe.setPrevious(1);
+        swipe.setOnItemClick(onItemClick);
+        swipe.setGestureDetector(gestureDetector);
+        view.setOnTouchListener(swipe.getLis());
         getPresenter().start();
 
         return view;

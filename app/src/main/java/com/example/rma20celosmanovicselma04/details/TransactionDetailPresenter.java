@@ -7,7 +7,6 @@ import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TransactionDetailPresenter implements ITransactionDetailPresenter {
@@ -23,11 +22,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
         interactor = TransactionsPresenter.getInteractor();
     }
 
-    @Override
-    public void create (LocalDate date, Double amount, String title, TransactionType type, String itemDescription, Integer transactionInterval, LocalDate endDate) {
-        this.transaction = new Transaction(date, amount, title, type, itemDescription, transactionInterval, endDate);
-    }
-
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
@@ -35,13 +29,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     @Override
     public Transaction getTransaction() {
         return transaction;
-    }
-
-    public void start () {
-//        ArrayList<String> types = interactor.getTypes();
-//        types.remove("Filter by");
-//        view.setTypeSpinner(interactor.getTypes());
-//        System.out.println("pozvao se startttttt");
     }
 
     public void removeTransaction (Transaction trn) {

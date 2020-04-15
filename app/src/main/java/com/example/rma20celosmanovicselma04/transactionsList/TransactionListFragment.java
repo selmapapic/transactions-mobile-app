@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04.transactionsList;
 
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.adapters.FilterAdapter;
 import com.example.rma20celosmanovicselma04.adapters.TransactionsAdapter;
 import com.example.rma20celosmanovicselma04.data.Transaction;
@@ -29,6 +31,8 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     private Spinner filterSpinner, sortSpinner;
     private FilterAdapter filterAdapter;
     private ArrayAdapter<String> sortAdapter;
+    private GestureDetector gestureDetector;
+    private Swipe swipe = new Swipe();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +46,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         addTransactionBtn = (Button) fragmentView.findViewById(R.id.addTransactionBtn);
         amountNumber = (TextView) fragmentView.findViewById(R.id.amountNumber);
         limitNumber = (TextView) fragmentView.findViewById(R.id.limitNumber);
-
 
         leftButton.setOnClickListener(leftAction());
         rightButton.setOnClickListener(rightAction());
@@ -67,6 +70,12 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         sortSpinner.setAdapter(sortAdapter);
 
         addTransactionBtn.setOnClickListener(addAction());
+        gestureDetector = new GestureDetector(getContext(), swipe);
+        swipe.setNext(2);
+        swipe.setPrevious(3);
+        swipe.setOnItemClick(onItemClick);
+        swipe.setGestureDetector(gestureDetector);
+        fragmentView.setOnTouchListener(swipe.getLis());
 
         getPresenter().refreshTransactionsByMonthAndYear();
         getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
@@ -159,7 +168,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         monthText.setText(date);
     }
 
-
     public static int pos = -1;
     public static boolean first = true;
     public AdapterView.OnItemClickListener listItemClickListener() {
@@ -174,7 +182,12 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
             }
             else if(pos == position) {
                 transactionListView.setAdapter(transactionsAdapter);
-                onItemClick.onButtonClicked();
+                if(getArguments().getBoolean("twoPaneMode")) {
+                    onItemClick.onButtonClicked();
+                }
+                else {
+                    onItemClick.onItemClicked(transaction);
+                }
                 pos = -1;
                 addTransactionBtn.setEnabled(true);
             }
@@ -192,7 +205,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
         getPresenter().setCurrentBudget();
-        System.out.println("pozvao se on resume u list fragmentu");
     }
 
     public View.OnClickListener addAction() {

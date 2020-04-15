@@ -65,7 +65,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
-        System.out.println("evo nas ovdje");
         ArrayList<String> types = getPresenter().getTypes();
         setTypeSpinner(types);
         removeValidation();
@@ -144,7 +143,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void validateTitle (EditText edit) {
-        System.out.println("pozvao se ovaj listenrrrrrrr");
         if(edit.getText().length() < 3 || edit.getText().length() > 15) {
             edit.setError("Your input is invalid");
             edit.setBackgroundResource(R.drawable.field_stroke);
@@ -171,7 +169,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         }
     }
 
-    public void validateDate (EditText edit, boolean type) { //ako je true, znaci da je date a ako je false onda je endDate
+    public void validateDate (EditText edit, boolean type) { ////ako je true, znaci da je date a ako je false onda je endDate
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setLenient(false);
         if(!type) {

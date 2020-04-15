@@ -2,6 +2,7 @@ package com.example.rma20celosmanovicselma04.graphs;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -19,11 +21,13 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-public class GraphsFragment extends Fragment implements IGraphsView{
+public class GraphsFragment extends Fragment implements IGraphsView {
     private IGraphsPresenter presenter;
     private BarChart incomeGraph, expenseGraph, combinedGraph;
     private RadioGroup radioGroup;
     private Button settingsBtn, homeBtn;
+    private GestureDetector gestureDetector;
+    private Swipe swipe = new Swipe();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.graphs_fragment, container, false);
@@ -43,6 +47,14 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         homeBtn.setOnClickListener(homeAction());
 
         radioGroup.setOnCheckedChangeListener(radioListener());
+
+        gestureDetector = new GestureDetector(getContext(), swipe);
+        swipe.setNext(1);
+        swipe.setPrevious(2);
+        swipe.setOnItemClick(onItemClick);
+        swipe.setGestureDetector(gestureDetector);
+        view.setOnTouchListener(swipe.getLis());
+
         getPresenter().refreshGraphs(1);
         return view;
     }

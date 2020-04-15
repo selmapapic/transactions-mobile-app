@@ -6,9 +6,7 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 
-import com.example.rma20celosmanovicselma04.adapters.ViewPagerAdapter;
 import com.example.rma20celosmanovicselma04.budget.BudgetFragment;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailFragment;
@@ -18,8 +16,6 @@ import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFrag
 
 public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
-    ViewPagerAdapter pageAdapter;
-    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,39 +65,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
             bundle.putBoolean("twoPaneMode", true);
             listFragment.setArguments(bundle);
         }
-
-//        if(!twoPaneMode) {
-//            viewPager = findViewById(R.id.viewPager);
-//            pageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-//            viewPager.setAdapter(pageAdapter);
-//            viewPager.setCurrentItem(0);
-//            viewPager.setOnPageChangeListener(circularListener());
-//        }
     }
-//    int mCurrentPosition, lastPageIndex = 1;
-//    private ViewPager.OnPageChangeListener circularListener() {
-//        return new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                mCurrentPosition = position; // Declare mCurrentPosition as a global variable to track the current position of the item in the ViewPager
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                // For going from the first item to the last item, when the 1st A goes to 1st C on the left, again we let the ViewPager do it's job until the movement is completed, we then set the current item to the 2nd C.
-//                // Set the current item to the item before the last item if the current position is 0
-//                if (mCurrentPosition == 0) viewPager.setCurrentItem(lastPageIndex - 1, true); // lastPageIndex is the index of the last item, in this case is pointing to the 2nd A on the list. This variable should be declared and initialzed as a global variable
-//
-//                // For going from the last item to the first item, when the 2nd C goes to the 2nd A on the right, we let the ViewPager do it's job for us, once the movement is completed, we set the current item to the 1st A.
-//                // Set the current item to the second item if the current position is on the last
-//                if (mCurrentPosition == lastPageIndex) viewPager.setCurrentItem(0, true);
-//            }
-//        };
-//    }
 
     @Override
     public void onItemClicked(Transaction transaction) {
@@ -134,25 +98,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
 
     @Override
     public void onNextClicked(int page) {
-        System.out.println(page);
-        if(page == 2) {
-            BudgetFragment budgetFragment = new BudgetFragment();
-            if (!twoPaneMode) {
+        if(!twoPaneMode) {
+            if (page == 2) {
+                BudgetFragment budgetFragment = new BudgetFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, budgetFragment).addToBackStack(null).commit();
-            }
-        }
-        else if(page == 1) {
-            TransactionListFragment listFragment = new TransactionListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("twoPaneMode", false);
-            listFragment.setArguments(bundle);
-            if(!twoPaneMode) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, listFragment).addToBackStack(null).commit();
-            }
-        }
-        else if(page == 3) {
-            GraphsFragment graphsFragment = new GraphsFragment();
-            if(!twoPaneMode) {
+            } else if (page == 1) {
+                TransactionListFragment listFragment = new TransactionListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("twoPaneMode", false);
+                listFragment.setArguments(bundle);
+                if (!twoPaneMode) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, listFragment).addToBackStack(null).commit();
+                }
+            } else if (page == 3) {
+                GraphsFragment graphsFragment = new GraphsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, graphsFragment).addToBackStack(null).commit();
             }
         }
@@ -160,24 +119,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
 
     @Override
     public void onPreviousClicked(int page) {
-        if(page == 1) {
-            TransactionListFragment listFragment = new TransactionListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("twoPaneMode", false);
-            listFragment.setArguments(bundle);
-            if(!twoPaneMode) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, listFragment).addToBackStack(null).commit();
-            }
-        }
-        else if(page == 2) {
-            BudgetFragment budgetFragment = new BudgetFragment();
-            if(!twoPaneMode) {
+        if(!twoPaneMode) {
+            if (page == 1) {
+                TransactionListFragment listFragment = new TransactionListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("twoPaneMode", false);
+                listFragment.setArguments(bundle);
+                if (!twoPaneMode) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, listFragment).addToBackStack(null).commit();
+                }
+            } else if (page == 2) {
+                BudgetFragment budgetFragment = new BudgetFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, budgetFragment).addToBackStack(null).commit();
-            }
-        }
-        else if(page == 3) {
-            GraphsFragment graphsFragment = new GraphsFragment();
-            if(!twoPaneMode) {
+            } else if (page == 3) {
+                GraphsFragment graphsFragment = new GraphsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, graphsFragment).addToBackStack(null).commit();
             }
         }
