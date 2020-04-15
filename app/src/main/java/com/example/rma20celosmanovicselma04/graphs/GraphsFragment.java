@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioGroup;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -21,6 +23,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
     private IGraphsPresenter presenter;
     private BarChart incomeGraph, expenseGraph, combinedGraph;
     private RadioGroup radioGroup;
+    private Button settingsBtn, homeBtn;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.graphs_fragment, container, false);
@@ -29,7 +32,15 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         incomeGraph = (BarChart) view.findViewById(R.id.incomeGraph);
         combinedGraph = (BarChart) view.findViewById(R.id.combinedGraph);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        settingsBtn = (Button) view.findViewById(R.id.settingsBtn);
+        homeBtn = (Button) view.findViewById(R.id.homeBtn);
+
         radioGroup.check(R.id.monthBtn);
+
+        onItemClick = (TransactionListFragment.OnItemClick) getActivity();
+
+        settingsBtn.setOnClickListener(settingsAction());
+        homeBtn.setOnClickListener(homeAction());
 
         radioGroup.setOnCheckedChangeListener(radioListener());
         getPresenter().refreshGraphs(1);
@@ -41,6 +52,14 @@ public class GraphsFragment extends Fragment implements IGraphsView{
             presenter = new GraphsPresenter(getActivity(), this);
         }
         return presenter;
+    }
+
+    private View.OnClickListener homeAction() {
+        return v -> onItemClick.onNextClicked(1);
+    }
+
+    private View.OnClickListener settingsAction() {
+        return v -> onItemClick.onPreviousClicked(2);
     }
 
     private RadioGroup.OnCheckedChangeListener radioListener() {
@@ -179,5 +198,11 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         graph.setDrawGridBackground(true);
         graph.setDescription(null);
         graph.setBorderColor(Color.WHITE);
+    }
+
+    private TransactionListFragment.OnItemClick onItemClick;
+    public interface OnItemClick {
+        void onNextClicked(int page);
+        void onPreviousClicked(int page);
     }
 }

@@ -143,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         }
         else if(page == 1) {
             TransactionListFragment listFragment = new TransactionListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("twoPaneMode", false);
+            listFragment.setArguments(bundle);
             if(!twoPaneMode) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, listFragment).addToBackStack(null).commit();
             }
@@ -173,7 +176,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
             }
         }
         else if(page == 3) {
-            //todo grafovi
+            GraphsFragment graphsFragment = new GraphsFragment();
+            if(!twoPaneMode) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.transactions_main, graphsFragment).addToBackStack(null).commit();
+            }
         }
     }
 

@@ -66,9 +66,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
     }
 
     private View.OnClickListener graphsAction() {
-        return v -> {
-            onItemClick.onNextClicked(3);
-        };
+        return v -> onItemClick.onNextClicked(3);
     }
 
     private View.OnClickListener homeAction() {

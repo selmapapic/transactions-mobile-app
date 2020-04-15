@@ -48,7 +48,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         rightButton.setOnClickListener(rightAction());
         filterSpinner.setOnItemSelectedListener(spinnerTypeAction());
         sortSpinner.setOnItemSelectedListener(spinnerSortAction());
-        System.out.println(getArguments().getBoolean("twoPaneMode") + "bla bla two pane mode");
         if(!getArguments().getBoolean("twoPaneMode")) {
             settingsBtn = (Button) fragmentView.findViewById(R.id.settingsBtn);
             graphsBtn = (Button) fragmentView.findViewById(R.id.graphsBtn);
@@ -80,9 +79,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     }
 
     private View.OnClickListener graphsAction() {
-        return v -> {
-
-        };
+        return v -> onItemClick.onPreviousClicked(3);
     }
 
     @Override
