@@ -1,9 +1,21 @@
 ## Napomene:
+
+Tokom rada na aplikaciji korišten je uređaj u Genymotion emulatoru - Google pixel, 1080x1920, 420dpi, 9.0 - API 28
+
+Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogodnosti koje nisu podržane u nižem SDK-u
+
+### 1. spirala:
 - Amount-i za sve transakcije se mogu unositi kao pozitivni ili negativni ali će se prikazivati kao pozitivni, te će se računati na osnovu tipa transakcije a ne predznaka
 - Global amount predstavlja zbir svih troškova i dobitaka
 - Pri editovanju ili dodavanju nove transakcije, mijenjanjem tipa se ne validiraju svi podaci (npr da li određeni tip ima interval ili end date) nego se tek validiraju klikom na Save button
 - Dopušteno je da sve transakcije, osim onih sa tipom "income", ne moraju imati description
-- Za računanje budget i totalLimit-a uzeto je u obzir čitavo trajanje transakcije (od date do endDate) 
-- Pri sortiranju po nazivu, ne pravi se razlika između transakcija sa velikim i malim slovima 
-- Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogodnosti koje nisu podržane u nižem SDK-u
-- Tokom rada na aplikaciji korišten je uređaj u Genymotion emulatoru - Google pixel, 1080x1920, 420dpi, 9.0 - API 28
+- Za računanje budget i totalLimit-a uzeto je u obzir čitavo trajanje transakcije (od date do endDate)
+- Pri sortiranju po nazivu, ne pravi se razlika između transakcija sa velikim i malim slovima
+
+### 2. spirala:
+- U GraphFragment-u omogućen je prikaz sljedećih podataka:
+  * Za mjesečne grafove prikazane su vrijednosti svih mjeseci u trenutnoj godini
+  * Za sedmične grafove prikazane su vrijednosti svih sedmica, počevši od prvog do posljednjeg dana u mjesecu. (mjesec april 2020. godine će imati sljedeće sedmice ->  1.- 8. (prva sedmica), 8.- 15. (druga sedmica), 15. - 22. (treća sedmica), 22. - 29. (četvrta sedmica), 29. - 30. (peta sedmica)). Ovime je osigurano da će se uzeti u obzir svi dani trenutnog mjeseca, te da će svaka sedmica imati po 7 dana.
+  * Za grafova po danu prikazane su vrijednosti svih dana u trenutnoj sedmici (od ponedjeljka do nedjelje)
+- Swipe je realizovan pomoću onFling metode iz klase GestureDetector
+- Pored swipe-a, omogućen je prelazak između fragmenata pomoću dugmadi kako bi se omogućilo korisniku da izabere pristup koji želi
