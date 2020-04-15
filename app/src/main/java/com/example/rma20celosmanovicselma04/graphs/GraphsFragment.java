@@ -67,14 +67,12 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         graphSetOptions(expenseGraph);
         BarDataSet bar = null;
         if(monthWeekDay == 1) {
-             bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByMonth(), "Monthly expenses");
+            bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByMonth(), "Monthly expenses");
             setMonthAxis(expenseGraph);
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByWeek(), "Weekly expenses");
-            XAxis xAxis = expenseGraph.getXAxis();
-            xAxis.setValueFormatter(null);
-            xAxis.setGranularity(1f);
+            setWeekAxis(expenseGraph);
         }
         else if(monthWeekDay == 3) {
 
@@ -109,9 +107,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByWeek(), "Weekly income");
-            XAxis xAxis = incomeGraph.getXAxis();
-            xAxis.setValueFormatter(null);
-            xAxis.setGranularity(1f);
+            setWeekAxis(incomeGraph);
         }
         else if(monthWeekDay == 3) {
 
@@ -137,9 +133,7 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByWeek(), "Weekly expense and income");
-            XAxis xAxis = combinedGraph.getXAxis();
-            xAxis.setValueFormatter(null);
-            xAxis.setGranularity(1f);
+            setWeekAxis(combinedGraph);
         }
         else if(monthWeekDay == 3) {
 
@@ -152,15 +146,18 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         combinedGraph.setData(data);
     }
 
+    private void setWeekAxis(BarChart graph) {
+        XAxis xAxis = graph.getXAxis();
+        xAxis.setValueFormatter(null);
+        xAxis.setGranularity(1f);
+    }
+
     private void graphSetOptions(BarChart graph) {
         graph.setDrawBarShadow(false);
         graph.setDrawValueAboveBar(true);
-        graph.setMaxVisibleValueCount(12);
         graph.setPinchZoom(false);
         graph.setDrawGridBackground(true);
         graph.setDescription(null);
         graph.setBorderColor(Color.WHITE);
-        graph.setDrawValueAboveBar(true);
-
     }
 }
