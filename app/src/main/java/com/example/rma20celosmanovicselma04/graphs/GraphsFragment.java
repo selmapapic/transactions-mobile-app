@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 public class GraphsFragment extends Fragment implements IGraphsView{
@@ -31,7 +33,6 @@ public class GraphsFragment extends Fragment implements IGraphsView{
 
         radioGroup.setOnCheckedChangeListener(radioListener());
         getPresenter().refreshGraphs(1);
-
         return view;
     }
 
@@ -64,13 +65,16 @@ public class GraphsFragment extends Fragment implements IGraphsView{
 
     public void setExpenseGraph (int monthWeekDay) {
         graphSetOptions(expenseGraph);
-        System.out.println(monthWeekDay + " expense mwd");
         BarDataSet bar = null;
         if(monthWeekDay == 1) {
              bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByMonth(), "Monthly expenses");
+            setMonthAxis(expenseGraph);
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getExpenseValuesForGraphByWeek(), "Weekly expenses");
+            XAxis xAxis = expenseGraph.getXAxis();
+            xAxis.setValueFormatter(null);
+            xAxis.setGranularity(1f);
         }
         else if(monthWeekDay == 3) {
 
@@ -78,8 +82,21 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         bar.setColors(ColorTemplate.PASTEL_COLORS);
         BarData data = new BarData(bar);
         data.setBarWidth(0.9f);
-
         expenseGraph.setData(data);
+    }
+
+    private void setMonthAxis(BarChart graph) {
+        XAxis xAxis = graph.getXAxis();
+        xAxis.setDrawGridLines(true);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        final String xVal[]={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return xVal[(int) value-1];
+            }
+        });
     }
 
     public void setIncomeGraph (int monthWeekDay) {
@@ -88,9 +105,13 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         BarDataSet bar = null;
         if(monthWeekDay == 1) {
             bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByMonth(), "Monthly income");
+            setMonthAxis(incomeGraph);
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getIncomeValuesForGraphByWeek(), "Weekly income");
+            XAxis xAxis = incomeGraph.getXAxis();
+            xAxis.setValueFormatter(null);
+            xAxis.setGranularity(1f);
         }
         else if(monthWeekDay == 3) {
 
@@ -112,9 +133,13 @@ public class GraphsFragment extends Fragment implements IGraphsView{
         BarDataSet bar = null;
         if(monthWeekDay == 1) {
             bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByMonth(), "Monthly expense and income");
+            setMonthAxis(combinedGraph);
         }
         else if(monthWeekDay == 2) {
             bar = new BarDataSet(getPresenter().getCombinedValuesForGraphByWeek(), "Weekly expense and income");
+            XAxis xAxis = combinedGraph.getXAxis();
+            xAxis.setValueFormatter(null);
+            xAxis.setGranularity(1f);
         }
         else if(monthWeekDay == 3) {
 
@@ -128,13 +153,14 @@ public class GraphsFragment extends Fragment implements IGraphsView{
     }
 
     private void graphSetOptions(BarChart graph) {
-        //graph.setDrawBarShadow(false);
+        graph.setDrawBarShadow(false);
         graph.setDrawValueAboveBar(true);
         graph.setMaxVisibleValueCount(12);
-        //graph.setPinchZoom(false);
+        graph.setPinchZoom(false);
         graph.setDrawGridBackground(true);
         graph.setDescription(null);
         graph.setBorderColor(Color.WHITE);
+        graph.setDrawValueAboveBar(true);
 
     }
 }
