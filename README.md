@@ -26,3 +26,4 @@ Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogod
 
 - Swipe je realizovan pomoću onFling metode iz klase GestureDetector
 - Pored swipe-a, omogućen je prelazak između fragmenata pomoću dugmadi kako bi se omogućilo korisniku da izabere pristup koji želi
+- Pri brisanju transakcije u landscape mode-u potrebno je odselektovati transakciju, koja se nalazila nakon obrisane, kako bi se omogućilo dodavanje nove transakcije
