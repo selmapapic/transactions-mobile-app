@@ -95,14 +95,12 @@
         android:layout_width="94dp"
         android:layout_height="31dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="126dp"
+        android:layout_marginEnd="135dp"
         android:layout_marginBottom="38dp"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/globalAmountText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -163,10 +161,9 @@
 
     <TextView
         android:id="@+id/limitNumber"
-        android:layout_width="94dp"
+        android:layout_width="150dp"
         android:layout_height="31dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="1dp"
         android:layout_marginBottom="6dp"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

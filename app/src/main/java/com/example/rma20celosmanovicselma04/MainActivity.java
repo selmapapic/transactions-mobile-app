@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
                 detailFragment.setArguments(arguments);
                 fragmentManager.beginTransaction().replace(R.id.transactions_detail, detailFragment).commit();
             }
+            else {
+                detailFragment = new TransactionDetailFragment();
+                detailFragment.setArguments(arguments);
+                fragmentManager.beginTransaction().replace(R.id.transactions_detail, detailFragment).commit();
+            }
         }
         else {
             twoPaneMode = false;
