@@ -161,6 +161,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     private String getSortParam(String sort) {
         String[] arr = sort.split(" ");
         String param = arr[0].toLowerCase();
+        if(param.equals("price")) param = "amount";
         String way = arr[2].toLowerCase();
         if(way.equals("ascending")) return param + ".asc";
         return param + ".desc";
