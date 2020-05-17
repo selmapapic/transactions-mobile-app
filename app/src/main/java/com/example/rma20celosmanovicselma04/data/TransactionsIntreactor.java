@@ -37,7 +37,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     public TransactionsIntreactor(OnTransactionsSearchDone p) {
         caller = p;
         transactions = new ArrayList<Transaction>();
-        System.out.println("tu smo bili");
     };
 
     public TransactionsIntreactor() {
@@ -48,7 +47,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         super.onPostExecute(aVoid);
         caller.onDone(transactions);
     }
-
 
     @Override
     public ArrayList<Transaction> getTransactions() {
@@ -184,6 +182,12 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             }
         }
         else if(strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
+            if(query.contains("typeId=")) {
+                String [] arr = query.split("&");
+                String s = arr[2];
+                s = s.substring(7);
+                query = query.replace(s, getTypeId(s).toString());
+            }
             for(Integer page = 0;; page++) {
                 String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/" + query + page.toString();
                 try {
@@ -226,8 +230,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
     private JSONObject getJsonObject(String url1) throws IOException, JSONException {
         URL url = new URL(url1);
-        HttpURLConnection urlConnection = (HttpURLConnection)
-                url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
         String result = convertStreamToString(in);
         return new JSONObject(result);

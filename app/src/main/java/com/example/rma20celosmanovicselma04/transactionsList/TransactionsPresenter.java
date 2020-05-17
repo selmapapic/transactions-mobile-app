@@ -147,14 +147,12 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             return;
         }
         else if((sort == null || sort.equals("Sort by") && !(filter == null || filter.equals("Filter by")))) {
-            int id = getInteractor().getTypeId(filter);
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&filter=" + id + "&page=");
+            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&page=");
             return;
         }
         else {
             String sortParam = getSortParam(sort);
-            int id = getInteractor().getTypeId(filter);
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&sort=" + sortParam + "&filter=" + id + "&page=");
+            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&sort=" + sortParam + "&page=");
         }
     }
 
