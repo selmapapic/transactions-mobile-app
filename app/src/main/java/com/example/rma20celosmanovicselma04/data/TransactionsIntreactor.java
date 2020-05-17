@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor{
@@ -168,56 +169,74 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         String query = strings[0];
 
         if(strings[1].equals("allTrn")) {    //dohvatanje svih trn
-            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + query;
-            try {
-                URL url = new URL(url1);
-                HttpURLConnection urlConnection = (HttpURLConnection)
-                        url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                String result = convertStreamToString(in);
-                JSONObject jo = new JSONObject(result);
-                JSONArray results = jo.getJSONArray("transactions");
-                for (int i = 0; i < results.length(); i++) {
-                    JSONObject trn = results.getJSONObject(i);
-                    int id = trn.getInt("id");
-                    LocalDate date = LocalDate.parse(trn.getString("date").substring(0,10));
-                    String title = trn.getString("title");
-                    Double amount = trn.getDouble("amount");
-                    String description = trn.getString("itemDescription");
-                    Integer interval;
-                    if("null".equals(trn.getString("transactionInterval"))) {
-                        interval = null;
+            for(Integer page = 0;; page++) {
+                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions?page=" + page.toString();
+                try {
+                    JSONObject jo = getJsonObject(url1);
+                    JSONArray results = jo.getJSONArray("transactions");
+                    if(results.length() == 0) break;
+                    for (int i = 0; i < results.length(); i++) {
+                        addTransactionToArray(results, i);
                     }
-                    else {
-                        interval = Integer.parseInt(trn.getString("transactionInterval"));
-                    }
-                    LocalDate endDate;
-                    if("null".equals(trn.getString("endDate"))) {
-                        endDate = null;
-                    }
-                    else {
-                        endDate = LocalDate.parse(trn.getString("endDate").substring(0,10));
-                    }
-                    //todo
-                    TransactionType type = getTransactionType(trn.getInt("TransactionTypeId"));
-                    transactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+            }
+        }
+        else if(strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
+            for(Integer page = 0;; page++) {
+                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/" + query + page.toString();
+                try {
+                    JSONObject jo = getJsonObject(url1);
+                    JSONArray results = jo.getJSONArray("transactions");
+                    if(results.length() == 0) break;
+                    for (int i = 0; i < results.length(); i++) {
+                        addTransactionToArray(results, i);
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
     }
 
-    private TransactionType getTransactionType(int typeId) {
+    private void addTransactionToArray(JSONArray results, int i) throws JSONException {
+        JSONObject trn = results.getJSONObject(i);
+        int id = trn.getInt("id");
+        LocalDate date = LocalDate.parse(trn.getString("date").substring(0, 10));
+        String title = trn.getString("title");
+        Double amount = trn.getDouble("amount");
+        String description = trn.getString("itemDescription");
+        Integer interval;
+        if ("null".equals(trn.getString("transactionInterval"))) {
+            interval = null;
+        } else {
+            interval = Integer.parseInt(trn.getString("transactionInterval"));
+        }
+        LocalDate endDate;
+        if ("null".equals(trn.getString("endDate"))) {
+            endDate = null;
+        } else {
+            endDate = LocalDate.parse(trn.getString("endDate").substring(0, 10));
+        }
+        TransactionType type = getType(trn.getInt("TransactionTypeId"));
+        transactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+    }
+
+    private JSONObject getJsonObject(String url1) throws IOException, JSONException {
+        URL url = new URL(url1);
+        HttpURLConnection urlConnection = (HttpURLConnection)
+                url.openConnection();
+        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+        String result = convertStreamToString(in);
+        return new JSONObject(result);
+    }
+
+    private void makeTransactionTypeMap() {
         String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/transactionTypes";
         try {
-            URL url = new URL(url1);
-            HttpURLConnection urlConnection = (HttpURLConnection)
-                    url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            String result = convertStreamToString(in);
-            JSONObject jo = new JSONObject(result);
+            JSONObject jo = getJsonObject(url1);
             JSONArray results = jo.getJSONArray("rows");
             for (int i = 0; i < results.length(); i++) {
                 JSONObject type = results.getJSONObject(i);
@@ -228,6 +247,18 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Integer getTypeId (String nameType) {
+        makeTransactionTypeMap();
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            if(entry.getValue().equals(nameType)) return entry.getKey();
+        }
+        return null;
+    }
+
+    public TransactionType getType (int typeId) {
+        makeTransactionTypeMap();
         return TransactionType.getType(map.get(typeId));
     }
 

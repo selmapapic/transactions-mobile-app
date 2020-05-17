@@ -17,4 +17,6 @@ public interface ITransactionsInteractor {
     ArrayList<Transaction> getTransactionsByDate (LocalDate date);
     double getCurrentBudget (boolean isAllNoDate);
     double getAmountForLimit (boolean isAllNoDate, LocalDate d);
+    Integer getTypeId (String nameType);
+    TransactionType getType (int typeId);
 }

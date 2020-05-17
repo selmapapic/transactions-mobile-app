@@ -147,6 +147,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
     public void onSaveOrDelete () {
         FragmentManager fragmentManager = getSupportFragmentManager();
         TransactionListFragment listFragment = (TransactionListFragment) fragmentManager.findFragmentByTag("list");
-        //listFragment.getPresenter().refreshFilterAndSort(listFragment.getFilterSpinner(), listFragment.getSortSpinner());
+        listFragment.getPresenter().refreshAllTransactions(listFragment.getFilterSpinner(), listFragment.getSortSpinner());
     }
 }
