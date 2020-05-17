@@ -12,4 +12,6 @@ public interface ITransactionsView {
     void setSortSpinner (ArrayList<String> sort);
     void setBudgetLimit (Double amt, Double limit);
     void setBudget (Double budget);
+    String getFilterSpinner();
+    String getSortSpinner();
 }

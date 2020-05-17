@@ -183,10 +183,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         else if(strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
             if(query.contains("typeId=")) {
-                String [] arr = query.split("&");
-                String s = arr[2];
-                s = s.substring(7);
-                query = query.replace(s, getTypeId(s).toString());
+                query = replaceNameWithId(query);
             }
             for(Integer page = 0;; page++) {
                 String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/" + query + page.toString();
@@ -201,11 +198,82 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     e.printStackTrace();
                 }
             }
+
+            ArrayList<Transaction> regulars = new ArrayList<>();
+            int idReg = getTypeId("Regular payment");
+            for(Integer page = 0;; page++) {
+                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg;
+                try {
+                    JSONObject jo = getJsonObject(url2);
+                    JSONArray results = jo.getJSONArray("transactions");
+                    if(results.length() == 0) break;
+                    for (int i = 0; i < results.length(); i++) {
+                        addToRegulars(regulars, results, i);
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            idReg = getTypeId("Regular income");
+            for(Integer page = 0;; page++) {
+                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg;
+                try {
+                    JSONObject jo = getJsonObject(url2);
+                    JSONArray results = jo.getJSONArray("transactions");
+                    if(results.length() == 0) break;
+                    for (int i = 0; i < results.length(); i++) {
+                        addToRegulars(regulars, results, i);
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for(Transaction t : regulars) {         //spajanje regulars sa ostalim
+                if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
+            }
         }
         return null;
     }
 
-    private void addTransactionToArray(JSONArray results, int i) throws JSONException {
+    private String getMonthFromQuery(String query) {
+        String [] arr = query.split("&");
+        String temp = arr[0];
+        String [] arr2 = temp.split("=");
+        return arr2[1];
+    }
+
+    private String getYearFromQuery(String query) {
+        String [] arr = query.split("&");
+        String temp = arr[1];
+        String [] arr2 = temp.split("=");
+        return arr2[1];
+    }
+
+    private String replaceNameWithId(String query) {
+        String [] arr = query.split("&");
+        String s = arr[2];
+        s = s.substring(7);
+        query = query.replace(s, getTypeId(s).toString());  //uzimanje typeId umjesto typeName
+        return query;
+    }
+
+    private void addToThisMonth(Transaction t, int month, int year) {
+        if(t.getDate().getMonthValue() < month && t.getDate().getYear() <= year) {
+            LocalDate d = t.getDate();
+            while(d.getMonthValue() < month) {
+                d = d.plusDays(t.getTransactionInterval());
+            }
+            if(d.getMonthValue() == month) {
+                while(d.getMonthValue() == month) {
+                    transactions.add(t);
+                }
+            }
+        }
+    }
+
+    private void addToRegulars(ArrayList<Transaction> regulars, JSONArray results, int i) throws JSONException {
         JSONObject trn = results.getJSONObject(i);
         int id = trn.getInt("id");
         LocalDate date = LocalDate.parse(trn.getString("date").substring(0, 10));
@@ -225,7 +293,11 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             endDate = LocalDate.parse(trn.getString("endDate").substring(0, 10));
         }
         TransactionType type = getType(trn.getInt("TransactionTypeId"));
-        transactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+        regulars.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+    }
+
+    private void addTransactionToArray(JSONArray results, int i) throws JSONException {
+        addToRegulars(transactions, results, i);
     }
 
     private JSONObject getJsonObject(String url1) throws IOException, JSONException {
