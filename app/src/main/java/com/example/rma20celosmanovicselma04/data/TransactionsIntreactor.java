@@ -1,16 +1,53 @@
 package com.example.rma20celosmanovicselma04.data;
 
+import android.os.AsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class TransactionsIntreactor implements ITransactionsInteractor {
+public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor{
+
+    public interface OnTransactionsSearchDone{
+        public void onDone(ArrayList<Transaction> results);
+    }
 
     public LocalDate getCurrentDate() {
         return TransactionsModel.getCurrentDate();
     }
     public void setCurrentDate (LocalDate date) { TransactionsModel.setCurrentDate(date); }
+    HashMap<Integer, String> map = new HashMap<>();
+    private ArrayList<Transaction> transactions;
+
+    private OnTransactionsSearchDone caller;
+    public TransactionsIntreactor(OnTransactionsSearchDone p) {
+        caller = p;
+        transactions = new ArrayList<Transaction>();
+        System.out.println("tu smo bili");
+    };
+
+    public TransactionsIntreactor() {
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid){
+        super.onPostExecute(aVoid);
+        caller.onDone(transactions);
+    }
+
 
     @Override
     public ArrayList<Transaction> getTransactions() {
@@ -124,5 +161,91 @@ public class TransactionsIntreactor implements ITransactionsInteractor {
         }
         budget = Math.round(budget * 100.0) / 100.0;
         return budget;
+    }
+
+    @Override
+    protected Void doInBackground(String... strings) {
+        String query = strings[0];
+
+        if(strings[1].equals("allTrn")) {    //dohvatanje svih trn
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + query;
+            try {
+                URL url = new URL(url1);
+                HttpURLConnection urlConnection = (HttpURLConnection)
+                        url.openConnection();
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                String result = convertStreamToString(in);
+                JSONObject jo = new JSONObject(result);
+                JSONArray results = jo.getJSONArray("transactions");
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject trn = results.getJSONObject(i);
+                    int id = trn.getInt("id");
+                    LocalDate date = LocalDate.parse(trn.getString("date").substring(0,10));
+                    String title = trn.getString("title");
+                    Double amount = trn.getDouble("amount");
+                    String description = trn.getString("itemDescription");
+                    Integer interval;
+                    if("null".equals(trn.getString("transactionInterval"))) {
+                        interval = null;
+                    }
+                    else {
+                        interval = Integer.parseInt(trn.getString("transactionInterval"));
+                    }
+                    LocalDate endDate;
+                    if("null".equals(trn.getString("endDate"))) {
+                        endDate = null;
+                    }
+                    else {
+                        endDate = LocalDate.parse(trn.getString("endDate").substring(0,10));
+                    }
+                    //todo
+                    TransactionType type = getTransactionType(trn.getInt("TransactionTypeId"));
+                    transactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private TransactionType getTransactionType(int typeId) {
+        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/transactionTypes";
+        try {
+            URL url = new URL(url1);
+            HttpURLConnection urlConnection = (HttpURLConnection)
+                    url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            String result = convertStreamToString(in);
+            JSONObject jo = new JSONObject(result);
+            JSONArray results = jo.getJSONArray("rows");
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject type = results.getJSONObject(i);
+                Integer id = type.getInt("id");
+                String name = type.getString("name");
+                map.put(id, name);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return TransactionType.getType(map.get(typeId));
+    }
+
+    private String convertStreamToString(InputStream in) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+            }
+        }
+        return sb.toString();
     }
 }

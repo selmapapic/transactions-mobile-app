@@ -2,6 +2,7 @@ package com.example.rma20celosmanovicselma04.transactionsList;
 
 import android.content.Context;
 
+import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
@@ -13,7 +14,7 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 
-public class TransactionsPresenter implements ITransactionsPresenter {
+public class TransactionsPresenter implements ITransactionsPresenter, TransactionsIntreactor.OnTransactionsSearchDone {
     private ITransactionsView view;
     private static ITransactionsInteractor interactor;
     private Context context;
@@ -33,23 +34,24 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         view.setFilterSpinner(interactor.getTypes());
         view.setSortSpinner(interactor.getSortTypes());
         view.setBudgetLimit(interactor.getAccount().getBudget(), interactor.getAccount().getTotalLimit());
+        searchTransactions("transactions?page=1");
     }
 
-    public void refreshTransactionsByMonthAndYear () {
-        view.setTransactions(interactor.getTransactionsByDate(null));
-        view.notifyTransactionsListDataSetChanged();
-    }
+//    public void refreshTransactionsByMonthAndYear () {
+//        view.setTransactions(interactor.getTransactionsByDate(null));
+//        view.notifyTransactionsListDataSetChanged();
+//    }
 
     public ArrayList<Transaction> getTransactionsByType (ArrayList<Transaction> trns, String type) {
         return (ArrayList<Transaction>) trns.stream().filter(tr -> tr.getType().equals(TransactionType.getType(type))).collect(Collectors.toList());
     }
 
-    public void refreshFilterAndSort (String filter, String sort) {
-        ArrayList<Transaction> trns = filterAndSort(filter, sort);
-        view.setTransactions(trns);
-        view.notifyTransactionsListDataSetChanged();
-
-    }
+//    public void refreshFilterAndSort (String filter, String sort) {
+//        ArrayList<Transaction> trns = filterAndSort(filter, sort);
+//        view.setTransactions(trns);
+//        view.notifyTransactionsListDataSetChanged();
+//
+//    }
 
     public ArrayList<Transaction> filterAndSort (String filter, String sort) {
         ArrayList<Transaction> trns = interactor.getTransactionsByDate(null);
@@ -110,4 +112,18 @@ public class TransactionsPresenter implements ITransactionsPresenter {
         interactor.setBudget(interactor.getCurrentBudget(true));
         view.setBudget(interactor.getCurrentBudget(true));
     }
+
+    @Override
+    public void onDone(ArrayList<Transaction> results) {
+        view.setTransactions(results);
+        view.notifyTransactionsListDataSetChanged();
+        System.out.println("pozvalo se");
+    }
+
+    @Override
+    public void searchTransactions(String query){
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
+        System.out.println("desilo se");
+    }
+
 }

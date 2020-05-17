@@ -77,8 +77,8 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         swipe.setGestureDetector(gestureDetector);
         fragmentView.setOnTouchListener(swipe.getLis());
 
-        getPresenter().refreshTransactionsByMonthAndYear();
-        getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+        //getPresenter().refreshTransactionsByMonthAndYear();
+        //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         getPresenter().start();
         return fragmentView;
     }
@@ -124,16 +124,16 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     public View.OnClickListener leftAction() {
         return v -> {
             getPresenter().changeMonthBackward();
-            getPresenter().refreshTransactionsByMonthAndYear();
-            getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+            //getPresenter().refreshTransactionsByMonthAndYear();
+            //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
     public View.OnClickListener rightAction() {
         return v -> {
             getPresenter().changeMonthForward();
-            getPresenter().refreshTransactionsByMonthAndYear();
-            getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+            //getPresenter().refreshTransactionsByMonthAndYear();
+            //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
@@ -141,7 +141,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
 
             @Override
@@ -154,7 +154,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
             }
 
             @Override
