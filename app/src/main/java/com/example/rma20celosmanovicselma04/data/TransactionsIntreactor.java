@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -301,13 +302,19 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     private void addToThisMonth(Transaction t, int month, int year) {
-        if(t.getDate().getMonthValue() < month && t.getDate().getYear() <= year && t.getEndDate().getMonthValue() >= month && t.getEndDate().getYear() >= year) {
+        LocalDate date;
+        if(transactions.size() == 0) {
+            date = LocalDate.of(year, month, 15);
+            date = date.with(TemporalAdjusters.lastDayOfMonth());
+        }
+        else date = transactions.get(0).getDate();
+        if(t.getDate().isBefore(date) && t.getEndDate().isAfter(date)) {
             LocalDate d = t.getDate();
-            while(d.getMonthValue() < month) {
+            while(d.getMonthValue() != month && d.isBefore(date)) {
                 d = d.plusDays(t.getTransactionInterval());
             }
-            if(d.getMonthValue() == month) {
-                while(d.getMonthValue() == month) {
+            if(d.getMonthValue() == month && d.isBefore(t.getEndDate())) {
+                while(d.getMonthValue() == month && d.isBefore(t.getEndDate())) {
                     transactions.add(t);
                     d = d.plusDays(t.getTransactionInterval());
                 }

@@ -40,11 +40,12 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
-        interactor.changeTransaction(oldTrn, newTrn);
+//        interactor.changeTransaction(oldTrn, newTrn);
+        POSTTransaction(newTrn, oldTrn);
     }
 
     public void addTransaction(Transaction trn) {
-        POSTTransaction(trn);
+        POSTTransaction(trn, null);
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
@@ -72,13 +73,24 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     @Override
-    public void POSTTransaction (Transaction trn) {
-        String jsonFormat = getJSONFormat(trn);
-        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
+    public void POSTTransaction (Transaction newTrn, Transaction oldTrn) {
+        if(oldTrn == null) {        //ne mijenja se nego se dodaje (nema neka old)
+            String jsonFormat = getJSONFormat(newTrn, false);
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
+        }
+        else {
+            newTrn.setId(oldTrn.getId());
+            String jsonFormat = getJSONFormat(newTrn, true);
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
+        }
+
     }
 
-    private String getJSONFormat(Transaction trn) {
+    private String getJSONFormat(Transaction trn, boolean isWithId) {
         String json = "";
+        if(isWithId) {
+            //json +=
+        }
         json += "{" + "\"date\": " + "\"" + getJSONDateFormat(trn.getDate()) + "\", ";
         json +=  "\"title\": " + "\"" + trn.getTitle() + "\", ";
         json +=  "\"amount\": " + trn.getAmount() + ", ";
