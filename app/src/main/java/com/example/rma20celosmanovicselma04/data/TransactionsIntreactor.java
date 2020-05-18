@@ -8,9 +8,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -20,11 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor{
+public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor {
 
     public interface OnTransactionsSearchDone{
-        public void onDone(ArrayList<Transaction> results);
+        void onDone(ArrayList<Transaction> results);
     }
+    public interface TransferTransactions { }
 
     public LocalDate getCurrentDate() {
         return TransactionsModel.getCurrentDate();
@@ -38,6 +41,11 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         caller = p;
         transactions = new ArrayList<Transaction>();
     };
+
+    private TransferTransactions poziv;
+    public TransactionsIntreactor(TransferTransactions t) {
+        poziv = t;
+    }
 
     public TransactionsIntreactor() {
     }
@@ -202,7 +210,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             ArrayList<Transaction> regulars = new ArrayList<>();
             int idReg = getTypeId("Regular payment");
             for(Integer page = 0;; page++) {
-                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg;
+                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
                 try {
                     JSONObject jo = getJsonObject(url2);
                     JSONArray results = jo.getJSONArray("transactions");
@@ -217,7 +225,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
             idReg = getTypeId("Regular income");
             for(Integer page = 0;; page++) {
-                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg;
+                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
                 try {
                     JSONObject jo = getJsonObject(url2);
                     JSONArray results = jo.getJSONArray("transactions");
@@ -234,7 +242,40 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
             }
         }
+        else if(strings[1].equals("addTrn")) {  //POST
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions";
+            try {
+                URL url = new URL(url1);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                OutputStream out = new DataOutputStream(connection.getOutputStream());
+                String jsonString = replaceNameWithIdForPOST(strings[0]) + "}";
+                byte[] bytes = jsonString.getBytes("utf-8");
+                out.write(bytes, 0, bytes.length);
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
+    }
+
+    private String replaceNameWithIdForPOST(String string) {
+        String arr[] = string.split("\"typeId\": ");
+        String name = arr[1];
+        String repl = string.replace(name, getTypeId(name).toString());
+        return repl;
     }
 
     private String getMonthFromQuery(String query) {
@@ -260,7 +301,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     private void addToThisMonth(Transaction t, int month, int year) {
-        if(t.getDate().getMonthValue() < month && t.getDate().getYear() <= year) {
+        if(t.getDate().getMonthValue() < month && t.getDate().getYear() <= year && t.getEndDate().getMonthValue() >= month && t.getEndDate().getYear() >= year) {
             LocalDate d = t.getDate();
             while(d.getMonthValue() < month) {
                 d = d.plusDays(t.getTransactionInterval());
@@ -268,6 +309,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             if(d.getMonthValue() == month) {
                 while(d.getMonthValue() == month) {
                     transactions.add(t);
+                    d = d.plusDays(t.getTransactionInterval());
                 }
             }
         }

@@ -12,7 +12,7 @@ public interface ITransactionsPresenter {
     //ArrayList<Transaction> sortTransactions (ArrayList<Transaction> trns, String type);
     //ArrayList<Transaction> filterAndSort (String filter, String sort);
     void setCurrentBudget ();
-    public void searchTransactions(String query);
+    void searchTransactions(String query);
 
     void refreshAllTransactions(String filter, String sort);
 }

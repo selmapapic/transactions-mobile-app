@@ -2,14 +2,18 @@ package com.example.rma20celosmanovicselma04.details;
 
 import android.content.Context;
 
+import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
+import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class TransactionDetailPresenter implements ITransactionDetailPresenter {
+public class TransactionDetailPresenter implements ITransactionDetailPresenter, TransactionsIntreactor.OnTransactionsSearchDone {
     private ITransactionsInteractor interactor;
     private ITransactionDetailView view;
     private Context context;
@@ -40,7 +44,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
     }
 
     public void addTransaction(Transaction trn) {
-        interactor.addTransaction(trn);
+        POSTTransaction(trn);
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
@@ -65,5 +69,37 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter {
         types.add(TransactionType.INDIVIDUALPAYMENT.getTransactionName());
         types.add(TransactionType.REGULARPAYMENT.getTransactionName());
         return types;
+    }
+
+    @Override
+    public void POSTTransaction (Transaction trn) {
+        String jsonFormat = getJSONFormat(trn);
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
+    }
+
+    private String getJSONFormat(Transaction trn) {
+        String json = "";
+        json += "{" + "\"date\": " + "\"" + getJSONDateFormat(trn.getDate()) + "\", ";
+        json +=  "\"title\": " + "\"" + trn.getTitle() + "\", ";
+        json +=  "\"amount\": " + trn.getAmount() + ", ";
+
+        if(trn.getEndDate() != null) json += "\"endDate\": " + "\"" + getJSONDateFormat(trn.getEndDate()) + "\", ";
+        else json += "\"endDate\": " + "null, ";
+        if(trn.getItemDescription() != null) json += "\"itemDescription\": " + "\"" + trn.getItemDescription() + "\", ";
+        else json += "\"itemDescription\": " + "null, ";
+        if(trn.getTransactionInterval() != null) json += "\"transactionInterval\": " + trn.getTransactionInterval() + ", ";
+        else json += "\"transactionInterval\": " + "null, ";
+
+        json += "\"typeId\": " + trn.getType().getTransactionName();
+        return json;
+    }
+
+    private String getJSONDateFormat (LocalDate date) {
+        return date.toString() + "T" + LocalTime.now();
+    }
+
+    @Override
+    public void onDone(ArrayList<Transaction> results) {
+
     }
 }
