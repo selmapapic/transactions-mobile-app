@@ -2,8 +2,16 @@ package com.example.rma20celosmanovicselma04.data;
 
 public class Account {
     private double budget, totalLimit, monthLimit;
+    private int id;
 
     public Account(double budget, double totalLimit, double monthLimit) {
+        this.budget = budget;
+        this.totalLimit = totalLimit;
+        this.monthLimit = monthLimit;
+    }
+
+    public Account(int id, double budget, double totalLimit, double monthLimit) {
+        this.id = id;
         this.budget = budget;
         this.totalLimit = totalLimit;
         this.monthLimit = monthLimit;
@@ -34,5 +42,13 @@ public class Account {
 
     public void setMonthLimit(double monthLimit) {
         this.monthLimit = monthLimit;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -49,6 +49,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         swipe.setOnItemClick(onItemClick);
         swipe.setGestureDetector(gestureDetector);
         view.setOnTouchListener(swipe.getLis());
+
         getPresenter().start();
 
         return view;

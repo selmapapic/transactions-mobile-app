@@ -2,6 +2,8 @@ package com.example.rma20celosmanovicselma04.data;
 
 import android.os.AsyncTask;
 
+import com.example.rma20celosmanovicselma04.budget.BudgetPresenter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,36 +27,38 @@ import java.util.stream.Collectors;
 
 public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor {
 
+    private ArrayList<Transaction> transactions;
+    private Account account;
+    private OnTransactionsSearchDone caller;
+    HashMap<Integer, String> map = new HashMap<>();
+
     public interface OnTransactionsSearchDone{
         void onDone(ArrayList<Transaction> results);
+        void onAccountDone (Account account);
     }
-    public interface TransferTransactions { }
 
     public LocalDate getCurrentDate() {
         return TransactionsModel.getCurrentDate();
     }
     public void setCurrentDate (LocalDate date) { TransactionsModel.setCurrentDate(date); }
-    HashMap<Integer, String> map = new HashMap<>();
-    private ArrayList<Transaction> transactions;
 
-    private OnTransactionsSearchDone caller;
     public TransactionsIntreactor(OnTransactionsSearchDone p) {
         caller = p;
         transactions = new ArrayList<Transaction>();
     };
 
-    private TransferTransactions poziv;
-    public TransactionsIntreactor(TransferTransactions t) {
-        poziv = t;
-    }
-
-    public TransactionsIntreactor() {
-    }
+    public TransactionsIntreactor() { }
 
     @Override
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
-        caller.onDone(transactions);
+
+        if(caller.getClass().equals(BudgetPresenter.class)) {
+            caller.onAccountDone(account);
+        }
+        else {
+            caller.onDone(transactions);
+        }
     }
 
     @Override
@@ -99,11 +103,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     public Account getAccount () {
-        return AccountModel.account;
-    }
-
-    public void setBudget (double budget) {
-        getAccount().setBudget(budget);
+        return account;
     }
 
     public double getCurrentBudget (boolean isAllNoDate) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
@@ -290,6 +290,16 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     System.out.println(response.toString());
                 }
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(strings[1].equals("getAccount")) {
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
+            try {
+                JSONObject jo = getJsonObject(url1);
+                account = new Account(jo.getInt("id"), jo.getDouble("budget"), jo.getDouble("totalLimit"), jo.getDouble("monthLimit"));
+
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
         }

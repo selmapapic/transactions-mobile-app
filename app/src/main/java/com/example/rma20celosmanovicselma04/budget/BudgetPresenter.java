@@ -2,10 +2,15 @@ package com.example.rma20celosmanovicselma04.budget;
 
 import android.content.Context;
 
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
+import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 
-public class BudgetPresenter implements IBudgetPresenter {
+import java.util.ArrayList;
+
+public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor.OnTransactionsSearchDone{
     private IBudgetView view;
     private static ITransactionsInteractor interactor;
     private Context context;
@@ -17,20 +22,37 @@ public class BudgetPresenter implements IBudgetPresenter {
     }
 
     public void start () {
-        view.setBudgetText(interactor.getCurrentBudget(true));
-        view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
-        view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
+        searchAccount(null);
     }
 
     @Override
     public void saveNewChanges(Double totalLimit, Double monthLimit) {
-        interactor.getAccount().setTotalLimit(totalLimit);
-        interactor.getAccount().setMonthLimit(monthLimit);
+        //interactor.getAccount().setTotalLimit(totalLimit);
+        //interactor.getAccount().setMonthLimit(monthLimit);
     }
 
     @Override
     public void refreshFields() {
-        view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
-        view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
+        //view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
+        //view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
+        searchAccount(null);
+    }
+
+
+    @Override
+    public void onDone(ArrayList<Transaction> results) { }
+
+    @Override
+    public void onAccountDone(Account account) {
+        //todo
+        //view.setBudgetText(interactor.getCurrentBudget(true));
+        view.setBudgetText(account.getBudget());
+        view.setTotalLimitFld(account.getTotalLimit());
+        view.setMonthLimitFld(account.getMonthLimit());
+    }
+
+    @Override
+    public void searchAccount(String query){
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 }

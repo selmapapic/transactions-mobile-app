@@ -3,6 +3,7 @@ package com.example.rma20celosmanovicselma04.details;
 import android.content.Context;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
@@ -50,13 +51,15 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
-        Double monthSum = interactor.getAmountForLimit(false, currentTrn.getDate());
-        monthSum += currentTrn.getAmount();
-        if(!isAdd) monthSum -= getTransaction().getAmount();
-        Double allSum = interactor.getAmountForLimit(true, currentTrn.getDate());
-        allSum += currentTrn.getAmount();
-        if(!isAdd) allSum -= getTransaction().getAmount();
-        return interactor.getAccount().getMonthLimit() < monthSum || interactor.getAccount().getTotalLimit() < allSum;
+        //todo
+//        Double monthSum = interactor.getAmountForLimit(false, currentTrn.getDate());
+//        monthSum += currentTrn.getAmount();
+//        if(!isAdd) monthSum -= getTransaction().getAmount();
+//        Double allSum = interactor.getAmountForLimit(true, currentTrn.getDate());
+//        allSum += currentTrn.getAmount();
+//        if(!isAdd) allSum -= getTransaction().getAmount();
+//        return interactor.getAccount().getMonthLimit() < monthSum || interactor.getAccount().getTotalLimit() < allSum;
+        return true;
     }
 
     public ITransactionsInteractor getInteractor() {
@@ -114,6 +117,11 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void onDone(ArrayList<Transaction> results) {
+
+    }
+
+    @Override
+    public void onAccountDone(Account account) {
 
     }
 }

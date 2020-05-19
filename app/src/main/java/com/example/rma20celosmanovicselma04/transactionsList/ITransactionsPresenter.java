@@ -13,6 +13,6 @@ public interface ITransactionsPresenter {
     //ArrayList<Transaction> filterAndSort (String filter, String sort);
     void setCurrentBudget ();
     void searchTransactions(String query);
-
+    void searchAccount(String query);
     void refreshAllTransactions(String filter, String sort);
 }

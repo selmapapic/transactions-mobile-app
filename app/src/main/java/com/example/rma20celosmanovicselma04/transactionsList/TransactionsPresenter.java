@@ -3,6 +3,7 @@ package com.example.rma20celosmanovicselma04.transactionsList;
 import android.content.Context;
 
 import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
@@ -33,7 +34,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         view.refreshDate(dateToString(interactor.getCurrentDate()));
         view.setFilterSpinner(interactor.getTypes());
         view.setSortSpinner(interactor.getSortTypes());
-        view.setBudgetLimit(interactor.getAccount().getBudget(), interactor.getAccount().getTotalLimit());
+        searchAccount(null);
     }
 
     public ArrayList<Transaction> getTransactionsByType (ArrayList<Transaction> trns, String type) {
@@ -95,8 +96,9 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     public void setCurrentBudget () {
-        interactor.setBudget(interactor.getCurrentBudget(true));
-        view.setBudget(interactor.getCurrentBudget(true));
+        //todo
+        //interactor.setBudget(interactor.getCurrentBudget(true));
+        //view.setBudget(interactor.getCurrentBudget(true));
     }
 
     @Override
@@ -107,6 +109,11 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     @Override
+    public void onAccountDone(Account account) {
+        view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
+    }
+
+    @Override
     public void searchTransactions(String query){
         if(query == null) {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
@@ -114,6 +121,11 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         else {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "sortFilter", context.getResources().getString(R.string.api_id));
         }
+    }
+
+    @Override
+    public void searchAccount(String query){
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 
     @Override
