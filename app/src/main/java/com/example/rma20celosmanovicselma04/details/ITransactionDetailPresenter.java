@@ -14,5 +14,5 @@ public interface ITransactionDetailPresenter {
     void setTransaction(Transaction transaction);
     ITransactionsInteractor getInteractor();
     ArrayList<String> getTypes();
-    void POSTTransaction (Transaction newTrn, Transaction oldTrn);
+    void POSTTransaction (Transaction newTrn, Transaction oldTrn, boolean isDelete);
 }

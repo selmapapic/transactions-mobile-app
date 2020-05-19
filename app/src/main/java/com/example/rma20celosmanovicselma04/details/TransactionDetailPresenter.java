@@ -36,16 +36,17 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void removeTransaction (Transaction trn) {
-        interactor.removeTransaction(trn);
+        //interactor.removeTransaction(trn);
+        POSTTransaction(trn, null, true);
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
 //        interactor.changeTransaction(oldTrn, newTrn);
-        POSTTransaction(newTrn, oldTrn);
+        POSTTransaction(newTrn, oldTrn, false);
     }
 
     public void addTransaction(Transaction trn) {
-        POSTTransaction(trn, null);
+        POSTTransaction(trn, null, false);
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
@@ -73,7 +74,11 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     @Override
-    public void POSTTransaction (Transaction newTrn, Transaction oldTrn) {
+    public void POSTTransaction (Transaction newTrn, Transaction oldTrn, boolean isDelete) {
+        if(isDelete) {
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(null, "deleteTrn", context.getResources().getString(R.string.api_id), String.valueOf(newTrn.getId()));
+            return;
+        }
         if(oldTrn == null) {        //ne mijenja se nego se dodaje (nema neka old)
             String jsonFormat = getJSONFormat(newTrn);
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
@@ -83,7 +88,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
             String jsonFormat = getJSONFormat(newTrn);
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addEditTrn", context.getResources().getString(R.string.api_id), String.valueOf(newTrn.getId()));
         }
-
     }
 
     private String getJSONFormat(Transaction trn) {

@@ -271,6 +271,28 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 e.printStackTrace();
             }
         }
+        else if(strings[1].equals("deleteTrn")) {
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];
+            try {
+                URL url = new URL(url1);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("DELETE");
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
