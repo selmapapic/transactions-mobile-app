@@ -75,22 +75,20 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     @Override
     public void POSTTransaction (Transaction newTrn, Transaction oldTrn) {
         if(oldTrn == null) {        //ne mijenja se nego se dodaje (nema neka old)
-            String jsonFormat = getJSONFormat(newTrn, false);
+            String jsonFormat = getJSONFormat(newTrn);
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
         }
         else {
             newTrn.setId(oldTrn.getId());
-            String jsonFormat = getJSONFormat(newTrn, true);
-            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addTrn", context.getResources().getString(R.string.api_id));
+            String jsonFormat = getJSONFormat(newTrn);
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "addEditTrn", context.getResources().getString(R.string.api_id), String.valueOf(newTrn.getId()));
         }
 
     }
 
-    private String getJSONFormat(Transaction trn, boolean isWithId) {
+    private String getJSONFormat(Transaction trn) {
         String json = "";
-        if(isWithId) {
-            //json +=
-        }
+
         json += "{" + "\"date\": " + "\"" + getJSONDateFormat(trn.getDate()) + "\", ";
         json +=  "\"title\": " + "\"" + trn.getTitle() + "\", ";
         json +=  "\"amount\": " + trn.getAmount() + ", ";

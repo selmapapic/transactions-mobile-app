@@ -243,8 +243,10 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
             }
         }
-        else if(strings[1].equals("addTrn")) {  //POST
-            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions";
+        else if(strings[1].contains("add")) {  //POST
+            String url1;
+            if(strings[1].contains("Edit")) url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];  //ako se edituje
+            else url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions";      //ako se dodaje
             try {
                 URL url = new URL(url1);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
