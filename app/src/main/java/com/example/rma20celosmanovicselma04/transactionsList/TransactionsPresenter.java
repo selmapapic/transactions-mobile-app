@@ -103,8 +103,8 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void onDone(ArrayList<Transaction> results) {
-        filterAndSort(view.getFilterSpinner(), view.getSortSpinner(), results);
-        view.setTransactions(results);
+        ArrayList<Transaction> finalTrns = filterAndSort(view.getFilterSpinner(), view.getSortSpinner(), results);
+        view.setTransactions(finalTrns);
         view.notifyTransactionsListDataSetChanged();
     }
 

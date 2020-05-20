@@ -52,7 +52,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     @Override
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
-
+        System.out.println("pozvao se on post ");
         if(caller.getClass().equals(BudgetPresenter.class)) {
             caller.onAccountDone(account);
         }
@@ -207,7 +207,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("111111111111111111");
             ArrayList<Transaction> regulars = new ArrayList<>();
             int idReg = getTypeId("Regular payment");
             for(Integer page = 0;; page++) {
@@ -223,7 +223,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("2222222222222221222");
             idReg = getTypeId("Regular income");
             for(Integer page = 0;; page++) {
                 String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
@@ -238,7 +238,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("333333333333333333333333333");
             for(Transaction t : regulars) {         //spajanje regulars sa ostalim
                 if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
             }
@@ -380,6 +380,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 }
             }
         }
+        System.out.println("pozvao se add to this month");
     }
 
     private void addToRegulars(ArrayList<Transaction> regulars, JSONArray results, int i) throws JSONException {
