@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 
 public interface IGraphsPresenter {
+    void start();
     void refreshGraphs (int monthWeekDay);
     ArrayList<BarEntry> getExpenseValuesForGraphByMonth ();
     ArrayList<BarEntry> getIncomeValuesForGraphByMonth ();

@@ -55,7 +55,8 @@ public class GraphsFragment extends Fragment implements IGraphsView {
         swipe.setGestureDetector(gestureDetector);
         view.setOnTouchListener(swipe.getLis());
 
-        getPresenter().refreshGraphs(1);
+        getPresenter().start();
+        //getPresenter().refreshGraphs(1);
         return view;
     }
 
@@ -210,6 +211,7 @@ public class GraphsFragment extends Fragment implements IGraphsView {
         graph.setDrawGridBackground(true);
         graph.setDescription(null);
         graph.setBorderColor(Color.WHITE);
+        graph.animateXY(0,2000);
     }
 
     private TransactionListFragment.OnItemClick onItemClick;

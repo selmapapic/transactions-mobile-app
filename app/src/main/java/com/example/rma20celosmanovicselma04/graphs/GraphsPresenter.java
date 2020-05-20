@@ -2,8 +2,11 @@ package com.example.rma20celosmanovicselma04.graphs;
 
 import android.content.Context;
 
+import com.example.rma20celosmanovicselma04.R;
+import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
+import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
 import com.github.mikephil.charting.data.BarEntry;
 
@@ -20,11 +23,12 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static java.time.temporal.TemporalAdjusters.nextOrSame;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
-public class GraphsPresenter implements IGraphsPresenter {
+public class GraphsPresenter implements IGraphsPresenter, TransactionsIntreactor.OnTransactionsSearchDone {
     private ITransactionsInteractor interactor;
     private IGraphsView view;
     private Context context;
-
+    private int graphType;  //month = 1, week = 2, day = 3
+    private ArrayList<Transaction> allTransactions = new ArrayList<>();
 
     public GraphsPresenter (Context context, IGraphsView view) {
         this.context = context;
@@ -49,7 +53,7 @@ public class GraphsPresenter implements IGraphsPresenter {
 
     private double expenseGraphMonthValues (int month) {
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("PAYMENT") || transaction.getType().toString().contains("PURCHASE")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if(t.getDate().getMonthValue() == month && (t.getType().toString().contains("PURCHASE") || t.getType().toString().contains("INDIVIDUAL"))){
@@ -78,7 +82,7 @@ public class GraphsPresenter implements IGraphsPresenter {
 
     private double incomeGraphMonthValues (int month) {
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("INCOME")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if(t.getDate().getMonthValue() == month && t.getType().toString().contains("INDIVIDUAL")){
@@ -119,7 +123,7 @@ public class GraphsPresenter implements IGraphsPresenter {
         LocalDate dWeek = d.plusDays(7);
         if(d.getMonthValue() != dWeek.getMonthValue()) dWeek = LocalDate.now().with(lastDayOfMonth());
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("PAYMENT") || transaction.getType().toString().contains("PURCHASE")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if((t.getDate().equals(d)  || (t.getDate().isAfter(d) && t.getDate().isBefore(dWeek))) && (t.getType().toString().contains("PURCHASE") || t.getType().toString().contains("INDIVIDUAL"))){
@@ -152,7 +156,7 @@ public class GraphsPresenter implements IGraphsPresenter {
         LocalDate dWeek = d.plusDays(7);
         if(d.getMonthValue() != dWeek.getMonthValue()) dWeek = LocalDate.now().with(lastDayOfMonth());
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("INCOME")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if((t.getDate().equals(d)  || (t.getDate().isAfter(d) && t.getDate().isBefore(dWeek))) && t.getType().toString().contains("INDIVIDUAL")){
@@ -287,11 +291,11 @@ public class GraphsPresenter implements IGraphsPresenter {
         return list;
     }
 
-    public Double expenseGraphDayValues (int day) {
+    private Double expenseGraphDayValues(int day) {
         LocalDate monday = LocalDate.now().with(previousOrSame(MONDAY));
         LocalDate d = monday.plusDays(day);
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("PAYMENT") || transaction.getType().toString().contains("PURCHASE")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if(t.getDate().equals(d) || isRegularInThisWeek(t, d)){
@@ -305,7 +309,7 @@ public class GraphsPresenter implements IGraphsPresenter {
         LocalDate monday = LocalDate.now().with(previousOrSame(MONDAY));
         LocalDate d = monday.plusDays(day);
         ArrayList<Double> values = new ArrayList<>();
-        ArrayList<Transaction> transactions = interactor.getTransactions();
+        ArrayList<Transaction> transactions = allTransactions;
         transactions = (ArrayList<Transaction>) transactions.stream().filter(transaction -> transaction.getType().toString().contains("INCOME")).collect(Collectors.toList());
         for (Transaction t : transactions) {
             if(t.getDate().equals(d) || isRegularInThisWeek(t, d)){
@@ -386,8 +390,32 @@ public class GraphsPresenter implements IGraphsPresenter {
 
     @Override
     public void refreshGraphs (int monthWeekDay) {  //month = 1, week = 2, day = 3
-        view.setExpenseGraph(monthWeekDay);
-        view.setIncomeGraph(monthWeekDay);
-        view.setCombinedGraph(monthWeekDay);
+        graphType = monthWeekDay;
+        view.setExpenseGraph(graphType);
+        view.setIncomeGraph(graphType);
+        view.setCombinedGraph(graphType);
+    }
+
+    @Override
+    public void start () {
+        graphType = 1;
+        searchTransactions(null);
+    }
+
+    public void searchTransactions(String query) {
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
+    }
+
+    @Override
+    public void onDone(ArrayList<Transaction> results) {
+        allTransactions = results;
+        view.setExpenseGraph(graphType);
+        view.setIncomeGraph(graphType);
+        view.setCombinedGraph(graphType);
+    }
+
+    @Override
+    public void onAccountDone(Account account) {
+
     }
 }
