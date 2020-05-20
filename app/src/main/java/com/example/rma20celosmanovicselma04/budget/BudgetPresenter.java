@@ -22,11 +22,12 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     }
 
     public void start () {
-        searchAccount(null);
+        searchAccount(null, null);
     }
 
     @Override
     public void saveNewChanges(Double totalLimit, Double monthLimit) {
+        searchAccount(null, new Account(0, totalLimit, monthLimit));
         //interactor.getAccount().setTotalLimit(totalLimit);
         //interactor.getAccount().setMonthLimit(monthLimit);
     }
@@ -35,7 +36,7 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     public void refreshFields() {
         //view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
         //view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
-        searchAccount(null);
+        searchAccount(null, null);
     }
 
 
@@ -46,13 +47,30 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     public void onAccountDone(Account account) {
         //todo
         //view.setBudgetText(interactor.getCurrentBudget(true));
-        view.setBudgetText(account.getBudget());
-        view.setTotalLimitFld(account.getTotalLimit());
-        view.setMonthLimitFld(account.getMonthLimit());
+        if(account != null) {
+            view.setBudgetText(account.getBudget());
+            view.setTotalLimitFld(account.getTotalLimit());
+            view.setMonthLimitFld(account.getMonthLimit());
+        }
     }
 
     @Override
-    public void searchAccount(String query){
-        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+    public void searchAccount(String query, Account edit){
+        if(edit != null) {
+            String jsonFormat = getJSONFormat(edit);
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "editAccount", context.getResources().getString(R.string.api_id));
+        }
+        else {
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+        }
+    }
+
+    private String getJSONFormat(Account account) {
+        String json = "";
+
+        json += "{" + "\"monthLimit\": " + account.getMonthLimit() + ", ";
+        json +=  "\"totalLimit\": " + account.getTotalLimit();
+        json += "}";
+        return json;
     }
 }

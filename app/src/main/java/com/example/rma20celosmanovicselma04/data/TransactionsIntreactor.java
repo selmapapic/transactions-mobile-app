@@ -303,6 +303,32 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 e.printStackTrace();
             }
         }
+        else if(strings[1].equals("editAccount")) {
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
+            try {
+                URL url = new URL(url1);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                OutputStream out = new DataOutputStream(connection.getOutputStream());
+                String jsonString = strings[0];
+                byte[] bytes = jsonString.getBytes("utf-8");
+                out.write(bytes, 0, bytes.length);
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
