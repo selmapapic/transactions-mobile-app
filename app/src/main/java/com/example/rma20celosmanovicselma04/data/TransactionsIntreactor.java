@@ -141,7 +141,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                 }
             }
             for(Transaction t : regulars) {         //spajanje regulars sa ostalim
-                if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
+                addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
             }
 
             if(strings[3].equals("getAcc")) {
@@ -277,19 +277,23 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             date = date.with(TemporalAdjusters.lastDayOfMonth());
         }
         else date = transactions.get(0).getDate();
-        if(t.getDate().isBefore(date) && t.getEndDate().isAfter(date)) {
+        boolean skip = false;
+        if(t.getDate().getMonthValue() == month && t.getDate().getYear() == year) skip = true;
+        if((t.getDate().isBefore(date) || t.getDate().equals(date)) && (t.getEndDate().isAfter(date) || (t.getEndDate().getYear() == date.getYear() && t.getEndDate().getMonthValue() == date.getMonthValue()))) {
             LocalDate d = t.getDate();
             while(d.getMonthValue() != month && d.isBefore(date)) {
                 d = d.plusDays(t.getTransactionInterval());
             }
             if(d.getMonthValue() == month && d.isBefore(t.getEndDate())) {
                 while(d.getMonthValue() == month && d.isBefore(t.getEndDate())) {
-                    transactions.add(t);
+                    if(skip) {
+                        skip = false;
+                    }
+                    else transactions.add(t);
                     d = d.plusDays(t.getTransactionInterval());
                 }
             }
         }
-        System.out.println("pozvao se add to this month");
     }
 
     private void addToRegulars(ArrayList<Transaction> regulars, JSONArray results, int i) throws JSONException {

@@ -61,7 +61,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
-        //todo
         Double monthSum = getAmountForLimit(false, currentTrn.getDate());
         monthSum += currentTrn.getAmount();
         if(!isAdd) monthSum -= getTransaction().getAmount();
@@ -192,7 +191,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
     }
 
-    //todo
     public double getAmountForLimit (boolean isAllNoDate, LocalDate date) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
         ArrayList<Transaction> trns;
         if (isAllNoDate) trns = transactions;

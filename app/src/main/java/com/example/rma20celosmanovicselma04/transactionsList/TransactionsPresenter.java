@@ -96,10 +96,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     public void setCurrentBudget () {
-        //todo
         searchAccount(null);
-        //interactor.setBudget(interactor.getCurrentBudget(true));
-        //view.setBudget(interactor.getCurrentBudget(true));
     }
 
     @Override

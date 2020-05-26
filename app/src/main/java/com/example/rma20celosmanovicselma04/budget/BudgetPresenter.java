@@ -45,8 +45,6 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
 
     @Override
     public void onAccountDone(Account account) {
-        //todo
-        //view.setBudgetText(interactor.getCurrentBudget(true));
         if(account != null) {
             view.setBudgetText(account.getBudget());
             view.setTotalLimitFld(account.getTotalLimit());
