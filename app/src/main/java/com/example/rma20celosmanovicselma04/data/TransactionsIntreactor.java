@@ -52,8 +52,8 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
         if(caller.getClass().equals(BudgetPresenter.class) || caller.getClass().equals(TransactionDetailPresenter.class)) {
-            caller.onAccountDone(account);
-            caller.onDone(transactions);
+            if(account != null) caller.onAccountDone(account);
+            if(transactions != null) caller.onDone(transactions);
         }
         else {
             caller.onDone(transactions);

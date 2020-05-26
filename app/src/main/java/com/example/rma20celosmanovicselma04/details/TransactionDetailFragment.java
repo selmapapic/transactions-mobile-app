@@ -409,7 +409,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     @Override
     public void onResume () {
         super.onResume();
-        getPresenter().start();
+        //getPresenter().start();
     }
 }
 
