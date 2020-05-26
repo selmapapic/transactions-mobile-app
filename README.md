@@ -32,7 +32,7 @@ Min SDK je postavljen na 23 a Target SDK na 26 jer su korištene određene pogod
 
 S obzirom da nije bilo naglašeno da je brzina dobavljanja informacija sa web servisa bitna, postoje određena kašnjenja, a to su:
 
-- Pri dodavanju, brisanju ili editovanju transakcije, prije klika na save ili delete button, potrebno je sačekati oko 10 sekundi (razlog tome je što se u tom fragmentu dobavlja account sa web servisa kako bi se ažurirao budžet, pa je potrebno sačekati nekoliko sekundi dok se dobavi jer će se u protivnom krahirati). Da bi se spriječilo krahiranje, sačekati da se ispiše u konzoli "DOBAVLJENE TRANSAKCIJE U DETAIL PRESENTER" i
+- Pri dodavanju, brisanju ili editovanju transakcije, prije klika na save ili delete button, potrebno je sačekati oko 5 sekundi (razlog tome je što se u tom fragmentu dobavlja account sa web servisa kako bi se ažurirao budžet, pa je potrebno sačekati nekoliko sekundi dok se dobavi jer će se u protivnom krahirati). Da bi se spriječilo krahiranje, sačekati da se ispiše u konzoli "DOBAVLJENE TRANSAKCIJE U DETAIL PRESENTER" i
      "DOBAVLJEN ACCOUNT U DETAIL PRESENTER".
 - Pri prikazu grafova, potrebno je sačekati oko 10-15 sekundi dok se ne prikaže graf; u međuvremenu će pisati "No chart data available"
 - Pri promjeni mjeseca na glavnom fragmentu, potrebno je sačekati oko 2 sekunde dok se osvježe transakcije

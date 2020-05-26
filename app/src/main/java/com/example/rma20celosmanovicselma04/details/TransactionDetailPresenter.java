@@ -148,8 +148,8 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void start() {
-        searchTransactions(null);
         searchAccount(null, null);
+        searchTransactions(null);
     }
 
     private String getJSONFormatAccount(Account account) {
