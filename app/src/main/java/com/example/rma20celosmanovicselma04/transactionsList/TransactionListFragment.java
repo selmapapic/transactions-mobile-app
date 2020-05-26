@@ -124,8 +124,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return v -> {
             getPresenter().changeMonthBackward();
             getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-            //getPresenter().refreshTransactionsByMonthAndYear();
-            //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
@@ -133,8 +131,6 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return v -> {
             getPresenter().changeMonthForward();
             getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-            //getPresenter().refreshTransactionsByMonthAndYear();
-            //getPresenter().refreshFilterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         };
     }
 
@@ -203,11 +199,8 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     @Override
     public void onResume () {
         super.onResume();
-        //todo
         getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
-        //transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
-        //getPresenter().start();
         getPresenter().setCurrentBudget();
     }
 

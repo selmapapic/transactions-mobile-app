@@ -367,7 +367,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void removeValidation () {
-        System.out.println("pozvao se remove validation");
         titleFld.setBackgroundResource(R.drawable.field_stroke);
         titleFld.setError(null);
         amountFld.setBackgroundResource(R.drawable.field_stroke);
@@ -411,7 +410,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     public void onResume () {
         super.onResume();
         getPresenter().start();
-        System.out.println("pozvao se on resume");
     }
 }
 

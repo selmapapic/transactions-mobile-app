@@ -126,13 +126,13 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     @Override
     public void onDone(ArrayList<Transaction> results) {
         transactions = results;
-        System.out.println(" EVO GA ON DONE ");
+        System.out.println(" DOBAVLJENE TRANSAKCIJE U DETAIL PRESENTER ");
     }
 
     @Override
     public void onAccountDone(Account account) {
         this.account = account;
-        System.out.println("desio se on acc done det pres");
+        System.out.println(" DOBAVLJEN ACCOUNT U DETAIL PRESENTER ");
     }
 
     @Override
@@ -150,7 +150,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     public void start() {
         searchTransactions(null);
         searchAccount(null, null);
-        System.out.println("Pozvao se start");
     }
 
     private String getJSONFormatAccount(Account account) {

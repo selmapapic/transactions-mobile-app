@@ -113,7 +113,6 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void searchTransactions(String query){
-        System.out.println("pozvao se search trn");
         if(query == null) {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
         }
@@ -124,7 +123,6 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void searchAccount(String query){
-        System.out.println("pozvao se search account");
         new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 

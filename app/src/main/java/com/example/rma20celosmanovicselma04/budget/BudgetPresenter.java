@@ -28,14 +28,10 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     @Override
     public void saveNewChanges(Double totalLimit, Double monthLimit) {
         searchAccount(null, new Account(0, totalLimit, monthLimit));
-        //interactor.getAccount().setTotalLimit(totalLimit);
-        //interactor.getAccount().setMonthLimit(monthLimit);
     }
 
     @Override
     public void refreshFields() {
-        //view.setTotalLimitFld(interactor.getAccount().getTotalLimit());
-        //view.setMonthLimitFld(interactor.getAccount().getMonthLimit());
         searchAccount(null, null);
     }
 
