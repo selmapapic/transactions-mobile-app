@@ -45,7 +45,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
-//        interactor.changeTransaction(oldTrn, newTrn);
         POSTTransaction(newTrn, oldTrn, false);
         account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
         account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));

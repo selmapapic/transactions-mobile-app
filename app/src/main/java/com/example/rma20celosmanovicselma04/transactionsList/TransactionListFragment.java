@@ -207,6 +207,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         //transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
+        //getPresenter().start();
         getPresenter().setCurrentBudget();
     }
 

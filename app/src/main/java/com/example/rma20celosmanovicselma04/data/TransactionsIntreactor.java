@@ -24,7 +24,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor {
 
@@ -53,11 +52,13 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     @Override
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
+        System.out.println(caller.getClass() + " callet get class");
         if(caller.getClass().equals(BudgetPresenter.class) || caller.getClass().equals(TransactionDetailPresenter.class)) {
             caller.onAccountDone(account);
         }
         else {
             caller.onDone(transactions);
+            caller.onAccountDone(account);
         }
     }
 
@@ -66,19 +67,19 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         return TransactionsModel.transactions;
     }
 
-    public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
-        LocalDate curr;
-        if(date == null) curr = TransactionsModel.currentDate;
-        else curr = date;
-
-        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
-
-        return (ArrayList<Transaction>) allTransactions.stream().
-                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
-                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
-                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
-                collect(Collectors.toList());
-    }
+//    public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
+//        LocalDate curr;
+//        if(date == null) curr = TransactionsModel.currentDate;
+//        else curr = date;
+//
+//        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
+//
+//        return (ArrayList<Transaction>) allTransactions.stream().
+//                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
+//                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
+//                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
+//                collect(Collectors.toList());
+//    }
 
     public ArrayList<String> getTypes () {
         return TransactionsModel.transactionTypes;
@@ -87,19 +88,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     @Override
     public ArrayList<String> getSortTypes () {
         return TransactionsModel.sortTypes;
-    }
-
-    public void removeTransaction(Transaction trn) {
-        TransactionsModel.transactions.remove(trn);
-    }
-
-    public void changeTransaction(Transaction oldTrn, Transaction newTrn) {
-        int indexOld = TransactionsModel.transactions.indexOf(oldTrn);
-        TransactionsModel.transactions.set(indexOld, newTrn);
-    }
-
-    public void addTransaction (Transaction trn) {
-        TransactionsModel.transactions.add(trn);
     }
 
     public Account getAccount () {
@@ -136,39 +124,41 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         return budget;
     }
 
+    //todo
     public double getAmountForLimit (boolean isAllNoDate, LocalDate date) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
-        ArrayList<Transaction> trns;
-        if (isAllNoDate) trns = getTransactions();
-        else trns = getTransactionsByDate(date);
-
-        for (Transaction t : trns) {
-            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
-        }
-
-        double budget = 0;
-        for (Transaction t : trns) {
-            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
-                if (t.getType().toString().contains("REGULAR")) {
-                    if (!isAllNoDate) {
-                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
-                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
-                        else {
-                            int i = 0;
-                            while(t.getDate().getMonth() == d.getMonth()) {
-                                i++;
-                                d = d.plusDays(t.getTransactionInterval());
-                            }
-                            budget += (t.getAmount() * i) + t.getAmount();
-                        }
-                    } else
-                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
-                } else {
-                    budget += t.getAmount();
-                }
-            }
-        }
-        budget = Math.round(budget * 100.0) / 100.0;
-        return budget;
+//        ArrayList<Transaction> trns;
+//        if (isAllNoDate) trns = getTransactions();
+//        else trns = getTransactionsByDate(date);
+//
+//        for (Transaction t : trns) {
+//            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
+//        }
+//
+//        double budget = 0;
+//        for (Transaction t : trns) {
+//            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
+//                if (t.getType().toString().contains("REGULAR")) {
+//                    if (!isAllNoDate) {
+//                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
+//                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
+//                        else {
+//                            int i = 0;
+//                            while(t.getDate().getMonth() == d.getMonth()) {
+//                                i++;
+//                                d = d.plusDays(t.getTransactionInterval());
+//                            }
+//                            budget += (t.getAmount() * i) + t.getAmount();
+//                        }
+//                    } else
+//                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
+//                } else {
+//                    budget += t.getAmount();
+//                }
+//            }
+//        }
+//        budget = Math.round(budget * 100.0) / 100.0;
+//        return budget;
+        return 0;
     }
 
     @Override
@@ -239,6 +229,10 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             for(Transaction t : regulars) {         //spajanje regulars sa ostalim
                 if(!transactions.contains(t)) addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
             }
+
+            if(strings[3].equals("getAcc")) {
+                getAccountFromWeb(strings[2]);
+            }
         }
         else if(strings[1].contains("add")) {  //POST
             String url1;
@@ -291,14 +285,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             }
         }
         else if(strings[1].equals("getAccount")) {
-            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
-            try {
-                JSONObject jo = getJsonObject(url1);
-                account = new Account(jo.getInt("id"), jo.getDouble("budget"), jo.getDouble("totalLimit"), jo.getDouble("monthLimit"));
-
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
+            getAccountFromWeb(strings[2]);
         }
         else if(strings[1].equals("editAccount")) {
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
@@ -327,6 +314,17 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             }
         }
         return null;
+    }
+
+    private void getAccountFromWeb(String api_id) {
+        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + api_id;
+        try {
+            JSONObject jo = getJsonObject(url1);
+            account = new Account(jo.getInt("id"), jo.getDouble("budget"), jo.getDouble("totalLimit"), jo.getDouble("monthLimit"));
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private String replaceNameWithIdForPOST(String string) {

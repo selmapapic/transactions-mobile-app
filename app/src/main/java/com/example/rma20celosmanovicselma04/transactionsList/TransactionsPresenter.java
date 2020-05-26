@@ -34,7 +34,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         view.refreshDate(dateToString(interactor.getCurrentDate()));
         view.setFilterSpinner(interactor.getTypes());
         view.setSortSpinner(interactor.getSortTypes());
-        searchAccount(null);
+        //searchAccount(null);
     }
 
     public ArrayList<Transaction> getTransactionsByType (ArrayList<Transaction> trns, String type) {
@@ -97,6 +97,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     public void setCurrentBudget () {
         //todo
+        searchAccount(null);
         //interactor.setBudget(interactor.getCurrentBudget(true));
         //view.setBudget(interactor.getCurrentBudget(true));
     }
@@ -115,16 +116,18 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void searchTransactions(String query){
+        System.out.println("pozvao se search trn");
         if(query == null) {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
         }
         else {
-            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "sortFilter", context.getResources().getString(R.string.api_id));
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "sortFilter", context.getResources().getString(R.string.api_id), "getAcc");
         }
     }
 
     @Override
     public void searchAccount(String query){
+        System.out.println("pozvao se search account");
         new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 
