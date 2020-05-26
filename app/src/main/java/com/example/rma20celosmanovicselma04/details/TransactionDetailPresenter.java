@@ -12,6 +12,7 @@ import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresent
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class TransactionDetailPresenter implements ITransactionDetailPresenter, TransactionsIntreactor.OnTransactionsSearchDone {
@@ -20,6 +21,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     private Context context;
 
     private Transaction transaction;
+    private Account account;
 
     public TransactionDetailPresenter (Context context, ITransactionDetailView view) {
         this.context = context;
@@ -39,6 +41,31 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     public void removeTransaction (Transaction trn) {
         //interactor.removeTransaction(trn);
         POSTTransaction(trn, null, true);
+        account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
+        searchAccount(null, account);
+    }
+
+    private double getTransactionAmountBudget(Transaction trn) {
+        double budget = 0;
+
+        if(trn.getType().toString().contains("PAYMENT") || trn.getType().toString().contains("PURCHASE")) {
+            if(trn.getType().toString().contains("REGULAR")) {
+                budget -= (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+            }
+            else {
+                budget -= trn.getAmount();
+            }
+        }
+        else {
+            if(trn.getType().toString().contains("REGULAR")) {
+                budget += (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+            }
+            else {
+                budget += trn.getAmount();
+            }
+        }
+
+        return (Math.round(budget * 100.0) / 100.0);
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
@@ -48,6 +75,8 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     public void addTransaction(Transaction trn) {
         POSTTransaction(trn, null, false);
+        account.setBudget(account.getBudget() + getTransactionAmountBudget(trn));
+        searchAccount(null, account);
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
@@ -122,6 +151,31 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void onAccountDone(Account account) {
+        this.account = account;
+        System.out.println("desio se on acc done det pres");
+    }
 
+    @Override
+    public void searchAccount(String query, Account edit){
+        if(edit != null) {
+            String jsonFormat = getJSONFormatAccount(edit);
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "editAccount", context.getResources().getString(R.string.api_id));
+        }
+        else {
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+        }
+    }
+
+    @Override
+    public void start() {
+        searchAccount(null, null);
+    }
+
+    private String getJSONFormatAccount(Account account) {
+        String json = "";
+
+        json += "{" + "\"budget\": " + account.getBudget();
+        json += "}";
+        return json;
     }
 }

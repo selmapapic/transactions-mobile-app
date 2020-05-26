@@ -1,5 +1,6 @@
 package com.example.rma20celosmanovicselma04.details;
 
+import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 
@@ -15,4 +16,6 @@ public interface ITransactionDetailPresenter {
     ITransactionsInteractor getInteractor();
     ArrayList<String> getTypes();
     void POSTTransaction (Transaction newTrn, Transaction oldTrn, boolean isDelete);
+    void searchAccount(String query, Account edit);
+    void start();
 }

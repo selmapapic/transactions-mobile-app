@@ -203,6 +203,8 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     @Override
     public void onResume () {
         super.onResume();
+        //todo
+        getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         //transactionsAdapter.setTransactions(getPresenter().filterAndSort((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem()));
         transactionsAdapter.notifyDataSetChanged();
         getPresenter().setCurrentBudget();

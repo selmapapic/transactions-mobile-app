@@ -34,7 +34,9 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("pozvao se on create");
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
+        getPresenter().start();
 
         titleFld = (EditText) view.findViewById(R.id.titleFld);
         titleFld.setTag("title");
@@ -65,6 +67,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
+        //todo maknuti listu i zamijeniti je samo pozivom funkcije
         ArrayList<String> types = getPresenter().getTypes();
         setTypeSpinner(types);
         removeValidation();
@@ -403,6 +406,13 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     private TransactionDetailFragment.OnChange onChange;
     public interface OnChange {
         void onSaveOrDelete ();
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        getPresenter().start();
+        System.out.println("pozvao se on resume");
     }
 }
 
