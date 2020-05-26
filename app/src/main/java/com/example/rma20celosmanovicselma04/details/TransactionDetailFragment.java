@@ -405,11 +405,5 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     public interface OnChange {
         void onSaveOrDelete ();
     }
-
-    @Override
-    public void onResume () {
-        super.onResume();
-        //getPresenter().start();
-    }
 }
 

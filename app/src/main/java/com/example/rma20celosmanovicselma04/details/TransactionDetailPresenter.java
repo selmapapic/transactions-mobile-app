@@ -148,7 +148,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void start() {
-        System.out.println("pozvao se start");
         searchAccount(null, null);
         searchTransactions(null);
     }
