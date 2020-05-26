@@ -39,38 +39,17 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void removeTransaction (Transaction trn) {
-        //interactor.removeTransaction(trn);
         POSTTransaction(trn, null, true);
         account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
         searchAccount(null, account);
     }
 
-    private double getTransactionAmountBudget(Transaction trn) {
-        double budget = 0;
-
-        if(trn.getType().toString().contains("PAYMENT") || trn.getType().toString().contains("PURCHASE")) {
-            if(trn.getType().toString().contains("REGULAR")) {
-                budget -= (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
-            }
-            else {
-                budget -= trn.getAmount();
-            }
-        }
-        else {
-            if(trn.getType().toString().contains("REGULAR")) {
-                budget += (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
-            }
-            else {
-                budget += trn.getAmount();
-            }
-        }
-
-        return (Math.round(budget * 100.0) / 100.0);
-    }
-
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
 //        interactor.changeTransaction(oldTrn, newTrn);
         POSTTransaction(newTrn, oldTrn, false);
+        account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
+        account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
+        searchAccount(null, account);
     }
 
     public void addTransaction(Transaction trn) {
@@ -177,5 +156,28 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         json += "{" + "\"budget\": " + account.getBudget();
         json += "}";
         return json;
+    }
+
+    private double getTransactionAmountBudget(Transaction trn) {
+        double budget = 0;
+
+        if(trn.getType().toString().contains("PAYMENT") || trn.getType().toString().contains("PURCHASE")) {
+            if(trn.getType().toString().contains("REGULAR")) {
+                budget -= (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+            }
+            else {
+                budget -= trn.getAmount();
+            }
+        }
+        else {
+            if(trn.getType().toString().contains("REGULAR")) {
+                budget += (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+            }
+            else {
+                budget += trn.getAmount();
+            }
+        }
+
+        return (Math.round(budget * 100.0) / 100.0);
     }
 }

@@ -67,9 +67,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         intervalFld.addTextChangedListener(fieldColor(intervalFld));
         endDateFld.addTextChangedListener(fieldColor(endDateFld));
         spinnerType.setOnItemSelectedListener(spinnerColor());
-        //todo maknuti listu i zamijeniti je samo pozivom funkcije
-        ArrayList<String> types = getPresenter().getTypes();
-        setTypeSpinner(types);
+        setTypeSpinner(getPresenter().getTypes());
         removeValidation();
         return view;
     }
