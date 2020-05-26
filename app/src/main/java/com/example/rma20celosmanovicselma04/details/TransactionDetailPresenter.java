@@ -164,6 +164,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         if(trn.getType().toString().contains("PAYMENT") || trn.getType().toString().contains("PURCHASE")) {
             if(trn.getType().toString().contains("REGULAR")) {
                 budget -= (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+                budget -= trn.getAmount();
             }
             else {
                 budget -= trn.getAmount();
@@ -172,6 +173,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         else {
             if(trn.getType().toString().contains("REGULAR")) {
                 budget += (ChronoUnit.DAYS.between(trn.getDate(), trn.getEndDate()) / trn.getTransactionInterval()) * trn.getAmount();
+                budget += trn.getAmount();
             }
             else {
                 budget += trn.getAmount();
