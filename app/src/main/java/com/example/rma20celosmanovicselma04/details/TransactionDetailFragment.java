@@ -34,7 +34,6 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("pozvao se on create");
         View view = inflater.inflate(R.layout.detail_fragment, container, false);
         getPresenter().start();
 

@@ -18,4 +18,5 @@ public interface ITransactionDetailPresenter {
     void POSTTransaction (Transaction newTrn, Transaction oldTrn, boolean isDelete);
     void searchAccount(String query, Account edit);
     void start();
+    void searchTransactions(String query);
 }

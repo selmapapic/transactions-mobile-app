@@ -8,12 +8,14 @@ import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
+import com.example.rma20celosmanovicselma04.data.TransactionsModel;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class TransactionDetailPresenter implements ITransactionDetailPresenter, TransactionsIntreactor.OnTransactionsSearchDone {
     private ITransactionsInteractor interactor;
@@ -22,6 +24,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     private Transaction transaction;
     private Account account;
+    private ArrayList<Transaction> transactions;
 
     public TransactionDetailPresenter (Context context, ITransactionDetailView view) {
         this.context = context;
@@ -59,14 +62,13 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
         //todo
-//        Double monthSum = interactor.getAmountForLimit(false, currentTrn.getDate());
-//        monthSum += currentTrn.getAmount();
-//        if(!isAdd) monthSum -= getTransaction().getAmount();
-//        Double allSum = interactor.getAmountForLimit(true, currentTrn.getDate());
-//        allSum += currentTrn.getAmount();
-//        if(!isAdd) allSum -= getTransaction().getAmount();
-//        return interactor.getAccount().getMonthLimit() < monthSum || interactor.getAccount().getTotalLimit() < allSum;
-        return true;
+        Double monthSum = getAmountForLimit(false, currentTrn.getDate());
+        monthSum += currentTrn.getAmount();
+        if(!isAdd) monthSum -= getTransaction().getAmount();
+        Double allSum = getAmountForLimit(true, currentTrn.getDate());
+        allSum += currentTrn.getAmount();
+        if(!isAdd) allSum -= getTransaction().getAmount();
+        return account.getMonthLimit() < monthSum || account.getTotalLimit() < allSum;
     }
 
     public ITransactionsInteractor getInteractor() {
@@ -124,7 +126,8 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void onDone(ArrayList<Transaction> results) {
-
+        transactions = results;
+        System.out.println(" EVO GA ON DONE ");
     }
 
     @Override
@@ -146,7 +149,9 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
 
     @Override
     public void start() {
+        searchTransactions(null);
         searchAccount(null, null);
+        System.out.println("Pozvao se start");
     }
 
     private String getJSONFormatAccount(Account account) {
@@ -180,5 +185,59 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         }
 
         return (Math.round(budget * 100.0) / 100.0);
+    }
+
+    @Override
+    public void searchTransactions(String query){
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
+    }
+
+    //todo
+    public double getAmountForLimit (boolean isAllNoDate, LocalDate date) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
+        ArrayList<Transaction> trns;
+        if (isAllNoDate) trns = transactions;
+        else trns = getTransactionsByDate(date);
+
+        for (Transaction t : trns) {
+            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
+        }
+
+        double budget = 0;
+        for (Transaction t : trns) {
+            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
+                if (t.getType().toString().contains("REGULAR")) {
+                    if (!isAllNoDate) {
+                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
+                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
+                        else {
+                            int i = 0;
+                            while(t.getDate().getMonth() == d.getMonth()) {
+                                i++;
+                                d = d.plusDays(t.getTransactionInterval());
+                            }
+                            budget += (t.getAmount() * i) + t.getAmount();
+                        }
+                    } else
+                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
+                } else {
+                    budget += t.getAmount();
+                }
+            }
+        }
+        return Math.round(budget * 100.0) / 100.0;
+    }
+
+    public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
+        LocalDate curr;
+        if(date == null) curr = TransactionsModel.currentDate;
+        else curr = date;
+
+        ArrayList<Transaction> allTransactions = transactions;
+
+        return (ArrayList<Transaction>) allTransactions.stream().
+                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
+                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
+                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
+                collect(Collectors.toList());
     }
 }
