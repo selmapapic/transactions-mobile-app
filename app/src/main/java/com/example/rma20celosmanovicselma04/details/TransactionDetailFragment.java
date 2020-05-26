@@ -287,6 +287,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                         else {
                             getPresenter().addTransaction(trn);
                             onChange.onSaveOrDelete();
+                            clearAllFields();
                         }
                     });
                     builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
@@ -367,6 +368,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     }
 
     public void removeValidation () {
+        System.out.println("pozvao se remove validation");
         titleFld.setBackgroundResource(R.drawable.field_stroke);
         titleFld.setError(null);
         amountFld.setBackgroundResource(R.drawable.field_stroke);
