@@ -330,7 +330,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     private String replaceNameWithIdForPOST(String string) {
-        String arr[] = string.split("\"typeId\": ");
+        String arr[] = string.split("\"TransactionTypeId\": ");
         String name = arr[1];
         String repl = string.replace(name, getTypeId(name).toString());
         return repl;

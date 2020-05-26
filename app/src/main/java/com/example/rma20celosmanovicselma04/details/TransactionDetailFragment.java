@@ -93,7 +93,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                     intervalFld.setText("");
                     endDateFld.setText("");
                 }
-
+                spinnerType.setSelection(getPresenter().getTypes().indexOf(getPresenter().getTransaction().getType().getTransactionName()));
                 deleteBtn.setOnClickListener(deleteAction());
                 saveBtn.setOnClickListener(saveAction(false));
             }

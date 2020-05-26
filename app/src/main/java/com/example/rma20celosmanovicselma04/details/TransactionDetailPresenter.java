@@ -115,7 +115,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         if(trn.getTransactionInterval() != null) json += "\"transactionInterval\": " + trn.getTransactionInterval() + ", ";
         else json += "\"transactionInterval\": " + "null, ";
 
-        json += "\"typeId\": " + trn.getType().getTransactionName();
+        json += "\"TransactionTypeId\": " + trn.getType().getTransactionName();
         return json;
     }
 
