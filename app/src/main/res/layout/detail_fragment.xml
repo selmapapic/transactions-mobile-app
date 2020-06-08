@@ -274,4 +274,16 @@
         app:layout_constraintTop_toBottomOf="@+id/descriptionFld"
         app:layout_constraintVertical_bias="0.285" />
 
+    <TextView
+        android:id="@+id/offlineIzmjena"
+        android:layout_width="112dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="299dp"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

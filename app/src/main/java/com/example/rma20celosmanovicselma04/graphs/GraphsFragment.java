@@ -12,8 +12,8 @@ import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
-import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
+import com.example.rma20celosmanovicselma04.util.Swipe;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;

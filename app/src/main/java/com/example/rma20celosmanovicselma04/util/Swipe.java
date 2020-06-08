@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04;
+package com.example.rma20celosmanovicselma04.util;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

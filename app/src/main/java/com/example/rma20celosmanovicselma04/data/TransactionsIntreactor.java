@@ -1,9 +1,14 @@
 package com.example.rma20celosmanovicselma04.data;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.rma20celosmanovicselma04.budget.BudgetPresenter;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailPresenter;
+import com.example.rma20celosmanovicselma04.util.TransactionsDBOpenHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -357,6 +362,35 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     public TransactionType getType (int typeId) {
         makeTransactionTypeMap();
         return TransactionType.getType(map.get(typeId));
+    }
+
+    @Override
+    public void addToDb(Transaction trn, Context applicationContext) {
+        ContentResolver cr = applicationContext.getApplicationContext().getContentResolver();
+        Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
+        ContentValues values = new ContentValues();
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ID, trn.getId());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TITLE, trn.getTitle());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_DATE, trn.getDate().toString());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_AMOUNT, trn.getAmount());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_INTERVAL, trn.getTransactionInterval());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION, trn.getItemDescription());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TYPE, trn.getType().toString());
+        if(trn.getEndDate() == null) {
+            values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
+        }
+        else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+        cr.insert(transactionsURI,values);
+    }
+
+    @Override
+    public void addToModel(ArrayList<Transaction> results) {
+        TransactionsModel.transactions = results;
+    }
+
+    @Override
+    public ArrayList<Transaction> getFromModel() {
+        return TransactionsModel.transactions;
     }
 
     private String convertStreamToString(InputStream in) {

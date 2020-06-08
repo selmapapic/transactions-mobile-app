@@ -54,10 +54,15 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         searchAccount(null, account);
     }
 
-    public void addTransaction(Transaction trn) {
-        POSTTransaction(trn, null, false);
-        account.setBudget(account.getBudget() + getTransactionAmountBudget(trn));
-        searchAccount(null, account);
+    public void addTransaction(Transaction trn, boolean isConnected) {
+        if(isConnected) {
+            POSTTransaction(trn, null, false);
+            account.setBudget(account.getBudget() + getTransactionAmountBudget(trn));
+            searchAccount(null, account);
+        }
+        else {
+            interactor.addToDb(trn, context.getApplicationContext());
+        }
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {

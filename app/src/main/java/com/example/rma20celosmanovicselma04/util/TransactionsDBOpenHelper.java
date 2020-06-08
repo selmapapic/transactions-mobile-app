@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class TransactionsDBOpenHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "Transactions18304DataBase.db";
+    public static final String DATABASE_NAME = "Transactions18304DB.db";
     public static final int DATABASE_VERSION = 1;
 
     public TransactionsDBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -29,21 +29,21 @@ public class TransactionsDBOpenHelper extends SQLiteOpenHelper {
 
     private static final String TRANSACTION_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + TRANSACTION_TABLE + " ("  + TRANSACTION_INTERNAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + TRANSACTION_ID + " INTEGER UNIQUE, "
+                    + TRANSACTION_ID + " INTEGER, "
                     + TRANSACTION_TITLE + " TEXT NOT NULL, "
                     + TRANSACTION_AMOUNT + " NUMBER NOT NULL, "
                     + TRANSACTION_DATE + " DATE NOT NULL, "
                     + TRANSACTION_TYPE + " TEXT NOT NULL, "
                     + TRANSACTION_END_DATE + " DATE, "
-                    + TRANSACTION_ITEM_DESCRIPTION + "TEXT, "
-                    + TRANSACTION_INTERVAL + "INTEGER);";
+                    + TRANSACTION_ITEM_DESCRIPTION + " TEXT, "
+                    + TRANSACTION_INTERVAL + " INTEGER);";
 
     private static final String TRANSACTION_DROP = "DROP TABLE IF EXISTS " + TRANSACTION_TABLE;
 
 
     public static final String ACCOUNT_TABLE = "accounts";
     public static final String ACCOUNT_ID = "id";
-    public static final String ACCOUNT_INTERNAL_ID = "id";
+    public static final String ACCOUNT_INTERNAL_ID = "_id";
     public static final String ACCOUNT_BUDGET = "budget";
     public static final String ACCOUNT_TOTAL_LIMIT = "totalLimit";
     public static final String ACCOUNT_MONTH_LIMIT = "monthLimit";

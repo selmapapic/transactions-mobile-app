@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,6 +33,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     private ArrayAdapter<String> typeAdapter;
     private Spinner spinnerType;
     private Button deleteBtn, saveBtn;
+    private TextView offlineIzmjena;
+    private boolean isConnected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +56,14 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         spinnerType = (Spinner) view.findViewById(R.id.spinnerType);
         deleteBtn = (Button) view.findViewById(R.id.deleteBtn);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
-
+        offlineIzmjena = (TextView) view.findViewById(R.id.offlineIzmjena);
+        isConnected = ConnectionChecker.isConnected(getContext());
+        if(!isConnected) {
+            offlineIzmjena.setText("Offline izmjena");
+        }
+        else {
+            offlineIzmjena.setText("");
+        }
         typeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
 
@@ -261,6 +272,9 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
+
+            isConnected = ConnectionChecker.isConnected(getContext());
+
             if(validateDateDistances()) {
                 validateAll();
             }
@@ -284,7 +298,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                             getPresenter().setTransaction(trn);
                         }
                         else {
-                            getPresenter().addTransaction(trn);
+                            getPresenter().addTransaction(trn, isConnected);
                             onChange.onSaveOrDelete();
                             clearAllFields();
                         }
@@ -302,7 +316,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                         getPresenter().setTransaction(trn);
                     }
                     else {
-                        getPresenter().addTransaction(trn);
+                        getPresenter().addTransaction(trn, isConnected);
                         onChange.onSaveOrDelete();
                         clearAllFields();
                     }

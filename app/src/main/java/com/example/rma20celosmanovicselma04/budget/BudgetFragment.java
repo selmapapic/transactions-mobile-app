@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
-import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
+import com.example.rma20celosmanovicselma04.util.Swipe;
 
 public class BudgetFragment extends Fragment implements IBudgetView{
     private IBudgetPresenter presenter;

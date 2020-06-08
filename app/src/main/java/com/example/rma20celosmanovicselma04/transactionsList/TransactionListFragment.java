@@ -15,10 +15,10 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
-import com.example.rma20celosmanovicselma04.Swipe;
 import com.example.rma20celosmanovicselma04.adapters.FilterAdapter;
 import com.example.rma20celosmanovicselma04.adapters.TransactionsAdapter;
 import com.example.rma20celosmanovicselma04.data.Transaction;
+import com.example.rma20celosmanovicselma04.util.Swipe;
 
 import java.util.ArrayList;
 

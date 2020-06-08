@@ -8,6 +8,7 @@ import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -102,6 +103,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     @Override
     public void onDone(ArrayList<Transaction> results) {
         ArrayList<Transaction> finalTrns = filterAndSort(view.getFilterSpinner(), view.getSortSpinner(), results);
+        interactor.addToModel(results);
         view.setTransactions(finalTrns);
         view.notifyTransactionsListDataSetChanged();
     }
@@ -133,23 +135,24 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         String currMonthStr = String.valueOf(currMonth);
         if(!(currMonth > 9 && currMonth <= 12)) currMonthStr = "0" + currMonthStr;
         String currYear = String.valueOf(d.getYear());
-
-        if((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) {
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&page=");
-            return;
-        }
-        else if((filter == null || filter.equals("Filter by") && !(sort == null || sort.equals("Sort by")))) {
-            String sortParam = getSortParam(sort);
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&sort=" + sortParam + "&page=");
-            return;
-        }
-        else if((sort == null || sort.equals("Sort by") && !(filter == null || filter.equals("Filter by")))) {
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&page=");
-            return;
+        if(ConnectionChecker.isConnected(context.getApplicationContext())) {
+            if ((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) {
+                searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&page=");
+                return;
+            } else if ((filter == null || filter.equals("Filter by") && !(sort == null || sort.equals("Sort by")))) {
+                String sortParam = getSortParam(sort);
+                searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&sort=" + sortParam + "&page=");
+                return;
+            } else if ((sort == null || sort.equals("Sort by") && !(filter == null || filter.equals("Filter by")))) {
+                searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&page=");
+                return;
+            } else {
+                String sortParam = getSortParam(sort);
+                searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&sort=" + sortParam + "&page=");
+            }
         }
         else {
-            String sortParam = getSortParam(sort);
-            searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&typeId=" + filter + "&sort=" + sortParam + "&page=");
+            view.setTransactions(interactor.getFromModel());
         }
     }
 

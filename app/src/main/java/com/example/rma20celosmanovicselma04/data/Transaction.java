@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Transaction implements Parcelable {
-    private int id;
+    private Integer id;
     private LocalDate date;
     private Double amount;
     private String title;
@@ -15,6 +15,7 @@ public class Transaction implements Parcelable {
     private String itemDescription;
     private Integer transactionInterval;
     private LocalDate endDate;
+    private Integer internalId;
 
     public Transaction(int id, LocalDate date, Double amount, String title, TransactionType type, String itemDescription, Integer transactionInterval, LocalDate endDate) {
         this.id = id;
@@ -27,7 +28,27 @@ public class Transaction implements Parcelable {
         this.endDate = endDate;
     }
 
-    public int getId() {
+    public int getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(int internalId) {
+        this.internalId = internalId;
+    }
+
+    public Transaction(int id, LocalDate date, Double amount, String title, TransactionType type, String itemDescription, Integer transactionInterval, LocalDate endDate, Integer internalId) {
+        this.id = id;
+        this.date = date;
+        this.amount = amount;
+        this.title = title;
+        this.type = type;
+        this.itemDescription = itemDescription;
+        this.transactionInterval = transactionInterval;
+        this.endDate = endDate;
+        this.internalId = internalId;
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -55,6 +76,16 @@ public class Transaction implements Parcelable {
 
     protected Transaction(Parcel in) {
         id = in.readInt();
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            internalId = null;
+        } else {
+            internalId = in.readInt();
+        }
         if (in.readByte() == 0) {
             amount = null;
         } else {
@@ -177,6 +208,18 @@ public class Transaction implements Parcelable {
         } else {
             dest.writeByte((byte) 1);
             dest.writeInt(transactionInterval);
+        }
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        if (internalId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(internalId);
         }
     }
 
