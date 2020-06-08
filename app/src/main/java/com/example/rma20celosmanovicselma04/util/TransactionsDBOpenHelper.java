@@ -1,4 +1,4 @@
-package com.example.rma20celosmanovicselma04.data;
+package com.example.rma20celosmanovicselma04.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
