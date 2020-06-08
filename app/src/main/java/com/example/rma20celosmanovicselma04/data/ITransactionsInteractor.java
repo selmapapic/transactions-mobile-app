@@ -17,4 +17,5 @@ public interface ITransactionsInteractor {
 
     void addToModel(ArrayList<Transaction> results);
     ArrayList<Transaction> getFromModel();
+    ArrayList<Transaction> getTransactionsByDate (LocalDate date);
 }

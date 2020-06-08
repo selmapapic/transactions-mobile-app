@@ -28,6 +28,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> implements ITransactionsInteractor {
 
@@ -35,6 +36,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     private Account account;
     private OnTransactionsSearchDone caller;
     HashMap<Integer, String> map = new HashMap<>();
+    private ArrayList<Transaction> allTransactions = new ArrayList<>();
 
     public interface OnTransactionsSearchDone{
         void onDone(ArrayList<Transaction> results);
@@ -66,6 +68,20 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
     }
 
+    public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
+        LocalDate curr;
+        if(date == null) curr = TransactionsModel.currentDate;
+        else curr = date;
+
+        ArrayList<Transaction> allTransactions = TransactionsModel.transactions;
+
+        return (ArrayList<Transaction>) allTransactions.stream().
+                filter(tr -> (tr.getDate().getYear() == curr.getYear() && tr.getDate().getMonth() == curr.getMonth()) ||
+                        (tr.getType().toString().contains("REGULAR") && (tr.getEndDate().getMonth().getValue() == curr.getMonth().getValue() && tr.getEndDate().getYear() == curr.getYear() ||
+                                (tr.getDate().isBefore(curr) && tr.getEndDate().isAfter(curr))))).
+                collect(Collectors.toList());
+    }
+
     public ArrayList<String> getTypes () {
         return TransactionsModel.transactionTypes;
     }
@@ -91,12 +107,36 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
                     JSONArray results = jo.getJSONArray("transactions");
                     if(results.length() == 0) break;
                     for (int i = 0; i < results.length(); i++) {
-                        addTransactionToArray(results, i);
+                        JSONObject trn = results.getJSONObject(i);
+                        int id = trn.getInt("id");
+                        LocalDate date = LocalDate.parse(trn.getString("date").substring(0, 10));
+                        String title = trn.getString("title");
+                        Double amount = trn.getDouble("amount");
+                        String description = trn.getString("itemDescription");
+                        Integer interval;
+                        if ("null".equals(trn.getString("transactionInterval"))) {
+                            interval = null;
+                        } else {
+                            interval = Integer.parseInt(trn.getString("transactionInterval"));
+                        }
+                        LocalDate endDate;
+                        if ("null".equals(trn.getString("endDate"))) {
+                            endDate = null;
+                        } else {
+                            endDate = LocalDate.parse(trn.getString("endDate").substring(0, 10));
+                        }
+                        TransactionType type = getType(trn.getInt("TransactionTypeId"));
+                        allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
+            TransactionsModel.transactions.addAll(allTransactions);
+            System.out.println("bla" + TransactionsModel.transactions.size());
+            allTransactions.clear();
+            System.out.println("bla2222    " + TransactionsModel.transactions.size());
+
         }
         else if(strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
             if(query.contains("typeId=")) {
@@ -321,6 +361,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         TransactionType type = getType(trn.getInt("TransactionTypeId"));
         regulars.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+        allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
     }
 
     private void addTransactionToArray(JSONArray results, int i) throws JSONException {
@@ -381,6 +422,8 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
         cr.insert(transactionsURI,values);
+
+        TransactionsModel.transactions.add(trn);
     }
 
     @Override

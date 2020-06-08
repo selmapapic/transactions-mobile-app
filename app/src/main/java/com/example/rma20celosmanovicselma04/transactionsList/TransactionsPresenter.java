@@ -103,14 +103,15 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     @Override
     public void onDone(ArrayList<Transaction> results) {
         ArrayList<Transaction> finalTrns = filterAndSort(view.getFilterSpinner(), view.getSortSpinner(), results);
-        interactor.addToModel(results);
+        //interactor.addToModel(results);
         view.setTransactions(finalTrns);
         view.notifyTransactionsListDataSetChanged();
     }
 
     @Override
     public void onAccountDone(Account account) {
-        view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
+        //todo
+        //view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
     }
 
     @Override
@@ -120,6 +121,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         }
         else {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "sortFilter", context.getResources().getString(R.string.api_id), "getAcc");
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
         }
     }
 
@@ -130,12 +132,13 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void refreshAllTransactions(String filter, String sort) {
+        System.out.println("pozvalo se refresh");
         LocalDate d = interactor.getCurrentDate();
         int currMonth = d.getMonthValue();
         String currMonthStr = String.valueOf(currMonth);
         if(!(currMonth > 9 && currMonth <= 12)) currMonthStr = "0" + currMonthStr;
         String currYear = String.valueOf(d.getYear());
-        if(ConnectionChecker.isConnected(context.getApplicationContext())) {
+        if(ConnectionChecker.isConnected(context.getApplicationContext())) {        //ako ima konekcije
             if ((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) {
                 searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&page=");
                 return;
@@ -152,7 +155,10 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             }
         }
         else {
-            view.setTransactions(interactor.getFromModel());
+            System.out.println(interactor.getFromModel().size() + "glupi size");
+            ArrayList<Transaction> finalTrns = interactor.getTransactionsByDate(null);
+            view.setTransactions(finalTrns);
+            view.notifyTransactionsListDataSetChanged();
         }
     }
 
