@@ -66,7 +66,8 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         else {
             System.out.println(account + " on post exec");
-            caller.onDone(transactions);
+            System.out.println(transactions.size() + " on post exec trn size");
+            if(transactions.size() != 0) caller.onDone(transactions);
             if(account != null) caller.onAccountDone(account);
         }
     }

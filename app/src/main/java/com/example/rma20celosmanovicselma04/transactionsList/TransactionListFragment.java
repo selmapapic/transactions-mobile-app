@@ -33,6 +33,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
     private ArrayAdapter<String> sortAdapter;
     private GestureDetector gestureDetector;
     private Swipe swipe = new Swipe();
+    private boolean isFirstSort = true, isFirstFilter = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -140,7 +141,10 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                if(!isFirstFilter) {
+                    getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                }
+                isFirstFilter = false;
             }
 
             @Override
@@ -153,7 +157,10 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                if(!isFirstSort) {
+                    getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
+                }
+                isFirstSort = false;
             }
 
             @Override
