@@ -169,6 +169,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
         else {
             System.out.println(interactor.getFromModel().size() + "glupi size");
             ArrayList<Transaction> finalTrns = interactor.getTransactionsByDate(null);
+            finalTrns.addAll(interactor.getTransactionsFromDb(context));
             view.setTransactions(finalTrns);
             view.notifyTransactionsListDataSetChanged();
         }

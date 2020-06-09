@@ -483,6 +483,61 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         return acc;
     }
 
+    public Cursor getTransactionsCursor (Context context) {
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        String[] kolone = new String[]{
+                TransactionsDBOpenHelper.TRANSACTION_ID,
+                TransactionsDBOpenHelper.TRANSACTION_INTERNAL_ID,
+                TransactionsDBOpenHelper.TRANSACTION_TITLE,
+                TransactionsDBOpenHelper.TRANSACTION_AMOUNT,
+                TransactionsDBOpenHelper.TRANSACTION_DATE,
+                TransactionsDBOpenHelper.TRANSACTION_END_DATE,
+                TransactionsDBOpenHelper.TRANSACTION_INTERVAL,
+                TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION,
+                TransactionsDBOpenHelper.TRANSACTION_TYPE
+        };
+        Uri adresa = Uri.parse("content://rma.provider.transactions/elements");
+        String where = null;
+        String whereArgs[] = null;
+        String order = null;
+        Cursor cur = cr.query(adresa,kolone,where,whereArgs,order);
+        return cur;
+    }
+
+
+    @Override
+    public ArrayList<Transaction> getTransactionsFromDb(Context context) {
+        ArrayList<Transaction> trns = new ArrayList<>();
+
+        Cursor cursor = getTransactionsCursor(context);
+        if(cursor != null) {
+            if(cursor.moveToFirst()) {
+                do {
+                    int idPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_ID);
+                    int internalId = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_INTERNAL_ID);
+                    int titlePos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_TITLE);
+                    int datePos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_DATE);
+                    int endDatePos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_END_DATE);
+                    int typePos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_TYPE);
+                    int transactionIntervalPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_INTERVAL);
+                    int amountPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_AMOUNT);
+                    int itemDescriptionPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION);
+
+                    LocalDate endDate;
+                    if(cursor.getString(endDatePos) == null) {
+                        endDate = null;
+                    }
+                    else endDate = LocalDate.parse(cursor.getString(endDatePos));
+                    //provjeritiiiiiii
+                    trns.add(new Transaction(cursor.getInt(idPos), LocalDate.parse(cursor.getString(datePos)), cursor.getDouble(amountPos),
+                            cursor.getString(titlePos), TransactionType.valueOf(cursor.getString(typePos)), cursor.getString(itemDescriptionPos), cursor.getInt(transactionIntervalPos),
+                            endDate, cursor.getInt(internalId)));
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        return trns;
+    }
 
     @Override
     public void addToModel(ArrayList<Transaction> results) {
