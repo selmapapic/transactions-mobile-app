@@ -44,10 +44,15 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void removeTransaction (Transaction trn) {
-        POSTTransaction(trn, null, true);
-        account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
-        AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
-        searchAccount(null, account);
+        if(ConnectionChecker.isConnected(context)) {
+            POSTTransaction(trn, null, true);
+            account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
+            AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
+            searchAccount(null, account);
+        }
+        else {
+
+        }
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {

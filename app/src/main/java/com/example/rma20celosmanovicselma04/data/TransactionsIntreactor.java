@@ -8,8 +8,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.example.rma20celosmanovicselma04.MainActivity;
 import com.example.rma20celosmanovicselma04.budget.BudgetPresenter;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailPresenter;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 import com.example.rma20celosmanovicselma04.util.TransactionsDBOpenHelper;
 
 import org.json.JSONArray;
@@ -101,180 +103,183 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
     @Override
     protected Void doInBackground(String... strings) {
-        String query = strings[0];
+        if(ConnectionChecker.isConnected(MainActivity.getAppContext())) {
+            String query = strings[0];
 
-        if(strings[1].equals("allTrn")) {    //dohvatanje svih trn
-            for(Integer page = 0;; page++) {
-                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions?page=" + page.toString();
-                try {
-                    JSONObject jo = getJsonObject(url1);
-                    JSONArray results = jo.getJSONArray("transactions");
-                    if(results.length() == 0) break;
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject trn = results.getJSONObject(i);
-                        int id = trn.getInt("id");
-                        LocalDate date = LocalDate.parse(trn.getString("date").substring(0, 10));
-                        String title = trn.getString("title");
-                        Double amount = trn.getDouble("amount");
-                        String description = trn.getString("itemDescription");
-                        Integer interval;
-                        if ("null".equals(trn.getString("transactionInterval"))) {
-                            interval = null;
-                        } else {
-                            interval = Integer.parseInt(trn.getString("transactionInterval"));
+            if (strings[1].equals("allTrn")) {    //dohvatanje svih trn
+                for (Integer page = 0; ; page++) {
+                    String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions?page=" + page.toString();
+                    try {
+                        JSONObject jo = getJsonObject(url1);
+                        JSONArray results = jo.getJSONArray("transactions");
+                        if (results.length() == 0) break;
+                        for (int i = 0; i < results.length(); i++) {
+                            JSONObject trn = results.getJSONObject(i);
+                            int id = trn.getInt("id");
+                            LocalDate date = LocalDate.parse(trn.getString("date").substring(0, 10));
+                            String title = trn.getString("title");
+                            Double amount = trn.getDouble("amount");
+                            String description = trn.getString("itemDescription");
+                            Integer interval;
+                            if ("null".equals(trn.getString("transactionInterval"))) {
+                                interval = null;
+                            } else {
+                                interval = Integer.parseInt(trn.getString("transactionInterval"));
+                            }
+                            LocalDate endDate;
+                            if ("null".equals(trn.getString("endDate"))) {
+                                endDate = null;
+                            } else {
+                                endDate = LocalDate.parse(trn.getString("endDate").substring(0, 10));
+                            }
+                            TransactionType type = getType(trn.getInt("TransactionTypeId"));
+                            allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
                         }
-                        LocalDate endDate;
-                        if ("null".equals(trn.getString("endDate"))) {
-                            endDate = null;
-                        } else {
-                            endDate = LocalDate.parse(trn.getString("endDate").substring(0, 10));
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                TransactionsModel.transactions.clear();
+                TransactionsModel.transactions.addAll(allTransactions);
+                System.out.println("bla" + TransactionsModel.transactions.size());
+                allTransactions.clear();
+                System.out.println("bla2222    " + TransactionsModel.transactions.size());
+
+            } else if (strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
+                if (query.contains("typeId=")) {
+                    query = replaceNameWithId(query);
+                }
+                for (Integer page = 0; ; page++) {
+                    String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/" + query + page.toString();
+                    try {
+                        JSONObject jo = getJsonObject(url1);
+                        JSONArray results = jo.getJSONArray("transactions");
+                        if (results.length() == 0) break;
+                        for (int i = 0; i < results.length(); i++) {
+                            addTransactionToArray(results, i);
                         }
-                        TransactionType type = getType(trn.getInt("TransactionTypeId"));
-                        allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-            TransactionsModel.transactions.addAll(allTransactions);
-            System.out.println("bla" + TransactionsModel.transactions.size());
-            allTransactions.clear();
-            System.out.println("bla2222    " + TransactionsModel.transactions.size());
+                ArrayList<Transaction> regulars = new ArrayList<>();
+                int idReg = getTypeId("Regular payment");
+                for (Integer page = 0; ; page++) {
+                    String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
+                    try {
+                        JSONObject jo = getJsonObject(url2);
+                        JSONArray results = jo.getJSONArray("transactions");
+                        if (results.length() == 0) break;
+                        for (int i = 0; i < results.length(); i++) {
+                            addToRegulars(regulars, results, i);
+                        }
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                idReg = getTypeId("Regular income");
+                for (Integer page = 0; ; page++) {
+                    String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
+                    try {
+                        JSONObject jo = getJsonObject(url2);
+                        JSONArray results = jo.getJSONArray("transactions");
+                        if (results.length() == 0) break;
+                        for (int i = 0; i < results.length(); i++) {
+                            addToRegulars(regulars, results, i);
+                        }
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for (Transaction t : regulars) {         //spajanje regulars sa ostalim
+                    addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
+                }
 
-        }
-        else if(strings[1].equals("sortFilter")) {  //dohvatanje sa filterom i sortom
-            if(query.contains("typeId=")) {
-                query = replaceNameWithId(query);
-            }
-            for(Integer page = 0;; page++) {
-                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/" + query + page.toString();
-                try {
-                    JSONObject jo = getJsonObject(url1);
-                    JSONArray results = jo.getJSONArray("transactions");
-                    if(results.length() == 0) break;
-                    for (int i = 0; i < results.length(); i++) {
-                        addTransactionToArray(results, i);
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                if (strings[3].equals("getAcc")) {
+                    getAccountFromWeb(strings[2]);
                 }
-            }
-            ArrayList<Transaction> regulars = new ArrayList<>();
-            int idReg = getTypeId("Regular payment");
-            for(Integer page = 0;; page++) {
-                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
+            } else if (strings[1].contains("add")) {  //POST
+                String url1;
+                if (strings[1].contains("Edit"))
+                    url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];  //ako se edituje
+                else
+                    url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions";      //ako se dodaje
                 try {
-                    JSONObject jo = getJsonObject(url2);
-                    JSONArray results = jo.getJSONArray("transactions");
-                    if(results.length() == 0) break;
-                    for (int i = 0; i < results.length(); i++) {
-                        addToRegulars(regulars, results, i);
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            idReg = getTypeId("Regular income");
-            for(Integer page = 0;; page++) {
-                String url2 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/" + "transactions/filter?typeId=" + idReg + "&page=" + page;
-                try {
-                    JSONObject jo = getJsonObject(url2);
-                    JSONArray results = jo.getJSONArray("transactions");
-                    if(results.length() == 0) break;
-                    for (int i = 0; i < results.length(); i++) {
-                        addToRegulars(regulars, results, i);
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            for(Transaction t : regulars) {         //spajanje regulars sa ostalim
-                addToThisMonth(t, Integer.parseInt(getMonthFromQuery(query)), Integer.parseInt(getYearFromQuery(query)));
-            }
+                    URL url = new URL(url1);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+                    OutputStream out = new DataOutputStream(connection.getOutputStream());
+                    String jsonString = replaceNameWithIdForPOST(strings[0]) + "}";
+                    byte[] bytes = jsonString.getBytes("utf-8");
+                    out.write(bytes, 0, bytes.length);
 
-            if(strings[3].equals("getAcc")) {
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        System.out.println(response.toString());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (strings[1].equals("deleteTrn")) {
+                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];
+                try {
+                    URL url = new URL(url1);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("DELETE");
+                    connection.setDoOutput(true);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        System.out.println(response.toString());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (strings[1].equals("getAccount")) {
+                System.out.println("do in bg account");
                 getAccountFromWeb(strings[2]);
-            }
-        }
-        else if(strings[1].contains("add")) {  //POST
-            String url1;
-            if(strings[1].contains("Edit")) url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];  //ako se edituje
-            else url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions";      //ako se dodaje
-            try {
-                URL url = new URL(url1);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                OutputStream out = new DataOutputStream(connection.getOutputStream());
-                String jsonString = replaceNameWithIdForPOST(strings[0]) + "}";
-                byte[] bytes = jsonString.getBytes("utf-8");
-                out.write(bytes, 0, bytes.length);
+            } else if (strings[1].equals("editAccount")) {
+                String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
+                try {
+                    URL url = new URL(url1);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+                    OutputStream out = new DataOutputStream(connection.getOutputStream());
+                    String jsonString = strings[0];
+                    byte[] bytes = jsonString.getBytes("utf-8");
+                    out.write(bytes, 0, bytes.length);
 
-                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        System.out.println(response.toString());
                     }
-                    System.out.println(response.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
-        else if(strings[1].equals("deleteTrn")) {
-            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2] + "/transactions/" + strings[3];
-            try {
-                URL url = new URL(url1);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("DELETE");
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
+        else {
 
-                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                    }
-                    System.out.println(response.toString());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(strings[1].equals("getAccount")) {
-            System.out.println("do in bg account");
-            getAccountFromWeb(strings[2]);
-        }
-        else if(strings[1].equals("editAccount")) {
-            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/" + strings[2];
-            try {
-                URL url = new URL(url1);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                OutputStream out = new DataOutputStream(connection.getOutputStream());
-                String jsonString = strings[0];
-                byte[] bytes = jsonString.getBytes("utf-8");
-                out.write(bytes, 0, bytes.length);
-
-                try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                    }
-                    System.out.println(response.toString());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return null;
     }
@@ -597,7 +602,8 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
     @Override
     public void addToModel(ArrayList<Transaction> results) {
-        TransactionsModel.transactions = results;
+        TransactionsModel.transactions.clear();
+        TransactionsModel.transactions.addAll(results);
     }
 
     @Override

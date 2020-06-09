@@ -1,5 +1,6 @@
 package com.example.rma20celosmanovicselma04;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -16,10 +17,16 @@ import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFrag
 
 public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
+    private static Context context;
+
+    public static Context getAppContext() {
+        return MainActivity.context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.context = getApplicationContext();
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
