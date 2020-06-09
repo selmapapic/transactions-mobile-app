@@ -19,4 +19,7 @@ public interface ITransactionDetailPresenter {
     void searchAccount(String query, Account edit);
     void start();
     void searchTransactions(String query);
+    boolean isDelete ();
+
+    void changeForUndo(Transaction transaction);
 }

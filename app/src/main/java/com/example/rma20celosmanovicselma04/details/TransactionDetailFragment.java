@@ -74,6 +74,12 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         spinnerType.setOnItemSelectedListener(spinnerColor());
         setTypeSpinner(getPresenter().getTypes());
         removeValidation();
+
+        if(!isConnected && getPresenter().isDelete()) {
+            offlineIzmjena.setText("Offline brisanje");
+            deleteBtn.setText("Undo");
+        }
+
         return view;
     }
 
@@ -265,21 +271,40 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
 
     public View.OnClickListener deleteAction () {
         return v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            if(deleteBtn.getText().equals("DELETE")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            builder.setMessage("Are you sure you want to permanently delete this transaction?");
-            builder.setCancelable(false);
-            builder.setPositiveButton("Yes", (dialog, which) -> {
-                getPresenter().removeTransaction(getPresenter().getTransaction());
-                onChange.onSaveOrDelete();
-                clearAllFields();
-                getFragmentManager().popBackStack();
-                clearAllFields();
-            });
-            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+                builder.setMessage("Are you sure you want to permanently delete this transaction?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    getPresenter().removeTransaction(getPresenter().getTransaction());
+                    onChange.onSaveOrDelete();
+                    clearAllFields();
+                    getFragmentManager().popBackStack();
+                    clearAllFields();
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+            else if(deleteBtn.getText().equals("Undo")){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setMessage("Are you sure you want to undo deleting this transaction?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    getPresenter().changeForUndo(getPresenter().getTransaction());
+                    onChange.onSaveOrDelete();
+                    clearAllFields();
+                    getFragmentManager().popBackStack();
+                    clearAllFields();
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
         };
     }
 

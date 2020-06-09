@@ -471,6 +471,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         else trn.setInternalId(oldTrn.getInternalId());
         if(oldTrn.getId() == null) trn.setId(null);
         else trn.setId(oldTrn.getId());
+
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
         ContentValues values = new ContentValues();
@@ -485,7 +486,11 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
         }
         else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
-        values.put(TransactionsDBOpenHelper.STATUS, "UPDATE");
+
+
+        if(!getStatus(trn, context).equals("DELETE")) {
+            values.put(TransactionsDBOpenHelper.STATUS, "UPDATE");
+        }
 
         String where = "_id=?";
         String [] whereArgs = {String.valueOf(trn.getInternalId())};
@@ -512,7 +517,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         values.put(TransactionsDBOpenHelper.ACCOUNT_BUDGET, account.getBudget());
         values.put(TransactionsDBOpenHelper.ACCOUNT_TOTAL_LIMIT, account.getTotalLimit());
         values.put(TransactionsDBOpenHelper.ACCOUNT_MONTH_LIMIT, account.getMonthLimit());
-
 
         String where = "_id=?";
         String [] whereArgs = {String.valueOf(account.getInternalId())};
@@ -598,6 +602,96 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         cursor.close();
         return trns;
+    }
+
+    @Override
+    public void SetDeleteStatus(Transaction trn, Context context) {
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
+        ContentValues values = new ContentValues();
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ID, trn.getId());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TITLE, trn.getTitle());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_DATE, trn.getDate().toString());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_AMOUNT, trn.getAmount());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_INTERVAL, trn.getTransactionInterval());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION, trn.getItemDescription());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TYPE, trn.getType().toString());
+        if(trn.getEndDate() == null) {
+            values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
+        }
+        else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+        values.put(TransactionsDBOpenHelper.STATUS, "DELETE");
+
+        String where = "_id=?";
+        String [] whereArgs = {String.valueOf(trn.getInternalId())};
+
+
+        if(trn.getInternalId() == null) {
+            cr.insert(transactionsURI, values);
+            while(TransactionsModel.transactions.contains(trn)) {
+                TransactionsModel.transactions.remove(trn);
+            }
+        }
+        else {
+            cr.update(transactionsURI, values, where, whereArgs);
+        }
+    }
+
+    @Override
+    public void changeForUndoDb(Transaction trn, Context applicationContext) {
+        ContentResolver cr = applicationContext.getApplicationContext().getContentResolver();
+        Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
+        ContentValues values = new ContentValues();
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ID, trn.getId());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TITLE, trn.getTitle());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_DATE, trn.getDate().toString());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_AMOUNT, trn.getAmount());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_INTERVAL, trn.getTransactionInterval());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION, trn.getItemDescription());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TYPE, trn.getType().toString());
+        if(trn.getEndDate() == null) {
+            values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
+        }
+        else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+        values.put(TransactionsDBOpenHelper.STATUS, "UPDATE");
+
+        String where = "_id=?";
+        String [] whereArgs = {String.valueOf(trn.getInternalId())};
+
+
+        if(trn.getInternalId() == null) {
+            cr.insert(transactionsURI, values);
+            while(TransactionsModel.transactions.contains(trn)) {
+                TransactionsModel.transactions.remove(trn);
+            }
+        }
+        else {
+            cr.update(transactionsURI, values, where, whereArgs);
+        }
+    }
+
+    public String getStatus(Transaction trn, Context context) {
+        String status = "";
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        String[] kolone = null;
+        Uri adresa = ContentUris.withAppendedId(Uri.parse("content://rma.provider.transactions/elements"), trn.getInternalId());
+        String where = null;
+        String whereArgs[] = null;
+        String order = null;
+        Cursor cursor = cr.query(adresa,kolone,where,whereArgs,order);
+        if (cursor != null){
+            cursor.moveToFirst();
+            if(!cursor.isBeforeFirst()) {
+                int statusPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.STATUS);
+                status = cursor.getString(statusPos);
+
+            }
+            else {
+                return "ERROR";
+            }
+        }
+        cursor.close();
+        return status;
     }
 
     @Override

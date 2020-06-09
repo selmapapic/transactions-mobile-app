@@ -51,8 +51,22 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
             searchAccount(null, account);
         }
         else {
-
+            AccountModel.account.setBudget(AccountModel.account.getBudget() - getTransactionAmountBudget(trn));
+            interactor.UpdateAccountInDb(AccountModel.account, context.getApplicationContext());
+            interactor.SetDeleteStatus(trn, context);
         }
+    }
+
+    public boolean isDelete () {
+        String status = interactor.getStatus(getTransaction(), context);
+        return status.equals("DELETE");
+    }
+
+    @Override
+    public void changeForUndo(Transaction trn) {
+        AccountModel.account.setBudget(AccountModel.account.getBudget() + getTransactionAmountBudget(trn));
+        interactor.UpdateAccountInDb(AccountModel.account, context.getApplicationContext());
+        interactor.changeForUndoDb(trn, context.getApplicationContext());
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {

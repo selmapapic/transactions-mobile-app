@@ -18,10 +18,15 @@ public interface ITransactionsInteractor {
     Account getAccountFromDb(Context context);
     void UpdateTransactionInDb(Transaction newTrn, Context context, Transaction oldTrn);
     void UpdateAccountInDb(Account account, Context context);
+    String getStatus(Transaction trn, Context context);
 
     void addToModel(ArrayList<Transaction> results);
     ArrayList<Transaction> getFromModel();
     ArrayList<Transaction> getTransactionsByDate (LocalDate date);
 
     ArrayList<Transaction> getTransactionsFromDb(Context context);
+
+    void SetDeleteStatus(Transaction trn, Context context);
+
+    void changeForUndoDb(Transaction trn, Context applicationContext);
 }
