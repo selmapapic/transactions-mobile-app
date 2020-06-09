@@ -499,11 +499,28 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     @Override
-    public Account getAccountFromDb(Context context, Integer id) {
-        Account acc = null;
+    public void UpdateAccountInDb(Account account, Context context) {
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri transactionsURI = Uri.parse("content://rma.provider.accounts/elements");
+        ContentValues values = new ContentValues();
+        values.put(TransactionsDBOpenHelper.ACCOUNT_ID, account.getId());
+        values.put(TransactionsDBOpenHelper.ACCOUNT_BUDGET, account.getBudget());
+        values.put(TransactionsDBOpenHelper.ACCOUNT_TOTAL_LIMIT, account.getTotalLimit());
+        values.put(TransactionsDBOpenHelper.ACCOUNT_MONTH_LIMIT, account.getMonthLimit());
+
+
+        String where = "_id=?";
+        String [] whereArgs = {String.valueOf(account.getInternalId())};
+
+        cr.update(transactionsURI, values, where, whereArgs);
+    }
+
+    @Override
+    public Account getAccountFromDb(Context context) {
+        Account acc = new Account();
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         String[] kolone = null;
-        Uri adresa = ContentUris.withAppendedId(Uri.parse("content://rma.provider.accounts/elements"),id);
+        Uri adresa = Uri.parse("content://rma.provider.accounts/elements");
         String where = null;
         String[] whereArgs = null;
         String order = null;

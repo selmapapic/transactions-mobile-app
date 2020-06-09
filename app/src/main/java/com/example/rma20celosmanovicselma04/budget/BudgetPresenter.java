@@ -7,6 +7,7 @@ import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,12 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
 
     @Override
     public void saveNewChanges(Double totalLimit, Double monthLimit) {
-        searchAccount(null, new Account(0, totalLimit, monthLimit));
+        if(ConnectionChecker.isConnected(context)) {
+            searchAccount(null, new Account(0, totalLimit, monthLimit));
+        }
+        else {
+//            interactor.UpdateAccountInDb(new Account());
+        }
     }
 
     @Override

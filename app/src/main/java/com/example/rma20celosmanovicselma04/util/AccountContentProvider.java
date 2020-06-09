@@ -90,6 +90,12 @@ public class AccountContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database;
+        try{
+            database=helper.getWritableDatabase();
+        }catch (SQLiteException e){
+            database=helper.getReadableDatabase();
+        }
+        return database.update(TransactionsDBOpenHelper.ACCOUNT_TABLE, values, selection, selectionArgs);
     }
 }

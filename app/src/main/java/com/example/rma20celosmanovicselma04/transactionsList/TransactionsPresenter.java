@@ -100,7 +100,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     public void setCurrentBudget () {
         System.out.println("set curr budg");
         if(!ConnectionChecker.isConnected(context)) {
-            Account acc = getInteractor().getAccountFromDb(context,1);
+            Account acc = getInteractor().getAccountFromDb(context);
             view.setBudgetLimit(acc.getBudget(), acc.getTotalLimit());
         }
         else searchAccount(null);
@@ -121,7 +121,8 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             System.out.println("on acc done if");
             view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
             interactor.AddAccountToDb(account, context.getApplicationContext());
-            AccountModel.account = new Account(account.getBudget(), account.getTotalLimit(), account.getMonthLimit());
+            Account acc = interactor.getAccountFromDb(context.getApplicationContext());
+            AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
         }
 
     }

@@ -15,8 +15,9 @@ public interface ITransactionsInteractor {
 
     void AddTransactionToDb(Transaction trn, Context applicationContext);
     void AddAccountToDb(Account acc, Context applicationContext);
-    Account getAccountFromDb(Context context, Integer id);
+    Account getAccountFromDb(Context context);
     void UpdateTransactionInDb(Transaction newTrn, Context context, Transaction oldTrn);
+    void UpdateAccountInDb(Account account, Context context);
 
     void addToModel(ArrayList<Transaction> results);
     ArrayList<Transaction> getFromModel();
