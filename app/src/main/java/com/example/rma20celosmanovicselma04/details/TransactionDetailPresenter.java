@@ -10,6 +10,7 @@ import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 import com.example.rma20celosmanovicselma04.data.TransactionsModel;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -48,10 +49,16 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
-        POSTTransaction(newTrn, oldTrn, false);
-        account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
-        account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
-        searchAccount(null, account);
+        if(ConnectionChecker.isConnected(context)) {
+            POSTTransaction(newTrn, oldTrn, false);
+            account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
+            account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
+            searchAccount(null, account);
+        }
+        else {
+            newTrn.setInternalId(oldTrn.getInternalId());
+            interactor.UpdateTransactionInDb(newTrn, context.getApplicationContext());
+        }
     }
 
     public void addTransaction(Transaction trn, boolean isConnected) {

@@ -460,6 +460,29 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     @Override
+    public void UpdateTransactionInDb(Transaction trn, Context context) {
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
+        ContentValues values = new ContentValues();
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ID, trn.getId());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TITLE, trn.getTitle());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_DATE, trn.getDate().toString());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_AMOUNT, trn.getAmount());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_INTERVAL, trn.getTransactionInterval());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_ITEM_DESCRIPTION, trn.getItemDescription());
+        values.put(TransactionsDBOpenHelper.TRANSACTION_TYPE, trn.getType().toString());
+        if(trn.getEndDate() == null) {
+            values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
+        }
+        else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+
+        String where = "_id=?";
+        String [] whereArgs = {String.valueOf(trn.getInternalId())};
+
+        cr.update(transactionsURI, values, where, whereArgs);
+    }
+
+    @Override
     public Account getAccountFromDb(Context context, Integer id) {
         Account acc = null;
         ContentResolver cr = context.getApplicationContext().getContentResolver();
