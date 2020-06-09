@@ -52,7 +52,7 @@ public class Transaction implements Parcelable {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -224,6 +224,6 @@ public class Transaction implements Parcelable {
     }
 
     public Transaction clone () {
-        return new Transaction(this.getDate(), this.getAmount(), this.getTitle(), this.getType(), this.getItemDescription(), this.getTransactionInterval(), this.getEndDate());
+        return new Transaction(this.getId(), this.getDate(), this.getAmount(), this.getTitle(), this.getType(), this.getItemDescription(), this.getTransactionInterval(), this.getEndDate());
     }
 }

@@ -305,6 +305,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                     builder.setCancelable(false);
                     builder.setPositiveButton("Yes", (dialog, which) -> {
                         if(!isAdd) {
+                            getPresenter().getTransaction().setId(((Transaction) getArguments().get("transaction")).getId());
+                            getPresenter().getTransaction().setInternalId(((Transaction) getArguments().get("transaction")).getInternalId());
                             getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                             removeValidation();
                             onChange.onSaveOrDelete();
@@ -323,6 +325,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                 }
                 else {
                     if(!isAdd) {
+                        getPresenter().getTransaction().setId(((Transaction) getArguments().get("transaction")).getId());
+                        getPresenter().getTransaction().setInternalId(((Transaction) getArguments().get("transaction")).getInternalId());
                         getPresenter().changeTransaction(getPresenter().getTransaction(), trn);
                         removeValidation();
                         onChange.onSaveOrDelete();

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
+import com.example.rma20celosmanovicselma04.data.AccountModel;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
@@ -45,6 +46,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     public void removeTransaction (Transaction trn) {
         POSTTransaction(trn, null, true);
         account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
+        AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
         searchAccount(null, account);
     }
 
@@ -53,6 +55,8 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
             POSTTransaction(newTrn, oldTrn, false);
             account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
             account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
+            AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
+            AccountModel.account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
             searchAccount(null, account);
         }
         else {
@@ -64,6 +68,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         if(isConnected) {
             POSTTransaction(trn, null, false);
             account.setBudget(account.getBudget() + getTransactionAmountBudget(trn));
+            AccountModel.account.setBudget(account.getBudget() + getTransactionAmountBudget(trn));
             searchAccount(null, account);
         }
         else {

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
+import com.example.rma20celosmanovicselma04.data.AccountModel;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
@@ -120,7 +121,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             System.out.println("on acc done if");
             view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
             interactor.AddAccountToDb(account, context.getApplicationContext());
-
+            AccountModel.account = new Account(account.getBudget(), account.getTotalLimit(), account.getMonthLimit());
         }
 
     }

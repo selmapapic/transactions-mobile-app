@@ -366,7 +366,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         TransactionType type = getType(trn.getInt("TransactionTypeId"));
         regulars.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
-        allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
+        //allTransactions.add(new Transaction(id, date, amount, title, type, description, interval, endDate));
     }
 
     private void addTransactionToArray(JSONArray results, int i) throws JSONException {
@@ -426,6 +426,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
         }
         else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+        values.put(TransactionsDBOpenHelper.STATUS, "ADD");
         cr.insert(transactionsURI,values);
 
         TransactionsModel.transactions.add(trn);
@@ -463,6 +464,8 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     public void UpdateTransactionInDb(Transaction trn, Context context, Transaction oldTrn) {
         if(oldTrn.getInternalId() == null) trn.setInternalId(null);
         else trn.setInternalId(oldTrn.getInternalId());
+        if(oldTrn.getId() == null) trn.setId(null);
+        else trn.setId(oldTrn.getId());
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
         ContentValues values = new ContentValues();
@@ -477,6 +480,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, (String) null);
         }
         else values.put(TransactionsDBOpenHelper.TRANSACTION_END_DATE, trn.getEndDate().toString());
+        values.put(TransactionsDBOpenHelper.STATUS, "UPDATE");
 
         String where = "_id=?";
         String [] whereArgs = {String.valueOf(trn.getInternalId())};
