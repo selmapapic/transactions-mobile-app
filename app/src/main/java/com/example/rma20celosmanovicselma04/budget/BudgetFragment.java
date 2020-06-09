@@ -99,6 +99,10 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         budgetText.setText(budget.toString());
     }
 
+    public String getBudgetText() {
+        return budgetText.getText().toString();
+    }
+
     public void setTotalLimitFld (Double totalLimit) {
         totalLimitFld.setText(totalLimit.toString());
     }

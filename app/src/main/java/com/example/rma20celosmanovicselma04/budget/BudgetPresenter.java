@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
+import com.example.rma20celosmanovicselma04.data.AccountModel;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
@@ -23,7 +24,14 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     }
 
     public void start () {
-        searchAccount(null, null);
+        if(ConnectionChecker.isConnected(context)) {
+            searchAccount(null, null);
+        }
+        else {
+            view.setBudgetText(AccountModel.account.getBudget());
+            view.setTotalLimitFld(AccountModel.account.getTotalLimit());
+            view.setMonthLimitFld(AccountModel.account.getMonthLimit());
+        }
     }
 
     @Override
@@ -32,13 +40,28 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
             searchAccount(null, new Account(0, totalLimit, monthLimit));
         }
         else {
-//            interactor.UpdateAccountInDb(new Account());
+            AccountModel.account.setBudget(Double.parseDouble(view.getBudgetText()));
+            AccountModel.account.setTotalLimit(totalLimit);
+            AccountModel.account.setMonthLimit(monthLimit);
+            interactor.UpdateAccountInDb(new Account(AccountModel.account.getBudget(), AccountModel.account.getTotalLimit(), AccountModel.account.getMonthLimit(),
+                    AccountModel.account.getId(), AccountModel.account.getInternalId()), context);
+            Account acc = interactor.getAccountFromDb(context);
+            view.setBudgetText(acc.getBudget());
+            view.setTotalLimitFld(acc.getTotalLimit());
+            view.setMonthLimitFld(acc.getMonthLimit());
         }
     }
 
     @Override
     public void refreshFields() {
-        searchAccount(null, null);
+        if(ConnectionChecker.isConnected(context)) {
+            searchAccount(null, null);
+        }
+        else {
+            view.setBudgetText(AccountModel.account.getBudget());
+            view.setTotalLimitFld(AccountModel.account.getTotalLimit());
+            view.setMonthLimitFld(AccountModel.account.getMonthLimit());
+        }
     }
 
 
