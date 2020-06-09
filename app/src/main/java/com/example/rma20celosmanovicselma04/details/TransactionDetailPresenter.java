@@ -61,7 +61,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
             searchAccount(null, account);
         }
         else {
-            interactor.addToDb(trn, context.getApplicationContext());
+            interactor.AddTransactionToDb(trn, context.getApplicationContext());
         }
     }
 

@@ -13,7 +13,9 @@ public interface ITransactionsInteractor {
     Integer getTypeId (String nameType);
     TransactionType getType (int typeId);
 
-    void addToDb(Transaction trn, Context applicationContext);
+    void AddTransactionToDb(Transaction trn, Context applicationContext);
+    void AddAccountToDb(Account acc, Context applicationContext);
+    Account getAccountFromDb(Context context, Integer id);
 
     void addToModel(ArrayList<Transaction> results);
     ArrayList<Transaction> getFromModel();

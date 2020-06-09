@@ -1,8 +1,10 @@
 package com.example.rma20celosmanovicselma04.data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -63,8 +65,9 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             if(transactions != null) caller.onDone(transactions);
         }
         else {
+            System.out.println(account + " on post exec");
             caller.onDone(transactions);
-            caller.onAccountDone(account);
+            if(account != null) caller.onAccountDone(account);
         }
     }
 
@@ -243,6 +246,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             }
         }
         else if(strings[1].equals("getAccount")) {
+            System.out.println("do in bg account");
             getAccountFromWeb(strings[2]);
         }
         else if(strings[1].equals("editAccount")) {
@@ -406,7 +410,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     @Override
-    public void addToDb(Transaction trn, Context applicationContext) {
+    public void AddTransactionToDb(Transaction trn, Context applicationContext) {
         ContentResolver cr = applicationContext.getApplicationContext().getContentResolver();
         Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
         ContentValues values = new ContentValues();
@@ -425,6 +429,59 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
         TransactionsModel.transactions.add(trn);
     }
+
+    @Override
+    public void AddAccountToDb(Account acc, Context applicationContext) {
+        ContentResolver cr = applicationContext.getApplicationContext().getContentResolver();
+        String[] kolone = null;
+        Uri uri = ContentUris.withAppendedId(Uri.parse("content://rma.provider.accounts/elements"),1);
+        String where = null;
+        String[] whereArgs = null;
+        String order = null;
+        Cursor cursor = cr.query(uri,kolone,where,whereArgs,order);
+        ContentValues values = new ContentValues();
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.isBeforeFirst()) {
+                values.put(TransactionsDBOpenHelper.ACCOUNT_ID, acc.getId());
+                values.put(TransactionsDBOpenHelper.ACCOUNT_BUDGET, acc.getBudget());
+                values.put(TransactionsDBOpenHelper.ACCOUNT_TOTAL_LIMIT, acc.getTotalLimit());
+                values.put(TransactionsDBOpenHelper.ACCOUNT_MONTH_LIMIT, acc.getMonthLimit());
+
+                cr.insert(uri,values);
+            }
+            else {
+
+            }
+        }
+        cursor.close();
+    }
+
+    @Override
+    public Account getAccountFromDb(Context context, Integer id) {
+        Account acc = null;
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        String[] kolone = null;
+        Uri adresa = ContentUris.withAppendedId(Uri.parse("content://rma.provider.accounts/elements"),id);
+        String where = null;
+        String[] whereArgs = null;
+        String order = null;
+        Cursor cursor = cr.query(adresa,kolone,where,whereArgs,order);
+        if (cursor != null){
+            cursor.moveToFirst();
+            int idPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.ACCOUNT_ID);
+            int internalId = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.ACCOUNT_INTERNAL_ID);
+            int budgetPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.ACCOUNT_BUDGET);
+            int totalLimitPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.ACCOUNT_TOTAL_LIMIT);
+            int monthLimitPos = cursor.getColumnIndexOrThrow(TransactionsDBOpenHelper.ACCOUNT_MONTH_LIMIT);
+            acc = new Account(cursor.getDouble(budgetPos), cursor.getDouble(totalLimitPos),
+                    cursor.getDouble(monthLimitPos), cursor.getInt(idPos), cursor.getInt(internalId));
+        }
+        cursor.close();
+        return acc;
+    }
+
 
     @Override
     public void addToModel(ArrayList<Transaction> results) {

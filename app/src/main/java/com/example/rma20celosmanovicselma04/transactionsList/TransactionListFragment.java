@@ -78,6 +78,8 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         fragmentView.setOnTouchListener(swipe.getLis());
 
         getPresenter().start();
+        getPresenter().setCurrentBudget();
+        System.out.println("on create ");
         getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         return fragmentView;
     }
@@ -201,7 +203,7 @@ public class TransactionListFragment extends Fragment implements ITransactionsVi
         super.onResume();
        // getPresenter().refreshAllTransactions((String) filterSpinner.getSelectedItem(), (String) sortSpinner.getSelectedItem());
         transactionsAdapter.notifyDataSetChanged();
-        getPresenter().setCurrentBudget();
+        //getPresenter().setCurrentBudget();
     }
 
     public View.OnClickListener addAction() {

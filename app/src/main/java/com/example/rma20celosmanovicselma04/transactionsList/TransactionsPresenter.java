@@ -97,7 +97,12 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     public void setCurrentBudget () {
-        searchAccount(null);
+        System.out.println("set curr budg");
+        if(!ConnectionChecker.isConnected(context)) {
+            Account acc = getInteractor().getAccountFromDb(context,1);
+            view.setBudgetLimit(acc.getBudget(), acc.getTotalLimit());
+        }
+        else searchAccount(null);
     }
 
     @Override
@@ -110,8 +115,14 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void onAccountDone(Account account) {
-        //todo
-        //view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
+        System.out.println("ON ACC DONe");
+        if(ConnectionChecker.isConnected(context)) {
+            System.out.println("on acc done if");
+            view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
+            interactor.AddAccountToDb(account, context.getApplicationContext());
+
+        }
+
     }
 
     @Override
@@ -127,6 +138,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void searchAccount(String query){
+        System.out.println("search acc");
         new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 
