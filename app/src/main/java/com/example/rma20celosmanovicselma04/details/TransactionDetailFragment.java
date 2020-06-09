@@ -58,12 +58,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
         offlineIzmjena = (TextView) view.findViewById(R.id.offlineIzmjena);
         isConnected = ConnectionChecker.isConnected(getContext());
-        if(!isConnected) {
-            offlineIzmjena.setText("Offline izmjena");
-        }
-        else {
-            offlineIzmjena.setText("");
-        }
+
         typeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
 
@@ -86,6 +81,12 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         if(getArguments() != null && getArguments().containsKey("transaction")) {
             boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
             if(!addTrn) {
+                if(!isConnected) {
+                    offlineIzmjena.setText("Offline izmjena");
+                }
+                else {
+                    offlineIzmjena.setText("");
+                }
                 getPresenter().setTransaction(getArguments().getParcelable("transaction"));
                 titleFld.setText(getPresenter().getTransaction().getTitle());
                 amountFld.setText(getPresenter().getTransaction().getAmount().toString());
@@ -108,12 +109,24 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
                 saveBtn.setOnClickListener(saveAction(false));
             }
             else {
+                if(!isConnected) {
+                    offlineIzmjena.setText("Offline dodavanje");
+                }
+                else {
+                    offlineIzmjena.setText("");
+                }
                 spinnerType.setSelection(0);
                 deleteBtn.setEnabled(false);
                 saveBtn.setOnClickListener(saveAction(true));
             }
         }
         else {
+            if(!isConnected) {
+                offlineIzmjena.setText("Offline izmjena");
+            }
+            else {
+                offlineIzmjena.setText("");
+            }
             spinnerType.setSelection(0);
             deleteBtn.setEnabled(false);
             saveBtn.setOnClickListener(saveAction(true));

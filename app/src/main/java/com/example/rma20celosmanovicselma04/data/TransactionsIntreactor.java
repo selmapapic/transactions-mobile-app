@@ -460,7 +460,9 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
     }
 
     @Override
-    public void UpdateTransactionInDb(Transaction trn, Context context) {
+    public void UpdateTransactionInDb(Transaction trn, Context context, Transaction oldTrn) {
+        if(oldTrn.getInternalId() == null) trn.setInternalId(null);
+        else trn.setInternalId(oldTrn.getInternalId());
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri transactionsURI = Uri.parse("content://rma.provider.transactions/elements");
         ContentValues values = new ContentValues();
@@ -479,7 +481,17 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         String where = "_id=?";
         String [] whereArgs = {String.valueOf(trn.getInternalId())};
 
-        cr.update(transactionsURI, values, where, whereArgs);
+
+        if(trn.getInternalId() == null) {
+            cr.insert(transactionsURI, values);
+            while(TransactionsModel.transactions.contains(oldTrn)) {
+                TransactionsModel.transactions.remove(oldTrn);
+            }
+        }
+        else {
+            cr.update(transactionsURI, values, where, whereArgs);
+        }
+
     }
 
     @Override

@@ -28,11 +28,11 @@ public class Transaction implements Parcelable {
         this.endDate = endDate;
     }
 
-    public int getInternalId() {
+    public Integer getInternalId() {
         return internalId;
     }
 
-    public void setInternalId(int internalId) {
+    public void setInternalId(Integer internalId) {
         this.internalId = internalId;
     }
 
