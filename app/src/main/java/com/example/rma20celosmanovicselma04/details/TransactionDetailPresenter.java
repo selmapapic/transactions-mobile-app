@@ -65,8 +65,8 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
             searchAccount(null, account);
         }
         else {
-            AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
-            AccountModel.account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));
+            AccountModel.account.setBudget(AccountModel.account.getBudget() - getTransactionAmountBudget(oldTrn));
+            AccountModel.account.setBudget(AccountModel.account.getBudget() + getTransactionAmountBudget(newTrn));
             interactor.UpdateAccountInDb(AccountModel.account, context.getApplicationContext());
             interactor.UpdateTransactionInDb(newTrn, context.getApplicationContext(), oldTrn);
         }

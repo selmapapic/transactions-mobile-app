@@ -146,6 +146,8 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void refreshAllTransactions(String filter, String sort) {
+        Account acc = interactor.getAccountFromDb(context);
+        AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
         System.out.println("pozvalo se refresh");
         LocalDate d = interactor.getCurrentDate();
         int currMonth = d.getMonthValue();

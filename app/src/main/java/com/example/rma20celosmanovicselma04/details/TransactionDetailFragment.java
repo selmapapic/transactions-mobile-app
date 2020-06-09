@@ -122,7 +122,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         }
         else {
             if(!isConnected) {
-                offlineIzmjena.setText("Offline izmjena");
+                offlineIzmjena.setText("Offline dodavanje");
             }
             else {
                 offlineIzmjena.setText("");
