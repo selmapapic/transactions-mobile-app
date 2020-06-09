@@ -178,6 +178,11 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     @Override
+    public void onTrnDoneForGraphs(ArrayList<Transaction> transactions) {
+
+    }
+
+    @Override
     public void searchAccount(String query, Account edit){
         if(edit != null) {
             String jsonFormat = getJSONFormatAccount(edit);

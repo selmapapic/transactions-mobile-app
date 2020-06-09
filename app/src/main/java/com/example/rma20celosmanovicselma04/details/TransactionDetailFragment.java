@@ -75,7 +75,8 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         setTypeSpinner(getPresenter().getTypes());
         removeValidation();
 
-        if(!isConnected && getPresenter().isDelete()) {
+        boolean addTrn = (boolean) getArguments().getBoolean("addTrn");
+        if(!isConnected && !addTrn && getPresenter().isDelete()) {
             offlineIzmjena.setText("Offline brisanje");
             deleteBtn.setText("Undo");
         }

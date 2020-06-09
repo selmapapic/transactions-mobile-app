@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -13,14 +14,31 @@ import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailFragment;
 import com.example.rma20celosmanovicselma04.graphs.GraphsFragment;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
+import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
 
 
 public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
     private static Context context;
+    private ConnectionChecker receiver = new ConnectionChecker();
+    private IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 
     public static Context getAppContext() {
         return MainActivity.context;
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+
+        unregisterReceiver(receiver);
+        super.onPause();
     }
 
     @Override

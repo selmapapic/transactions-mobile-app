@@ -85,7 +85,13 @@ public class AccountContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database;
+        try{
+            database=helper.getWritableDatabase();
+        }catch (SQLiteException e){
+            database=helper.getReadableDatabase();
+        }
+        return database.delete(TransactionsDBOpenHelper.ACCOUNT_TABLE, selection, selectionArgs);
     }
 
     @Override

@@ -91,10 +91,7 @@ public class TransactionContentProvider extends ContentProvider {
         }catch (SQLiteException e){
             database=helper.getReadableDatabase();
         }
-        long id = database.delete(TransactionsDBOpenHelper.TRANSACTION_TABLE, null, selectionArgs);
-        //return uri.buildUpon().appendPath(String.valueOf(id)).build();
-        //todo
-        return (int) id;
+        return database.delete(TransactionsDBOpenHelper.TRANSACTION_TABLE, selection, selectionArgs);
     }
 
     @Override

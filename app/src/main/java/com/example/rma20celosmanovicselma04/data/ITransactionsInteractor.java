@@ -19,6 +19,7 @@ public interface ITransactionsInteractor {
     void UpdateTransactionInDb(Transaction newTrn, Context context, Transaction oldTrn);
     void UpdateAccountInDb(Account account, Context context);
     String getStatus(Transaction trn, Context context);
+    ArrayList<Transaction> getTransactionsByStatus (String status, Context context);
 
     void addToModel(ArrayList<Transaction> results);
     ArrayList<Transaction> getFromModel();

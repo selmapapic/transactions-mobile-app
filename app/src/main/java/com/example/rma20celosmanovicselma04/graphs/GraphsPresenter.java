@@ -418,4 +418,12 @@ public class GraphsPresenter implements IGraphsPresenter, TransactionsIntreactor
     public void onAccountDone(Account account) {
 
     }
+
+    @Override
+    public void onTrnDoneForGraphs(ArrayList<Transaction> transactions) {
+        allTransactions = transactions;
+        view.setExpenseGraph(graphType);
+        view.setIncomeGraph(graphType);
+        view.setCombinedGraph(graphType);
+    }
 }

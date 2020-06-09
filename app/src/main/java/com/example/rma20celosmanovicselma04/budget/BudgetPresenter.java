@@ -78,6 +78,11 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     }
 
     @Override
+    public void onTrnDoneForGraphs(ArrayList<Transaction> transactions) {
+
+    }
+
+    @Override
     public void searchAccount(String query, Account edit){
         if(edit != null) {
             String jsonFormat = getJSONFormat(edit);

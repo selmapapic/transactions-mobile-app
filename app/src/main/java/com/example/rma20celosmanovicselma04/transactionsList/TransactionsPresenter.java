@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04.transactionsList;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
@@ -128,6 +129,11 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     @Override
+    public void onTrnDoneForGraphs(ArrayList<Transaction> transactions) {
+
+    }
+
+    @Override
     public void searchTransactions(String query){
         if(query == null) {
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
@@ -141,13 +147,14 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     @Override
     public void searchAccount(String query){
         System.out.println("search acc");
-        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+        //new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 
     @Override
     public void refreshAllTransactions(String filter, String sort) {
-        Account acc = interactor.getAccountFromDb(context);
-        AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
+//        Account acc = interactor.getAccountFromDb(context);
+//        AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
         System.out.println("pozvalo se refresh");
         LocalDate d = interactor.getCurrentDate();
         int currMonth = d.getMonthValue();
