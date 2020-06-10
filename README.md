@@ -37,3 +37,9 @@ S obzirom da nije bilo naglašeno da je brzina dobavljanja informacija sa web se
 - Pri prikazu grafova, potrebno je sačekati oko 10 sekundi dok se ne prikaže graf; u međuvremenu će pisati "No chart data available"
 - Pri promjeni mjeseca na glavnom fragmentu, potrebno je sačekati oko 2 sekunde dok se osvježe transakcije
 - Povratkom na glavni fragment iz detail fragmenta, potrebno je sačekati par sekundi da se osvježe informacije o accountu i da se osvježe transakcije
+
+### 4. spirala:
+
+- Potrebno je prvi put pokrenuti aplikaciju u online režimu
+- WiFi ugasiti tek 3-5 sekundi nakon ulaska u aplikaciju radi dobavljanja transakcija sa web servisa i smještanja u model
+- Pri ponovnom paljenju WiFi-ja nakon offline režima, sačekati 3-5 sekundi da se prikaže aktuelno stanje sa web servisa (tj. da se ažurira)
