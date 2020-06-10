@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04.budget;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
@@ -86,10 +87,11 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     public void searchAccount(String query, Account edit){
         if(edit != null) {
             String jsonFormat = getJSONFormat(edit);
-            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(jsonFormat, "editAccount", context.getResources().getString(R.string.api_id));
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, jsonFormat, "editAccount", context.getResources().getString(R.string.api_id));
+
         }
         else {
-            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,query, "getAccount", context.getResources().getString(R.string.api_id));
         }
     }
 

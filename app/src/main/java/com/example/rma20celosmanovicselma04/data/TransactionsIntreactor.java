@@ -340,10 +340,11 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
 
         Account acc = getAccountFromDb(MainActivity.getAppContext());
-        String json = getJSONFormatAccount(acc);
-        strings[0] = json;
-        editAccount(strings);
-
+        if(account != null) {
+            String json = getJSONFormatAccount(acc);
+            strings[0] = json;
+            editAccount(strings);
+        }
         clearDatabase();
     }
 
@@ -623,7 +624,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
     @Override
     public Account getAccountFromDb(Context context) {
-        Account acc = new Account();
+        Account acc = null;
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         String[] kolone = null;
         Uri adresa = Uri.parse("content://rma.provider.accounts/elements");

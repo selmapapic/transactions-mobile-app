@@ -1,6 +1,7 @@
 package com.example.rma20celosmanovicselma04.graphs;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Account;
@@ -403,7 +404,7 @@ public class GraphsPresenter implements IGraphsPresenter, TransactionsIntreactor
     }
 
     public void searchTransactions(String query) {
-        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
+        new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,query, "allTrn", context.getResources().getString(R.string.api_id));
     }
 
     @Override

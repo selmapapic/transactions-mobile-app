@@ -125,7 +125,6 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             Account acc = interactor.getAccountFromDb(context.getApplicationContext());
             AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
         }
-
     }
 
     @Override
@@ -139,7 +138,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
         }
         else {
-            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "sortFilter", context.getResources().getString(R.string.api_id), "getAcc");
+            new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, query, "sortFilter", context.getResources().getString(R.string.api_id), "getAcc");
             new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "allTrn", context.getResources().getString(R.string.api_id));
         }
     }

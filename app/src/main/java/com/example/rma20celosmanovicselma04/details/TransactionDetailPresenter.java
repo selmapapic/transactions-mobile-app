@@ -101,15 +101,14 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public boolean limitExceeded (Transaction currentTrn, boolean isAdd) {
-//        Double monthSum = getAmountForLimit(false, currentTrn.getDate());
-////        monthSum += currentTrn.getAmount();
-////        if(!isAdd) monthSum -= getTransaction().getAmount();
-////        Double allSum = getAmountForLimit(true, currentTrn.getDate());
-////        allSum += currentTrn.getAmount();
-////        if(!isAdd) allSum -= getTransaction().getAmount();
-////        return account.getMonthLimit() < monthSum || account.getTotalLimit() < allSum;
+        Double monthSum = getAmountForLimit(false, currentTrn.getDate());
+        monthSum += currentTrn.getAmount();
+        if(!isAdd) monthSum -= getTransaction().getAmount();
+        Double allSum = getAmountForLimit(true, currentTrn.getDate());
+        allSum += currentTrn.getAmount();
+        if(!isAdd) allSum -= getTransaction().getAmount();
+        return AccountModel.account.getMonthLimit() < monthSum || AccountModel.account.getTotalLimit() < allSum;
         //todo
-        return false;
     }
 
     public ITransactionsInteractor getInteractor() {
@@ -238,39 +237,38 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public double getAmountForLimit (boolean isAllNoDate, LocalDate date) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
-//        ArrayList<Transaction> trns;
-//        if (isAllNoDate) trns = transactions;
-//        //todo
-//        //else trns = getTransactionsByDate(date);
-//
-//        for (Transaction t : trns) {
-//            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
-//        }
-//
-//        double budget = 0;
-//        for (Transaction t : trns) {
-//            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
-//                if (t.getType().toString().contains("REGULAR")) {
-//                    if (!isAllNoDate) {
-//                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
-//                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
-//                        else {
-//                            int i = 0;
-//                            while(t.getDate().getMonth() == d.getMonth()) {
-//                                i++;
-//                                d = d.plusDays(t.getTransactionInterval());
-//                            }
-//                            budget += (t.getAmount() * i) + t.getAmount();
-//                        }
-//                    } else
-//                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
-//                } else {
-//                    budget += t.getAmount();
-//                }
-//            }
-//        }
-//        return Math.round(budget * 100.0) / 100.0;
-        return 1;
+        ArrayList<Transaction> trns;
+        if (isAllNoDate) trns = transactions;
+        //todo
+        else trns = getTransactionsByDate(date);
+
+        for (Transaction t : trns) {
+            if (t.getAmount() < 0) t.setAmount(t.getAmount() * (-1));
+        }
+
+        double budget = 0;
+        for (Transaction t : trns) {
+            if (t.getType().toString().contains("PAYMENT") || t.getType().toString().contains("PURCHASE")) {
+                if (t.getType().toString().contains("REGULAR")) {
+                    if (!isAllNoDate) {
+                        LocalDate d = t.getDate().plusDays(t.getTransactionInterval());
+                        if (t.getDate().getMonth() != d.getMonth()) budget += t.getAmount();
+                        else {
+                            int i = 0;
+                            while(t.getDate().getMonth() == d.getMonth()) {
+                                i++;
+                                d = d.plusDays(t.getTransactionInterval());
+                            }
+                            budget += (t.getAmount() * i) + t.getAmount();
+                        }
+                    } else
+                        budget += (ChronoUnit.DAYS.between(t.getDate(), t.getEndDate()) / t.getTransactionInterval()) * t.getAmount();
+                } else {
+                    budget += t.getAmount();
+                }
+            }
+        }
+        return Math.round(budget * 100.0) / 100.0;
     }
 
     public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
