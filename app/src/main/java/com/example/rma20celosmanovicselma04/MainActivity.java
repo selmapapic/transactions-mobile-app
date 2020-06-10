@@ -14,13 +14,13 @@ import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailFragment;
 import com.example.rma20celosmanovicselma04.graphs.GraphsFragment;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 
 
 public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnChange{
     private boolean twoPaneMode = false;
     private static Context context;
-    private ConnectionChecker receiver = new ConnectionChecker();
+    private ConnectionCheck receiver = new ConnectionCheck();
     private IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 
     public static Context getAppContext() {

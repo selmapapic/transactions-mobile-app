@@ -8,7 +8,9 @@ import com.example.rma20celosmanovicselma04.data.Account;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
+import com.example.rma20celosmanovicselma04.data.TransactionsModel;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.time.LocalDate;
@@ -400,7 +402,16 @@ public class GraphsPresenter implements IGraphsPresenter, TransactionsIntreactor
     @Override
     public void start () {
         graphType = 1;
-        searchTransactions(null);
+        if(ConnectionCheck.isConnected(context)) {
+            searchTransactions(null);
+        }
+        else {
+            allTransactions.addAll(TransactionsModel.transactions);
+            allTransactions.addAll(interactor.getTransactionsFromDb(context));
+            view.setExpenseGraph(graphType);
+            view.setIncomeGraph(graphType);
+            view.setCombinedGraph(graphType);
+        }
     }
 
     public void searchTransactions(String query) {

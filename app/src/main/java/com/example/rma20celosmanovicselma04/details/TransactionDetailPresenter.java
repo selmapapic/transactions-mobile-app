@@ -11,7 +11,7 @@ import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
 import com.example.rma20celosmanovicselma04.data.TransactionsModel;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionsPresenter;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,7 +44,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void removeTransaction (Transaction trn) {
-        if(ConnectionChecker.isConnected(context)) {
+        if(ConnectionCheck.isConnected(context)) {
             POSTTransaction(trn, null, true);
             account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
             AccountModel.account.setBudget(account.getBudget() - getTransactionAmountBudget(trn));
@@ -70,7 +70,7 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     }
 
     public void changeTransaction (Transaction oldTrn, Transaction newTrn) {
-        if(ConnectionChecker.isConnected(context)) {
+        if(ConnectionCheck.isConnected(context)) {
             POSTTransaction(newTrn, oldTrn, false);
             account.setBudget(account.getBudget() - getTransactionAmountBudget(oldTrn));
             account.setBudget(account.getBudget() + getTransactionAmountBudget(newTrn));

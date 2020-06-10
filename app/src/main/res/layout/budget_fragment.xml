@@ -184,4 +184,17 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/reset" />
 
+    <TextView
+        android:id="@+id/offlineMode"
+        android:layout_width="87dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

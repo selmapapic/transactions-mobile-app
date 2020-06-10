@@ -14,11 +14,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.transactionsList.TransactionListFragment;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 import com.example.rma20celosmanovicselma04.util.Swipe;
 
 public class BudgetFragment extends Fragment implements IBudgetView{
     private IBudgetPresenter presenter;
-    private TextView budgetText;
+    private TextView budgetText, offlineMode;
     private EditText totalLimitFld, monthLimitFld;
     private Button saveBtn, homeBtn, graphsBtn;
     private ImageButton resetBtn;
@@ -35,6 +36,7 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         resetBtn = (ImageButton) view.findViewById(R.id.resetBtn);
         homeBtn = (Button) view.findViewById(R.id.homeBtn);
         graphsBtn = (Button) view.findViewById(R.id.graphsBtn);
+        offlineMode = (TextView) view.findViewById(R.id.offlineMode);
 
         onItemClick = (TransactionListFragment.OnItemClick) getActivity();
 
@@ -49,6 +51,12 @@ public class BudgetFragment extends Fragment implements IBudgetView{
         swipe.setOnItemClick(onItemClick);
         swipe.setGestureDetector(gestureDetector);
         view.setOnTouchListener(swipe.getLis());
+        if(!ConnectionCheck.isConnected(getContext())) {
+            offlineMode.setText("Offline izmjena");
+        }
+        else {
+            offlineMode.setText("");
+        }
 
         getPresenter().start();
 

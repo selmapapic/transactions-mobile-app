@@ -10,7 +10,7 @@ import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,11 +22,17 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     private ITransactionsView view;
     private static ITransactionsInteractor interactor;
     private Context context;
+    public static ITransactionsPresenter presenterVariable;
 
     public TransactionsPresenter(ITransactionsView view, Context context) {
         this.view = view;
         this.interactor = new TransactionsIntreactor();
         this.context = context;
+        presenterVariable = this;
+    }
+
+    public static ITransactionsPresenter getPresenterVariable() {
+        return presenterVariable;
     }
 
     public static ITransactionsInteractor getInteractor() {
@@ -99,8 +105,7 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     }
 
     public void setCurrentBudget () {
-        System.out.println("set curr budg");
-        if(!ConnectionChecker.isConnected(context)) {
+        if(!ConnectionCheck.isConnected(context)) {
             Account acc = getInteractor().getAccountFromDb(context);
             view.setBudgetLimit(acc.getBudget(), acc.getTotalLimit());
         }
@@ -110,16 +115,13 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
     @Override
     public void onDone(ArrayList<Transaction> results) {
         ArrayList<Transaction> finalTrns = filterAndSort(view.getFilterSpinner(), view.getSortSpinner(), results);
-        //interactor.addToModel(results);
         view.setTransactions(finalTrns);
         view.notifyTransactionsListDataSetChanged();
     }
 
     @Override
     public void onAccountDone(Account account) {
-        System.out.println("ON ACC DONe");
-        if(ConnectionChecker.isConnected(context)) {
-            System.out.println("on acc done if");
+        if(ConnectionCheck.isConnected(context)) {
             view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
             interactor.AddAccountToDb(account, context.getApplicationContext());
             Account acc = interactor.getAccountFromDb(context.getApplicationContext());
@@ -131,7 +133,6 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void onTrnDoneForGraphs(ArrayList<Transaction> transactions) {
-
     }
 
     @Override
@@ -147,22 +148,22 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
 
     @Override
     public void searchAccount(String query){
-        System.out.println("search acc");
         //new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).execute(query, "getAccount", context.getResources().getString(R.string.api_id));
         new TransactionsIntreactor((TransactionsIntreactor.OnTransactionsSearchDone) this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, query, "getAccount", context.getResources().getString(R.string.api_id));
     }
 
+    public void refresh() {
+        refreshAllTransactions(view.getFilterSpinner(), view.getSortSpinner());
+    }
+
     @Override
     public void refreshAllTransactions(String filter, String sort) {
-//        Account acc = interactor.getAccountFromDb(context);
-//        AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
-        System.out.println("pozvalo se refresh");
         LocalDate d = interactor.getCurrentDate();
         int currMonth = d.getMonthValue();
         String currMonthStr = String.valueOf(currMonth);
         if(!(currMonth > 9 && currMonth <= 12)) currMonthStr = "0" + currMonthStr;
         String currYear = String.valueOf(d.getYear());
-        if(ConnectionChecker.isConnected(context.getApplicationContext())) {        //ako ima konekcije
+        if(ConnectionCheck.isConnected(context.getApplicationContext())) {        //ako ima konekcije
             if ((filter == null || filter.equals("Filter by")) && (sort == null || sort.equals("Sort by"))) {
                 searchTransactions("filter?month=" + currMonthStr + "&year=" + currYear + "&page=");
                 return;
@@ -179,7 +180,6 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             }
         }
         else {
-            System.out.println(interactor.getFromModel().size() + "glupi size");
             ArrayList<Transaction> finalTrns = interactor.getTransactionsByDate(null);
             finalTrns.addAll(interactor.getTransactionsFromDb(context));
             view.setTransactions(finalTrns);

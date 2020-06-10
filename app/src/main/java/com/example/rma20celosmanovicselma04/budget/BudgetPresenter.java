@@ -9,7 +9,7 @@ import com.example.rma20celosmanovicselma04.data.AccountModel;
 import com.example.rma20celosmanovicselma04.data.ITransactionsInteractor;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionsIntreactor;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
     }
 
     public void start () {
-        if(ConnectionChecker.isConnected(context)) {
+        if(ConnectionCheck.isConnected(context)) {
             searchAccount(null, null);
         }
         else {
@@ -37,7 +37,7 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
 
     @Override
     public void saveNewChanges(Double totalLimit, Double monthLimit) {
-        if(ConnectionChecker.isConnected(context)) {
+        if(ConnectionCheck.isConnected(context)) {
             searchAccount(null, new Account(0, totalLimit, monthLimit));
         }
         else {
@@ -55,7 +55,7 @@ public class BudgetPresenter implements IBudgetPresenter, TransactionsIntreactor
 
     @Override
     public void refreshFields() {
-        if(ConnectionChecker.isConnected(context)) {
+        if(ConnectionCheck.isConnected(context)) {
             searchAccount(null, null);
         }
         else {

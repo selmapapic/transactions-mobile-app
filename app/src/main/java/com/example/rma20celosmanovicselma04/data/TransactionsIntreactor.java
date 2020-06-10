@@ -11,7 +11,8 @@ import android.os.AsyncTask;
 import com.example.rma20celosmanovicselma04.MainActivity;
 import com.example.rma20celosmanovicselma04.budget.BudgetPresenter;
 import com.example.rma20celosmanovicselma04.details.TransactionDetailPresenter;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.graphs.GraphsPresenter;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 import com.example.rma20celosmanovicselma04.util.TransactionsDBOpenHelper;
 
 import org.json.JSONArray;
@@ -69,12 +70,15 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             if(transactions != null) caller.onDone(transactions);
         }
         else {
-            System.out.println(account + " on post exec");
-            System.out.println(transactions.size() + " on post exec trn size");
             if(transactions.size() != 0) caller.onDone(transactions);
             if(account != null) caller.onAccountDone(account);
         }
-        caller.onTrnDoneForGraphs(TransactionsModel.transactions);
+        if(caller.getClass().equals(GraphsPresenter.class)) {
+            caller.onTrnDoneForGraphs(TransactionsModel.transactions);
+        }
+        if(caller.getClass().equals(ConnectionCheck.class)) {
+            caller.onDone(null);
+        }
     }
 
     public ArrayList<Transaction> getTransactionsByDate (LocalDate date) {
@@ -106,7 +110,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
     @Override
     protected Void doInBackground(String... strings) {
-        if(ConnectionChecker.isConnected(MainActivity.getAppContext())) {
+        if(ConnectionCheck.isConnected(MainActivity.getAppContext())) {
             String query = strings[0];
 
             if (strings[1].equals("allTrn")) {    //dohvatanje svih trn
@@ -118,7 +122,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
             } else if (strings[1].equals("deleteTrn")) {
                 deleteTransaction(strings);
             } else if (strings[1].equals("getAccount")) {
-                System.out.println("do in bg account");
                 getAccountFromWeb(strings[2]);
             } else if (strings[1].equals("editAccount")) {
                 editAccount(strings);
@@ -301,9 +304,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
         TransactionsModel.transactions.clear();
         TransactionsModel.transactions.addAll(allTransactions);
-        System.out.println("bla" + TransactionsModel.transactions.size());
         allTransactions.clear();
-        System.out.println("bla2222    " + TransactionsModel.transactions.size());
     }
 
     private void fromDatabaseToWeb(String[] strings) {
@@ -340,7 +341,7 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
         }
 
         Account acc = getAccountFromDb(MainActivity.getAppContext());
-        if(account != null) {
+        if(acc != null) {
             String json = getJSONFormatAccount(acc);
             strings[0] = json;
             editAccount(strings);

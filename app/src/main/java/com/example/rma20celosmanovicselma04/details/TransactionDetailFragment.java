@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.rma20celosmanovicselma04.R;
 import com.example.rma20celosmanovicselma04.data.Transaction;
 import com.example.rma20celosmanovicselma04.data.TransactionType;
-import com.example.rma20celosmanovicselma04.util.ConnectionChecker;
+import com.example.rma20celosmanovicselma04.util.ConnectionCheck;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -57,7 +57,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
         deleteBtn = (Button) view.findViewById(R.id.deleteBtn);
         saveBtn = (Button) view.findViewById(R.id.saveBtn);
         offlineIzmjena = (TextView) view.findViewById(R.id.offlineIzmjena);
-        isConnected = ConnectionChecker.isConnected(getContext());
+        isConnected = ConnectionCheck.isConnected(getContext());
 
         typeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.detail_spinner_element, R.id.sortType, new ArrayList<>());
         spinnerType.setAdapter(typeAdapter);
@@ -312,7 +312,7 @@ public class TransactionDetailFragment extends Fragment implements ITransactionD
     public View.OnClickListener saveAction(boolean isAdd) {
         return v -> {
 
-            isConnected = ConnectionChecker.isConnected(getContext());
+            isConnected = ConnectionCheck.isConnected(getContext());
 
             if(validateDateDistances()) {
                 validateAll();

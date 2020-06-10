@@ -11,4 +11,5 @@ public interface ITransactionsPresenter {
     void searchTransactions(String query);
     void searchAccount(String query);
     void refreshAllTransactions(String filter, String sort);
+    void refresh();
 }
