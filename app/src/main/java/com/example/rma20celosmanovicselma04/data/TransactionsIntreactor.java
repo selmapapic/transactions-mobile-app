@@ -556,9 +556,6 @@ public class TransactionsIntreactor extends AsyncTask<String, Integer, Void> imp
 
                 cr.insert(uri,values);
             }
-            else {
-
-            }
         }
         cursor.close();
     }

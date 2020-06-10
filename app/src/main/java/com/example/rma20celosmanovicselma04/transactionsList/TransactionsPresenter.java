@@ -123,6 +123,8 @@ public class TransactionsPresenter implements ITransactionsPresenter, Transactio
             view.setBudgetLimit(account.getBudget(), account.getTotalLimit());
             interactor.AddAccountToDb(account, context.getApplicationContext());
             Account acc = interactor.getAccountFromDb(context.getApplicationContext());
+            account.setInternalId(acc.getInternalId());
+            interactor.UpdateAccountInDb(account, context.getApplicationContext());
             AccountModel.account = new Account(acc.getBudget(), acc.getTotalLimit(), acc.getMonthLimit(), acc.getId(), acc.getInternalId());
         }
     }

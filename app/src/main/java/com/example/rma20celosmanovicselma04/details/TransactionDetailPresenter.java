@@ -108,7 +108,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
         allSum += currentTrn.getAmount();
         if(!isAdd) allSum -= getTransaction().getAmount();
         return AccountModel.account.getMonthLimit() < monthSum || AccountModel.account.getTotalLimit() < allSum;
-        //todo
     }
 
     public ITransactionsInteractor getInteractor() {
@@ -239,7 +238,6 @@ public class TransactionDetailPresenter implements ITransactionDetailPresenter, 
     public double getAmountForLimit (boolean isAllNoDate, LocalDate date) { //is all no date - da li zelim da uzmem stanje svih transakcija, tj da nisu po odredjenom datumu
         ArrayList<Transaction> trns;
         if (isAllNoDate) trns = transactions;
-        //todo
         else trns = getTransactionsByDate(date);
 
         for (Transaction t : trns) {
